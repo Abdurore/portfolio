@@ -1,3 +1,5 @@
+export const SITE_URL = "https://abdurore.dev";
+
 export const profile = {
   name: "Oreagba Abdulhameed Oluwadurotimi",
   alias: "Abdurore",
