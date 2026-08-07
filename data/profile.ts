@@ -1,4 +1,4 @@
-export const SITE_URL = "https://abdurore.dev";
+export const SITE_URL = "https://abdurore-dev.vercel.app";
 
 export const profile = {
   name: "Oreagba Abdulhameed Oluwadurotimi",
