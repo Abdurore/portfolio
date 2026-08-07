@@ -1,6 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
+import Image from "next/image";
 import { ArrowUpRight, Lock } from "lucide-react";
 import type { Project } from "@/data/projects";
 import { revealItemVariants } from "./ScrollReveal";
@@ -37,6 +38,19 @@ export function ProjectCard({ project }: { project: Project }) {
           );
         }}
       />
+
+      {project.image && (
+        <div className="relative -mx-6 -mt-6 mb-5 overflow-hidden border-b border-border">
+          <Image
+            src={project.image}
+            alt={`${project.name} screenshot`}
+            width={1200}
+            height={720}
+            className="aspect-video w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
+          />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background-elevated/80 via-transparent to-transparent" />
+        </div>
+      )}
 
       <div className="relative">
         <div className="flex items-start justify-between gap-3">

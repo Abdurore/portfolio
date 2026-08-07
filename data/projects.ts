@@ -10,6 +10,7 @@ export type Project = {
   sourcePrivate?: boolean;
   category: "featured" | "practice";
   span?: "lg" | "md" | "sm";
+  image?: string;
 };
 
 export const projects: Project[] = [
@@ -24,6 +25,7 @@ export const projects: Project[] = [
     sourcePrivate: true,
     category: "featured",
     span: "lg",
+    image: "/projects/cardora.jpg",
   },
   {
     slug: "halal-meats",
@@ -36,6 +38,7 @@ export const projects: Project[] = [
     sourcePrivate: true,
     category: "featured",
     span: "md",
+    image: "/projects/halal-meats.jpg",
   },
   {
     slug: "preventai",
@@ -49,6 +52,7 @@ export const projects: Project[] = [
     sourceUrl: "https://github.com/Abdurore/Cavista_real",
     category: "featured",
     span: "md",
+    image: "/projects/preventai.jpg",
   },
   {
     slug: "chef-claude",
@@ -60,6 +64,7 @@ export const projects: Project[] = [
     liveUrl: "https://chef-claude-kappa-nine.vercel.app",
     sourceUrl: "https://github.com/Abdurore/chef-claude",
     category: "practice",
+    image: "/projects/chef-claude.jpg",
   },
   {
     slug: "tenzies",
@@ -71,6 +76,7 @@ export const projects: Project[] = [
     liveUrl: "https://tenzies-game-blush-eta.vercel.app",
     sourceUrl: "https://github.com/Abdurore/tenzies-game",
     category: "practice",
+    image: "/projects/tenzies.jpg",
   },
   {
     slug: "assembly-endgame",
@@ -93,6 +99,7 @@ export const projects: Project[] = [
     liveUrl: "https://tic-tac-toe-mini-sigma.vercel.app",
     sourceUrl: "https://github.com/Abdurore/tic-tac-toe-mini",
     category: "practice",
+    image: "/projects/tic-tac-toe.jpg",
   },
 ];
 
