@@ -15,21 +15,21 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Abdurore — Frontend Developer",
+  title: "Abdurore — Full-Stack Developer",
   description:
-    "Portfolio of Abdulhameed Oreagba (Abdurore), a frontend developer building AI-powered products and playful web experiences — creator of Cardora, Halal Meats, PreventAI, and more.",
+    "Portfolio of Abdulhameed Oreagba (Abdurore), a full-stack developer building AI-powered products and playful web experiences — creator of Cardora, Halal Meats, PreventAI, and more.",
   openGraph: {
-    title: "Abdurore — Frontend Developer",
+    title: "Abdurore — Full-Stack Developer",
     description:
-      "Portfolio of Abdulhameed Oreagba (Abdurore), a frontend developer building AI-powered products and playful web experiences.",
+      "Portfolio of Abdulhameed Oreagba (Abdurore), a full-stack developer building AI-powered products and playful web experiences.",
     type: "website",
     url: SITE_URL,
   },
   twitter: {
     card: "summary_large_image",
-    title: "Abdurore — Frontend Developer",
+    title: "Abdurore — Full-Stack Developer",
     description:
-      "Portfolio of Abdulhameed Oreagba (Abdurore), a frontend developer building AI-powered products and playful web experiences.",
+      "Portfolio of Abdulhameed Oreagba (Abdurore), a full-stack developer building AI-powered products and playful web experiences.",
   },
 };
 

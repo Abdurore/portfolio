@@ -1,12 +1,12 @@
 @import "tailwindcss";
 
 :root {
-  --background: #08080c;
-  --background-elevated: #101018;
-  --foreground: #f2f2f7;
-  --muted: #9a9aab;
-  --border: #1f1f2b;
-  --accent-violet: #8b5cf6;
+  --background: #07100c;
+  --background-elevated: #0f1a15;
+  --foreground: #f1f5f2;
+  --muted: #97a69e;
+  --border: #1c2b23;
+  --accent-green: #16a34a;
   --accent-cyan: #22d3ee;
   --accent-lime: #a3e635;
 }
@@ -17,7 +17,7 @@
   --color-foreground: var(--foreground);
   --color-muted: var(--muted);
   --color-border: var(--border);
-  --color-accent-violet: var(--accent-violet);
+  --color-accent-green: var(--accent-green);
   --color-accent-cyan: var(--accent-cyan);
   --color-accent-lime: var(--accent-lime);
   --font-sans: var(--font-geist-sans);
@@ -34,8 +34,8 @@ body {
 }
 
 ::selection {
-  background: var(--accent-violet);
-  color: #08080c;
+  background: var(--accent-green);
+  color: #07100c;
 }
 
 /* Scrollbar */
@@ -50,7 +50,7 @@ body {
   border-radius: 999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--accent-violet);
+  background: var(--accent-green);
 }
 
 @keyframes gradient-shift {
@@ -98,9 +98,9 @@ body {
 .text-gradient {
   background: linear-gradient(
     90deg,
-    var(--accent-violet),
+    var(--accent-green),
     var(--accent-cyan),
-    var(--accent-violet)
+    var(--accent-green)
   );
   background-clip: text;
   -webkit-background-clip: text;

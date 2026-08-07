@@ -38,7 +38,7 @@ export function Contact() {
           ?
         </h2>
         <p className="mx-auto mt-4 max-w-md text-muted">
-          I&apos;m open to frontend roles, freelance builds, and
+          I&apos;m open to full-stack roles, freelance builds, and
           collaborations. Drop a line, I read every email.
         </p>
 
@@ -62,7 +62,7 @@ export function Contact() {
               aria-label={label}
               whileHover={{ scale: 1.12, y: -3 }}
               whileTap={{ scale: 0.95 }}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background-elevated/60 text-muted transition-colors hover:border-accent-violet hover:text-foreground"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background-elevated/60 text-muted transition-colors hover:border-accent-green hover:text-foreground"
             >
               <Icon className="h-4 w-4" />
             </motion.a>

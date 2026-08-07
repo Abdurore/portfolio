@@ -23,7 +23,7 @@ export function ProjectCard({ project }: { project: Project }) {
       transition={{ type: "spring", stiffness: 300, damping: 20 }}
       className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-border bg-background-elevated/60 p-6 ${spanClass}`}
     >
-      <div className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-[radial-gradient(400px_circle_at_var(--mx,50%)_var(--my,0%),rgba(139,92,246,0.18),transparent_70%)]" />
+      <div className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-[radial-gradient(400px_circle_at_var(--mx,50%)_var(--my,0%),rgba(22,163,74,0.18),transparent_70%)]" />
       <div
         className="absolute inset-0"
         onMouseMove={(e) => {

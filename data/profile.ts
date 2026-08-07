@@ -3,11 +3,11 @@ export const SITE_URL = "https://abdurore.dev";
 export const profile = {
   name: "Oreagba Abdulhameed Oluwadurotimi",
   alias: "Abdurore",
-  role: "Frontend Developer",
+  role: "Full-Stack Developer",
   subrole: "Mechatronics Engineering Student",
   tagline:
-    "Frontend Developer building AI-powered products and playful web experiences.",
-  bio: "Third-year Mechatronics Engineering student and independent frontend developer with two years of hands-on experience building and shipping web platforms. Founder of Cardora, a digital card and moment-creation platform, with additional freelance and personal project experience spanning e-commerce, real estate, and service-based websites. Comfortable working across the full frontend build cycle, from UI design to deployment, and collaborating with backend developers and clients to deliver working products.",
+    "Full-Stack Developer building AI-powered products and playful web experiences.",
+  bio: "Third-year Mechatronics Engineering student and independent full-stack developer with two years of hands-on experience building and shipping web platforms. Founder of Cardora, a digital card and moment-creation platform, with additional freelance and personal project experience spanning e-commerce, real estate, and service-based websites. Comfortable across the full build cycle — UI design in Figma, React/Node.js implementation, Docker-based environments, and deployment — collaborating with backend developers and clients to deliver working products.",
   location: "Lagos, Nigeria",
   email: "abdulhamidore1@gmail.com",
   education: {
@@ -23,13 +23,15 @@ export const profile = {
   skills: [
     "React",
     "Next.js",
+    "Node.js",
     "TypeScript",
     "JavaScript",
     "Tailwind CSS",
     "HTML / CSS",
+    "Docker",
+    "Figma",
     "Git / GitHub",
     "Vercel / Netlify",
-    "FastAPI (integration)",
     "Design Tokens / CSS Custom Properties",
     "AI Prompt Engineering",
     "AutoCAD",

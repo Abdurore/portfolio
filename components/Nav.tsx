@@ -47,7 +47,7 @@ export function Nav() {
       transition={{ duration: 0.6, ease: "easeOut" }}
       className="fixed top-0 inset-x-0 z-50 flex justify-center px-4 pt-4"
     >
-      <nav className="flex w-full max-w-3xl items-center justify-between rounded-full border border-border bg-background-elevated/70 px-4 py-2.5 backdrop-blur-xl shadow-[0_0_30px_-12px_rgba(139,92,246,0.4)]">
+      <nav className="flex w-full max-w-3xl items-center justify-between rounded-full border border-border bg-background-elevated/70 px-4 py-2.5 backdrop-blur-xl shadow-[0_0_30px_-12px_rgba(22,163,74,0.4)]">
         <button
           onClick={() => handleClick("hero")}
           className="font-mono text-sm font-semibold tracking-tight text-foreground"

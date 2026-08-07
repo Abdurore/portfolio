@@ -15,9 +15,9 @@ export default function OpengraphImage() {
           flexDirection: "column",
           justifyContent: "center",
           padding: 96,
-          background: "#08080c",
+          background: "#07100c",
           backgroundImage:
-            "radial-gradient(circle at 15% 15%, rgba(139,92,246,0.35), transparent 55%), radial-gradient(circle at 85% 85%, rgba(34,211,238,0.25), transparent 55%)",
+            "radial-gradient(circle at 15% 15%, rgba(22,163,74,0.35), transparent 55%), radial-gradient(circle at 85% 85%, rgba(34,211,238,0.25), transparent 55%)",
           fontFamily: "sans-serif",
         }}
       >
@@ -39,25 +39,25 @@ export default function OpengraphImage() {
               background: "#a3e635",
             }}
           />
-          Available for frontend work
+          Available for full-stack work
         </div>
         <div
           style={{
             display: "flex",
             fontSize: 84,
             fontWeight: 700,
-            color: "#f2f2f7",
+            color: "#f1f5f2",
             lineHeight: 1.05,
           }}
         >
-          {profile.alias} — Frontend Developer
+          {profile.alias} — {profile.role}
         </div>
         <div
           style={{
             display: "flex",
             marginTop: 28,
             fontSize: 32,
-            color: "#9a9aab",
+            color: "#97a69e",
             maxWidth: 900,
           }}
         >
