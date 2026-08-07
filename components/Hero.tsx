@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import { ArrowDown, Mail } from "lucide-react";
 import { profile } from "@/data/profile";
+import { Magnetic } from "./Magnetic";
 
 const TECH_STRIP = [
   "React",
@@ -41,10 +42,10 @@ export function Hero() {
         className="pointer-events-none absolute inset-0 opacity-70 transition-opacity"
         style={{
           background:
-            "radial-gradient(600px circle at var(--x, 50%) var(--y, 30%), rgba(22,163,74,0.18), transparent 60%)",
+            "radial-gradient(600px circle at var(--x, 50%) var(--y, 30%), rgba(139,92,246,0.15), transparent 60%)",
         }}
       />
-      <div className="pointer-events-none absolute -top-40 left-1/2 h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-accent-green/20 blur-[120px]" />
+      <div className="pointer-events-none absolute -top-40 left-1/2 h-[500px] w-[700px] -translate-x-1/2 rounded-full bg-accent-violet/20 blur-[120px]" />
 
       <div className="relative mx-auto grid w-full max-w-5xl grid-cols-1 items-center gap-12 px-6 lg:grid-cols-[1.2fr_0.8fr]">
         <div className="flex flex-col">
@@ -92,26 +93,30 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mt-10 flex flex-wrap items-center gap-4"
           >
-            <a
-              href="#featured"
-              onClick={(e) => {
-                e.preventDefault();
-                document
-                  .getElementById("featured")
-                  ?.scrollIntoView({ behavior: "smooth" });
-              }}
-              className="group inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 font-mono text-sm font-medium text-background transition-transform hover:scale-105"
-            >
-              View Projects
-              <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
-            </a>
-            <a
-              href={`mailto:${profile.email}`}
-              className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 font-mono text-sm font-medium text-foreground transition-colors hover:border-accent-green hover:bg-white/5"
-            >
-              <Mail className="h-4 w-4" />
-              Get in touch
-            </a>
+            <Magnetic>
+              <a
+                href="#featured"
+                onClick={(e) => {
+                  e.preventDefault();
+                  document
+                    .getElementById("featured")
+                    ?.scrollIntoView({ behavior: "smooth" });
+                }}
+                className="group inline-flex items-center gap-2 rounded-full bg-foreground px-6 py-3 font-mono text-sm font-medium text-background transition-transform hover:scale-105"
+              >
+                View Projects
+                <ArrowDown className="h-4 w-4 transition-transform group-hover:translate-y-0.5" />
+              </a>
+            </Magnetic>
+            <Magnetic>
+              <a
+                href={`mailto:${profile.email}`}
+                className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 font-mono text-sm font-medium text-foreground transition-colors hover:border-accent-violet hover:bg-white/5"
+              >
+                <Mail className="h-4 w-4" />
+                Get in touch
+              </a>
+            </Magnetic>
           </motion.div>
         </div>
 
@@ -126,7 +131,7 @@ export function Hero() {
             transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
             className="relative"
           >
-            <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-accent-green via-accent-cyan to-accent-green opacity-60 blur-xl animate-glow-pulse" />
+            <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-accent-violet via-accent-cyan to-accent-violet opacity-60 blur-xl animate-glow-pulse" />
             <div className="relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-background-elevated">
               <Image
                 src="/headshot-v2.jpg"
@@ -151,7 +156,7 @@ export function Hero() {
                 className="font-mono text-sm text-muted"
               >
                 {tech}
-                <span className="ml-10 text-accent-green">/</span>
+                <span className="ml-10 text-accent-violet">/</span>
               </span>
             ))}
           </div>

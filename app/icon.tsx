@@ -14,10 +14,10 @@ export default function Icon() {
           alignItems: "center",
           justifyContent: "center",
           borderRadius: 14,
-          background: "linear-gradient(135deg, #16a34a, #22d3ee)",
+          background: "linear-gradient(135deg, #8b5cf6, #22d3ee)",
           fontSize: 36,
           fontWeight: 700,
-          color: "#07100c",
+          color: "#08080c",
           fontFamily: "sans-serif",
         }}
       >

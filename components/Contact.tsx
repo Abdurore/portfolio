@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
 import { profile } from "@/data/profile";
 import { ScrollReveal } from "./ScrollReveal";
+import { Magnetic } from "./Magnetic";
 import {
   GithubIcon,
   InstagramIcon,
@@ -42,15 +43,17 @@ export function Contact() {
           collaborations. Drop a line, I read every email.
         </p>
 
-        <motion.a
-          href={`mailto:${profile.email}`}
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.97 }}
-          className="mt-8 inline-flex items-center gap-2 rounded-full bg-foreground px-7 py-3.5 font-mono text-sm font-medium text-background"
-        >
-          <Mail className="h-4 w-4" />
-          {profile.email}
-        </motion.a>
+        <Magnetic>
+          <motion.a
+            href={`mailto:${profile.email}`}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
+            className="mt-8 inline-flex items-center gap-2 rounded-full bg-foreground px-7 py-3.5 font-mono text-sm font-medium text-background"
+          >
+            <Mail className="h-4 w-4" />
+            {profile.email}
+          </motion.a>
+        </Magnetic>
 
         <div className="mt-10 flex items-center justify-center gap-3">
           {SOCIAL_LINKS.map(({ label, href, icon: Icon }) => (
@@ -62,7 +65,7 @@ export function Contact() {
               aria-label={label}
               whileHover={{ scale: 1.12, y: -3 }}
               whileTap={{ scale: 0.95 }}
-              className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background-elevated/60 text-muted transition-colors hover:border-accent-green hover:text-foreground"
+              className="flex h-11 w-11 items-center justify-center rounded-full border border-border bg-background-elevated/60 text-muted transition-colors hover:border-accent-violet hover:text-foreground"
             >
               <Icon className="h-4 w-4" />
             </motion.a>

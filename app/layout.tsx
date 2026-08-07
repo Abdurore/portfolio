@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Analytics } from "@vercel/analytics/next";
 import { profile, SITE_URL } from "@/data/profile";
+import { MotionProvider } from "@/components/MotionProvider";
+import { ScrollProgress } from "@/components/ScrollProgress";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -55,7 +58,11 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
         />
-        {children}
+        <MotionProvider>
+          <ScrollProgress />
+          {children}
+        </MotionProvider>
+        <Analytics />
       </body>
     </html>
   );

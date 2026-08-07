@@ -48,7 +48,7 @@ export function About() {
           <motion.span
             key={skill}
             variants={revealItemVariants}
-            className="rounded-full border border-border bg-background-elevated/60 px-3.5 py-1.5 font-mono text-xs text-muted transition-colors hover:border-accent-green hover:text-foreground"
+            className="rounded-full border border-border bg-background-elevated/60 px-3.5 py-1.5 font-mono text-xs text-muted transition-colors hover:border-accent-violet hover:text-foreground"
           >
             {skill}
           </motion.span>
