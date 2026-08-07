@@ -129,7 +129,7 @@ export function Hero() {
             <div className="absolute -inset-3 rounded-[2rem] bg-gradient-to-br from-accent-violet via-accent-cyan to-accent-violet opacity-60 blur-xl animate-glow-pulse" />
             <div className="relative overflow-hidden rounded-[1.75rem] border border-white/10 bg-background-elevated">
               <Image
-                src="/headshot.jpg"
+                src="/headshot-v2.jpg"
                 alt={`${profile.alias} — ${profile.role}`}
                 width={900}
                 height={900}
