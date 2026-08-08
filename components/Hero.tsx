@@ -139,8 +139,9 @@ export function Hero() {
                 width={900}
                 height={900}
                 priority
-                className="aspect-square w-full object-cover grayscale-[15%] contrast-[1.05]"
+                className="aspect-square w-full object-cover object-[50%_6%] contrast-[1.03] saturate-[1.05]"
               />
+              <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_closest-side_at_50%_35%,transparent_58%,var(--background-elevated)_105%)]" />
               <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
             </div>
           </motion.div>
