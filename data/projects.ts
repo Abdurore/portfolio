@@ -43,10 +43,10 @@ export const projects: Project[] = [
   {
     slug: "ibro-pharmacy",
     name: "Ibro Pharmacy",
-    pitch: "A neighbourhood pharmacy e-commerce platform — shop, prescriptions, and same-day Lagos delivery.",
+    pitch: "A full-stack pharmacy e-commerce platform — shop, prescriptions, and same-day Lagos delivery.",
     description:
-      "Next.js e-commerce platform for a Lagos pharmacy. Shop by category with a cart and checkout flow, upload and track prescriptions, chat-style 'Ask a Pharmacist' access, and a health-tips section — all built around same-day delivery across Lagos.",
-    tech: ["Next.js", "React", "Tailwind CSS"],
+      "Full-stack e-commerce platform for a Lagos pharmacy, with a Next.js frontend and an Express API hosted on Render. Shop by category with a cart and checkout flow, upload and track prescriptions, chat-style 'Ask a Pharmacist' access, and a health-tips section — all built around same-day delivery across Lagos.",
+    tech: ["Next.js", "React", "Express", "Node.js", "Tailwind CSS"],
     liveUrl: "https://ibro-pharmacy.vercel.app",
     category: "featured",
     span: "md",
