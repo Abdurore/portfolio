@@ -41,6 +41,18 @@ export const projects: Project[] = [
     image: "/projects/halal-meats.jpg",
   },
   {
+    slug: "ibro-pharmacy",
+    name: "Ibro Pharmacy",
+    pitch: "A full-stack pharmacy e-commerce platform — shop, prescriptions, and same-day Lagos delivery.",
+    description:
+      "Full-stack e-commerce platform for a Lagos pharmacy, with a Next.js frontend and an Express API hosted on Render. Shop by category with a cart and checkout flow, upload and track prescriptions, chat-style 'Ask a Pharmacist' access, and a health-tips section — all built around same-day delivery across Lagos.",
+    tech: ["Next.js", "React", "Express", "Node.js", "Tailwind CSS"],
+    liveUrl: "https://ibro-pharmacy.vercel.app",
+    category: "featured",
+    span: "md",
+    image: "/projects/ibro-pharmacy.png",
+  },
+  {
     slug: "preventai",
     name: "PreventAI",
     pitch: "AI-scored preventive health assistant, built in 24 hours at Cavista Hackathon 2026.",
