@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
+import { Download } from "lucide-react";
 import { profile } from "@/data/profile";
 
 const LINKS = [
@@ -73,12 +74,22 @@ export function Nav() {
           ))}
         </ul>
 
-        <a
-          href={`mailto:${profile.email}`}
-          className="hidden rounded-full bg-foreground px-4 py-1.5 font-mono text-xs font-medium text-background transition-transform hover:scale-105 sm:inline-block"
-        >
-          Say Hi
-        </a>
+        <div className="hidden items-center gap-2 sm:flex">
+          <a
+            href={profile.resumeUrl}
+            download
+            className="inline-flex items-center gap-1.5 rounded-full border border-border px-4 py-1.5 font-mono text-xs font-medium text-foreground transition-colors hover:border-accent-violet hover:bg-white/5"
+          >
+            <Download className="h-3.5 w-3.5" />
+            Resume
+          </a>
+          <a
+            href={`mailto:${profile.email}`}
+            className="rounded-full bg-foreground px-4 py-1.5 font-mono text-xs font-medium text-background transition-transform hover:scale-105"
+          >
+            Say Hi
+          </a>
+        </div>
 
         <button
           onClick={() => setOpen((v) => !v)}
@@ -104,6 +115,22 @@ export function Nav() {
               </li>
             ))}
           </ul>
+          <div className="mt-2 flex gap-2 border-t border-border pt-2">
+            <a
+              href={profile.resumeUrl}
+              download
+              className="inline-flex flex-1 items-center justify-center gap-1.5 rounded-lg border border-border px-3 py-2 font-mono text-sm text-foreground hover:bg-white/5"
+            >
+              <Download className="h-3.5 w-3.5" />
+              Resume
+            </a>
+            <a
+              href={`mailto:${profile.email}`}
+              className="flex-1 rounded-lg bg-foreground px-3 py-2 text-center font-mono text-sm font-medium text-background"
+            >
+              Say Hi
+            </a>
+          </div>
         </div>
       )}
     </motion.header>

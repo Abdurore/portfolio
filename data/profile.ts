@@ -10,6 +10,7 @@ export const profile = {
   bio: "Third-year Mechatronics Engineering student and independent full-stack developer with two years of hands-on experience building and shipping web platforms. Founder of Cardora, a digital card and moment-creation platform, with additional freelance and personal project experience spanning e-commerce, real estate, and service-based websites. Comfortable across the full build cycle — UI design in Figma, React/Node.js implementation, Docker-based environments, and deployment — collaborating with backend developers and clients to deliver working products.",
   location: "Lagos, Nigeria",
   email: "abdulhamidore1@gmail.com",
+  resumeUrl: "/Abdurore-CV.pdf",
   education: {
     school: "Lagos State University of Science and Technology (LASUSTECH)",
     degree: "B.Eng. Mechatronics Engineering",
