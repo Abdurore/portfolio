@@ -3,7 +3,7 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { ArrowDown, Mail } from "lucide-react";
+import { ArrowDown, Download, Mail } from "lucide-react";
 import { profile } from "@/data/profile";
 import { Magnetic } from "./Magnetic";
 
@@ -115,6 +115,16 @@ export function Hero() {
               >
                 <Mail className="h-4 w-4" />
                 Get in touch
+              </a>
+            </Magnetic>
+            <Magnetic>
+              <a
+                href={profile.resumeUrl}
+                download
+                className="inline-flex items-center gap-2 rounded-full border border-border px-6 py-3 font-mono text-sm font-medium text-foreground transition-colors hover:border-accent-violet hover:bg-white/5"
+              >
+                <Download className="h-4 w-4" />
+                Resume
               </a>
             </Magnetic>
           </motion.div>
