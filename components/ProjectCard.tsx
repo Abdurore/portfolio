@@ -19,26 +19,8 @@ export function ProjectCard({ project }: { project: Project }) {
   return (
     <motion.div
       variants={revealItemVariants}
-      whileHover={{ y: -6 }}
-      transition={{ type: "spring", stiffness: 300, damping: 20 }}
-      className={`group relative flex flex-col justify-between overflow-hidden rounded-3xl border border-border bg-background-elevated/60 p-6 ${spanClass}`}
+      className={`corner-brackets group relative flex flex-col justify-between border border-border bg-background-elevated/60 p-6 transition-colors hover:border-accent/50 ${spanClass}`}
     >
-      <div className="pointer-events-none absolute -inset-px rounded-3xl opacity-0 transition-opacity duration-300 group-hover:opacity-100 bg-[radial-gradient(400px_circle_at_var(--mx,50%)_var(--my,0%),rgba(139,92,246,0.18),transparent_70%)]" />
-      <div
-        className="absolute inset-0"
-        onMouseMove={(e) => {
-          const rect = e.currentTarget.getBoundingClientRect();
-          e.currentTarget.style.setProperty(
-            "--mx",
-            `${e.clientX - rect.left}px`
-          );
-          e.currentTarget.style.setProperty(
-            "--my",
-            `${e.clientY - rect.top}px`
-          );
-        }}
-      />
-
       {project.image && (
         <div className="relative -mx-6 -mt-6 mb-5 overflow-hidden border-b border-border">
           <Image
@@ -46,7 +28,7 @@ export function ProjectCard({ project }: { project: Project }) {
             alt={`${project.name} screenshot`}
             width={1200}
             height={720}
-            className="aspect-video w-full object-cover object-top transition-transform duration-500 group-hover:scale-[1.04]"
+            className="aspect-video w-full object-cover object-top grayscale-[35%] transition-[filter] duration-300 group-hover:grayscale-0"
           />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background-elevated/80 via-transparent to-transparent" />
         </div>
@@ -58,11 +40,8 @@ export function ProjectCard({ project }: { project: Project }) {
             {project.name}
           </h3>
           {project.liveUrl && (
-            <span className="flex shrink-0 items-center gap-1.5 rounded-full border border-border bg-background/60 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wide text-accent-lime">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent-lime opacity-75" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent-lime" />
-              </span>
+            <span className="flex shrink-0 items-center gap-1.5 border border-border bg-background/60 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wide text-accent">
+              <span className="h-1.5 w-1.5 bg-accent" />
               Live
             </span>
           )}
@@ -79,7 +58,7 @@ export function ProjectCard({ project }: { project: Project }) {
           {project.tech.map((tech) => (
             <span
               key={tech}
-              className="rounded-full border border-border bg-background/60 px-2.5 py-1 font-mono text-[11px] text-muted"
+              className="border border-border bg-background/60 px-2.5 py-1 font-mono text-[11px] text-muted"
             >
               {tech}
             </span>
@@ -92,7 +71,7 @@ export function ProjectCard({ project }: { project: Project }) {
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 font-mono text-sm font-medium text-foreground transition-colors hover:text-accent-cyan"
+              className="inline-flex items-center gap-1 font-mono text-sm font-medium text-foreground transition-colors hover:text-accent"
             >
               Live Demo
               <ArrowUpRight className="h-3.5 w-3.5" />
@@ -104,7 +83,7 @@ export function ProjectCard({ project }: { project: Project }) {
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 font-mono text-sm text-muted transition-colors hover:text-accent-cyan"
+              className="inline-flex items-center gap-1 font-mono text-sm text-muted transition-colors hover:text-accent"
             >
               {link.label}
               <ArrowUpRight className="h-3.5 w-3.5" />

@@ -16,16 +16,68 @@ export type Project = {
 export const projects: Project[] = [
   {
     slug: "cardora",
-    name: "Cardora UI",
-    pitch: "Create, share, and collect interactive digital cards — with a live economy behind them.",
+    name: "Cardora",
+    pitch: "Animated digital greeting cards with tiered subscriptions and an in-app currency — pre-launch, wrapping up the payment flow.",
     description:
-      "Vite + React single-page app for creating, previewing, sharing, and managing interactive digital cards. Features dynamic pricing synced to a backend API, a studio for building poll/trivia/chain cards, a rewards hub with daily streak bonuses, and premium chat frame/profile decorators.",
-    tech: ["React", "Vite", "REST API", "CSS Custom Properties"],
+      "Co-founded and built full-stack. React + Tailwind CSS frontend with an animated card-opening experience, a Node.js backend, and Flutterwave/Paystack integration powering tiered subscriptions and in-app currency purchases. Currently pre-launch, in final bug fixes on the payment flow.",
+    tech: ["React", "Tailwind CSS", "Node.js", "Flutterwave", "Paystack"],
     liveUrl: "https://cardora.studio",
     sourcePrivate: true,
     category: "featured",
     span: "lg",
     image: "/projects/cardora.jpg",
+  },
+  {
+    slug: "euphorium",
+    name: "Euphorium",
+    pitch: "A social-commerce Telegram Mini App blending LinkedIn, X, and Jumia — in development for a client.",
+    description:
+      "Frontend/full-stack build for a client, merging professional networking, a social feed, and marketplace commerce into a single Telegram Mini App. Next.js + Tailwind CSS frontend backed by NestJS and Supabase, deployed on Cloudflare. Actively in development — no public link yet.",
+    tech: ["Next.js", "Tailwind CSS", "NestJS", "Supabase", "Cloudflare"],
+    sourcePrivate: true,
+    category: "featured",
+  },
+  {
+    slug: "jaayorun",
+    name: "Jaayorun",
+    pitch: "A live delivery platform with dedicated vendor, user, rider, and staff apps.",
+    description:
+      "Collaborator on a production delivery platform spanning four dedicated apps — vendor, user, rider, and staff. Built with Laravel/PHP and Docker. Contributed bug fixes and feature development on a proprietary, closed-source codebase that's live in production.",
+    tech: ["Laravel", "PHP", "Docker"],
+    sourcePrivate: true,
+    category: "featured",
+  },
+  {
+    slug: "hdi",
+    name: "HDI",
+    pitch: "Informational site for the Halal and Haram Distinction Development Initiative, with a live news feed.",
+    description:
+      "Webmaster and Super Admin for HDI's public site. Built with HTML/CSS and a Node.js/Express API backed by MongoDB, powering a live news feed. Live in production, under an ongoing maintenance contract.",
+    tech: ["HTML", "CSS", "Node.js", "Express", "MongoDB"],
+    liveUrl: "https://halalcert.com.ng",
+    category: "featured",
+    span: "md",
+    image: "/projects/hdi.png",
+  },
+  {
+    slug: "accessibility-audit-scanner",
+    name: "Accessibility Audit Scanner",
+    pitch: "An internal WCAG/ADA compliance scanner powering a solo audit service.",
+    description:
+      "Internal tool built with Playwright and axe-core to automate accessibility scans for a WCAG/ADA compliance audit service I run solo — crawls pages, runs axe-core rules, and compiles violation reports for client audits.",
+    tech: ["Playwright", "axe-core", "Node.js"],
+    sourcePrivate: true,
+    category: "featured",
+  },
+  {
+    slug: "student-performance-prediction",
+    name: "Student Performance Prediction System",
+    pitch: "An ML-driven system predicting student outcomes, built for a client's final-year project.",
+    description:
+      "Machine learning system built for a client's final-year project — a scikit-learn model trained on student performance data, served through a React/Next.js frontend for predictions and result visualization.",
+    tech: ["Python", "scikit-learn", "React", "Next.js"],
+    sourcePrivate: true,
+    category: "featured",
   },
   {
     slug: "halal-meats",
