@@ -6,8 +6,8 @@ export function FeaturedProjects() {
   return (
     <section id="featured" className="relative mx-auto max-w-5xl px-6 py-20">
       <ScrollReveal>
-        <p className="font-mono text-xs uppercase tracking-widest text-accent-cyan">
-          02 / Featured Projects
+        <p className="font-mono text-xs uppercase tracking-widest text-muted">
+          <span className="text-accent">[02]</span> Featured Projects
         </p>
         <h2 className="mt-3 max-w-xl text-3xl font-semibold tracking-tight sm:text-4xl">
           Full products, real backends, real users.
