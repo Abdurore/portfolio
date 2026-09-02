@@ -106,15 +106,14 @@ export function Hero() {
           className="corner-brackets relative mx-auto w-full max-w-[280px] border border-border bg-background-elevated lg:max-w-none"
         >
           <Image
-            src="/headshot-v3.jpg"
+            src="/headshot-v4.jpg"
             alt={`${profile.alias} — ${profile.role}`}
             width={900}
             height={900}
             priority
-            className="aspect-square w-full object-cover object-[50%_6%] contrast-[1.03] saturate-[1.05]"
+            className="aspect-square w-full object-cover object-[50%_32%] brightness-125 contrast-[1.08] saturate-[1.05]"
           />
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_closest-side_at_50%_35%,transparent_58%,var(--background-elevated)_105%)]" />
-          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/60 via-transparent to-transparent" />
+          <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background/70 via-transparent to-transparent" />
         </motion.div>
       </div>
     </section>
