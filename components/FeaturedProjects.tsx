@@ -14,7 +14,7 @@ export function FeaturedProjects() {
         </h2>
       </ScrollReveal>
 
-      <ScrollRevealGroup className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:auto-rows-[minmax(0,auto)]">
+      <ScrollRevealGroup className="mt-12 grid grid-cols-1 gap-5 sm:grid-cols-2 sm:auto-rows-[minmax(0,auto)] sm:items-start">
         {featuredProjects.map((project) => (
           <ProjectCard key={project.slug} project={project} />
         ))}
