@@ -37,7 +37,7 @@ export function About() {
       <div className="mt-14 flex flex-col gap-6">
         {profile.skillGroups.map((group) => (
           <div key={group.label}>
-            <p className="font-mono text-[10px] uppercase tracking-wide text-muted/70">
+            <p className="font-mono text-[10px] uppercase tracking-wide text-muted">
               {group.label}
             </p>
             <RevealGroup className="mt-2 flex flex-wrap gap-2">

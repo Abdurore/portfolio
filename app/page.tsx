@@ -2,6 +2,7 @@ import { About } from "@/components/About";
 import { Contact } from "@/components/Contact";
 import { Experience } from "@/components/Experience";
 import { FeaturedProjects } from "@/components/FeaturedProjects";
+import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/Hero";
 import { Nav } from "@/components/Nav";
 import { PracticeProjects } from "@/components/PracticeProjects";
@@ -18,6 +19,7 @@ export default function Home() {
         <PracticeProjects />
         <Contact />
       </main>
+      <Footer />
     </>
   );
 }

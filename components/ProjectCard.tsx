@@ -29,9 +29,10 @@ export function ProjectCard({ project }: { project: Project }) {
         <div className="relative -mx-6 -mt-6 mb-5 overflow-hidden border-b border-border">
           <Image
             src={project.image}
-            alt={`${project.name} screenshot`}
+            alt={project.imageAlt ?? `${project.name} screenshot`}
             width={1200}
             height={720}
+            sizes="(min-width: 1024px) 500px, (min-width: 640px) 50vw, 100vw"
             className="aspect-video w-full object-cover object-top grayscale-[35%] transition-[filter] duration-300 group-hover:grayscale-0"
           />
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-background-elevated/80 via-transparent to-transparent" />
@@ -54,7 +55,7 @@ export function ProjectCard({ project }: { project: Project }) {
         </div>
 
         <p className="mt-2 text-sm font-medium text-muted">{project.pitch}</p>
-        <p className="mt-4 text-sm leading-relaxed text-muted/80">
+        <p className="mt-4 text-sm leading-relaxed text-muted">
           {project.description}
         </p>
       </div>
@@ -110,7 +111,7 @@ export function ProjectCard({ project }: { project: Project }) {
             </a>
           )}
           {project.sourcePrivate && (
-            <span className="inline-flex items-center gap-1 text-sm text-muted/60">
+            <span className="inline-flex items-center gap-1 text-sm text-muted">
               <Lock className="h-3.5 w-3.5" aria-hidden="true" />
               Private repo
             </span>

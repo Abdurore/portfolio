@@ -2,7 +2,7 @@ import { Mail } from "lucide-react";
 import { profile } from "@/data/profile";
 import { Reveal } from "./Reveal";
 import { GrowthLine } from "./GrowthLine";
-import { LeafGlyph, MonsteraLeaf } from "./Botanical";
+import { LeafGlyph } from "./Botanical";
 import {
   GithubIcon,
   InstagramIcon,
@@ -68,22 +68,6 @@ export function Contact() {
           ))}
         </ul>
       </Reveal>
-
-      <footer className="relative mt-24 border-t border-border pt-8">
-        <MonsteraLeaf
-          aria-hidden="true"
-          className="pointer-events-none absolute -bottom-6 left-1/2 h-24 w-24 -translate-x-1/2 text-border opacity-50"
-        />
-        <p className="font-mono text-xs text-muted">
-          Grown in Lagos — © {new Date().getFullYear()} {profile.name} (
-          {profile.alias}).
-        </p>
-        <p className="mt-2 font-mono text-xs text-muted/70">
-          <a href="/accessibility" className="underline hover:text-accent">
-            Accessibility statement
-          </a>
-        </p>
-      </footer>
     </section>
   );
 }

@@ -11,6 +11,8 @@ export type Project = {
   category: "featured" | "practice";
   span?: "lg" | "md" | "sm";
   image?: string;
+  /** Describes what the screenshot actually shows, for alt text. Required if `image` is set. */
+  imageAlt?: string;
   /** "live" counts toward the "Shipped Projects" stat; the others don't. */
   status: "live" | "pre-launch" | "in-development" | "private";
 };
@@ -28,6 +30,8 @@ export const projects: Project[] = [
     category: "featured",
     span: "lg",
     image: "/projects/cardora.jpg",
+    imageAlt:
+      "Cardora's card-formats screen, showing five card types — Personal, Poll, Trivia, Anonymous Inbox, and Chain Cards — above a four-step how-it-works guide.",
     status: "pre-launch",
   },
   {
@@ -63,6 +67,8 @@ export const projects: Project[] = [
     category: "featured",
     span: "md",
     image: "/projects/hdi.png",
+    imageAlt:
+      "HDI's homepage showing a Latest News & Updates feed and a Food & Beverage Certification service card on a green background.",
     status: "live",
   },
   {
@@ -120,6 +126,8 @@ export const projects: Project[] = [
     category: "featured",
     span: "md",
     image: "/projects/halal-meats.jpg",
+    imageAlt:
+      "Halal Meats homepage with a certified-halal badge, this week's batch availability bar, and Reserve Your Meat / Chat on WhatsApp buttons.",
     status: "live",
   },
   {
@@ -133,6 +141,8 @@ export const projects: Project[] = [
     category: "featured",
     span: "md",
     image: "/projects/ibro-pharmacy.png",
+    imageAlt:
+      "Ibro Pharmacy's homepage hero, 'Your Health, Delivered with Care,' on a green background with a pill icon and Shop Now / Upload Prescription buttons.",
     status: "live",
   },
   {
@@ -148,6 +158,8 @@ export const projects: Project[] = [
     category: "featured",
     span: "md",
     image: "/projects/preventai.jpg",
+    imageAlt:
+      "PreventAI's clinical risk summary screen, showing a low-risk score of 20, cardiovascular/metabolic/lifestyle category breakdowns, and a list of healthy-range indicators.",
     status: "live",
   },
   {
@@ -161,6 +173,8 @@ export const projects: Project[] = [
     sourceUrl: "https://github.com/Abdurore/chef-claude",
     category: "practice",
     image: "/projects/chef-claude.jpg",
+    imageAlt:
+      "Chef Claude interface listing ingredients on hand (chicken, rice, beans, pepper) and a generated recipe for a chicken and rice bowl.",
     status: "live",
   },
   {
@@ -174,6 +188,7 @@ export const projects: Project[] = [
     sourceUrl: "https://github.com/Abdurore/tenzies-game",
     category: "practice",
     image: "/projects/tenzies.jpg",
+    imageAlt: "Tenzies game board showing ten dice mid-roll with a Roll button.",
     status: "live",
   },
   {
@@ -199,6 +214,8 @@ export const projects: Project[] = [
     sourceUrl: "https://github.com/Abdurore/tic-tac-toe-mini",
     category: "practice",
     image: "/projects/tic-tac-toe.jpg",
+    imageAlt:
+      "Tic-tac-toe board mid-game with one X placed, a turn indicator, and a score tracker for Player X, Ties, and Player O.",
     status: "live",
   },
 ];

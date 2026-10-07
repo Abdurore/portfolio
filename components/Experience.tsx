@@ -33,12 +33,12 @@ export function Experience() {
               <h3 className="font-semibold text-foreground">{item.title}</h3>
               <span className="font-mono text-xs text-muted">{item.org}</span>
               {item.period && (
-                <span className="font-mono text-xs text-muted/70">
+                <span className="font-mono text-xs text-muted">
                   {item.period}
                 </span>
               )}
             </div>
-            <p className="mt-1 max-w-xl text-sm leading-relaxed text-muted/80">
+            <p className="mt-1 max-w-xl text-sm leading-relaxed text-muted">
               {item.description}
             </p>
           </li>
@@ -57,7 +57,7 @@ export function Experience() {
             {cred.name}
             <span
               className={
-                cred.status === "earned" ? "text-accent" : "text-muted/70"
+                cred.status === "earned" ? "text-accent" : "text-muted"
               }
             >
               {CREDENTIAL_LABEL[cred.status]}
