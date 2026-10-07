@@ -21,8 +21,8 @@ export function About() {
           {profile.bio}
         </p>
         <p className="mt-4 max-w-2xl text-sm text-muted">
-          Currently studying {profile.education.degree} at{" "}
-          {profile.education.school} ({profile.education.status}).
+          {profile.education.degree} at {profile.education.school} (
+          {profile.education.status}).
         </p>
       </ScrollReveal>
 
@@ -43,17 +43,26 @@ export function About() {
         ))}
       </ScrollRevealGroup>
 
-      <ScrollRevealGroup className="mt-12 flex flex-wrap gap-2">
-        {profile.skills.map((skill) => (
-          <motion.span
-            key={skill}
-            variants={revealItemVariants}
-            className="border border-border bg-background-elevated/60 px-3.5 py-1.5 font-mono text-xs text-muted transition-colors hover:border-accent hover:text-foreground"
-          >
-            {skill}
-          </motion.span>
+      <div className="mt-12 flex flex-col gap-6">
+        {profile.skillGroups.map((group) => (
+          <div key={group.label}>
+            <p className="font-mono text-[10px] uppercase tracking-wide text-muted/70">
+              {group.label}
+            </p>
+            <ScrollRevealGroup className="mt-2 flex flex-wrap gap-2">
+              {group.skills.map((skill) => (
+                <motion.span
+                  key={skill}
+                  variants={revealItemVariants}
+                  className="border border-border bg-background-elevated/60 px-3.5 py-1.5 font-mono text-xs text-muted transition-colors hover:border-accent hover:text-foreground"
+                >
+                  {skill}
+                </motion.span>
+              ))}
+            </ScrollRevealGroup>
+          </div>
         ))}
-      </ScrollRevealGroup>
+      </div>
     </section>
   );
 }

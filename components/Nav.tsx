@@ -8,6 +8,7 @@ import { profile } from "@/data/profile";
 const LINKS = [
   { id: "about", label: "About" },
   { id: "featured", label: "Featured" },
+  { id: "experience", label: "Experience" },
   { id: "practice", label: "Practice" },
   { id: "contact", label: "Contact" },
 ];

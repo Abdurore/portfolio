@@ -24,6 +24,14 @@ export function XIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+export function YoutubeIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 24 24" fill="currentColor" {...props}>
+      <path d="M23.5 6.75a3.02 3.02 0 0 0-2.12-2.14C19.5 4.1 12 4.1 12 4.1s-7.5 0-9.38.51A3.02 3.02 0 0 0 .5 6.75 31.6 31.6 0 0 0 0 12.5a31.6 31.6 0 0 0 .5 5.75 3.02 3.02 0 0 0 2.12 2.14c1.88.51 9.38.51 9.38.51s7.5 0 9.38-.51a3.02 3.02 0 0 0 2.12-2.14c.34-1.9.5-3.82.5-5.75a31.6 31.6 0 0 0-.5-5.75ZM9.55 16V9l6.27 3.5L9.55 16Z" />
+    </svg>
+  );
+}
+
 export function InstagramIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 24 24" fill="currentColor" {...props}>

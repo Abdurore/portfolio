@@ -29,11 +29,10 @@ export function Hero() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-5xl font-semibold leading-[1.05] tracking-tight sm:text-7xl"
+            className="text-4xl font-semibold leading-[1.1] tracking-tight sm:text-6xl"
           >
-            Hi, I&apos;m <span className="text-accent">{profile.alias}</span>
-            <br />
-            <span className="font-mono">Full-Stack Developer</span>
+            {profile.name}{" "}
+            <span className="text-accent">({profile.alias})</span>
           </motion.h1>
 
           <motion.p
@@ -42,9 +41,7 @@ export function Hero() {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="mt-6 max-w-xl text-lg leading-relaxed text-muted"
           >
-            {profile.tagline} Founder of{" "}
-            <span className="text-foreground">Cardora</span> — building
-            interactive products from UI to deployment.
+            {profile.heroLead}
           </motion.p>
 
           <motion.div

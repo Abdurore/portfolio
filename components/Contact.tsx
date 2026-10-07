@@ -10,13 +10,17 @@ import {
   InstagramIcon,
   LinkedinIcon,
   XIcon,
+  YoutubeIcon,
 } from "./BrandIcons";
 
+// TODO: add Upwork profile URL, then add it here as
+// { label: "Upwork", href: profile.socials.upwork, icon: UpworkIcon }
 const SOCIAL_LINKS = [
   { label: "GitHub", href: profile.socials.github, icon: GithubIcon },
   { label: "LinkedIn", href: profile.socials.linkedin, icon: LinkedinIcon },
   { label: "X / Twitter", href: profile.socials.x, icon: XIcon },
   { label: "Instagram", href: profile.socials.instagram, icon: InstagramIcon },
+  { label: "YouTube", href: profile.socials.youtube, icon: YoutubeIcon },
 ];
 
 export function Contact() {
@@ -27,7 +31,7 @@ export function Contact() {
     >
       <ScrollReveal className="relative">
         <p className="font-mono text-xs uppercase tracking-widest text-muted">
-          <span className="text-accent">[04]</span> Contact
+          <span className="text-accent">[05]</span> Contact
         </p>
         <h2 className="mx-auto mt-3 max-w-xl text-3xl font-semibold tracking-tight sm:text-5xl">
           Got an idea worth <span className="text-accent">building</span>?

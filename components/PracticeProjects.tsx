@@ -7,7 +7,7 @@ export function PracticeProjects() {
     <section id="practice" className="relative mx-auto max-w-5xl px-6 py-20">
       <ScrollReveal>
         <p className="font-mono text-xs uppercase tracking-widest text-muted">
-          <span className="text-accent">[03]</span> Practice Projects
+          <span className="text-accent">[04]</span> Practice Projects
         </p>
         <h2 className="mt-3 max-w-xl text-3xl font-semibold tracking-tight sm:text-4xl">
           Smaller builds, sharp focus.

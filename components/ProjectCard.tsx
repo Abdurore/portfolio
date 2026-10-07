@@ -39,7 +39,7 @@ export function ProjectCard({ project }: { project: Project }) {
           <h3 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
             {project.name}
           </h3>
-          {project.liveUrl && (
+          {project.status === "live" && (
             <span className="flex shrink-0 items-center gap-1.5 border border-border bg-background/60 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wide text-accent">
               <span className="h-1.5 w-1.5 bg-accent" />
               Live

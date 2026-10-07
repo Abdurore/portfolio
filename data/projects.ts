@@ -11,31 +11,35 @@ export type Project = {
   category: "featured" | "practice";
   span?: "lg" | "md" | "sm";
   image?: string;
+  /** "live" counts toward the "Shipped Projects" stat; the others don't. */
+  status: "live" | "pre-launch" | "in-development" | "private";
 };
 
 export const projects: Project[] = [
   {
     slug: "cardora",
     name: "Cardora",
-    pitch: "Animated digital greeting cards with tiered subscriptions and an in-app currency — pre-launch, wrapping up the payment flow.",
+    pitch: "A WhatsApp-first digital greeting card and gifting platform for the Nigerian market — in final pre-launch testing.",
     description:
-      "Co-founded and built full-stack. React + Tailwind CSS frontend with an animated card-opening experience, a Node.js backend, and Flutterwave/Paystack integration powering tiered subscriptions and in-app currency purchases. Currently pre-launch, in final bug fixes on the payment flow.",
+      "Co-founded and built full-stack. React + Tailwind CSS frontend with an animated card-opening experience designed around WhatsApp sharing, a Node.js backend hardened after a security audit, and Flutterwave/Paystack integration powering tiered subscriptions and in-app currency purchases. In final pre-launch testing.",
     tech: ["React", "Tailwind CSS", "Node.js", "Flutterwave", "Paystack"],
     liveUrl: "https://cardora.studio",
     sourcePrivate: true,
     category: "featured",
     span: "lg",
     image: "/projects/cardora.jpg",
+    status: "pre-launch",
   },
   {
     slug: "euphorium",
     name: "Euphorium",
     pitch: "A social-commerce Telegram Mini App blending LinkedIn, X, and Jumia — in development for a client.",
     description:
-      "Frontend/full-stack build for a client, merging professional networking, a social feed, and marketplace commerce into a single Telegram Mini App. Next.js + Tailwind CSS frontend backed by NestJS and Supabase, deployed on Cloudflare. Actively in development — no public link yet.",
-    tech: ["Next.js", "Tailwind CSS", "NestJS", "Supabase", "Cloudflare"],
+      "Frontend/full-stack build for a client, merging professional networking, a social feed, and marketplace commerce into a single Telegram Mini App. Next.js + Tailwind CSS frontend backed by NestJS and Supabase, deployed on Render. Actively in development — no public link yet.",
+    tech: ["Next.js", "Tailwind CSS", "NestJS", "Supabase"],
     sourcePrivate: true,
     category: "featured",
+    status: "in-development",
   },
   {
     slug: "jaayorun",
@@ -46,28 +50,52 @@ export const projects: Project[] = [
     tech: ["Laravel", "PHP", "Docker"],
     sourcePrivate: true,
     category: "featured",
+    status: "live",
   },
   {
     slug: "hdi",
     name: "HDI",
-    pitch: "Informational site for the Halal and Haram Distinction Development Initiative, with a live news feed.",
+    pitch: "Informational site for the Halal and Haram Distinction Development Initiative, with a live news feed I help keep crawlable and current.",
     description:
-      "Webmaster and Super Admin for HDI's public site. Built with HTML/CSS and a Node.js/Express API backed by MongoDB, powering a live news feed. Live in production, under an ongoing maintenance contract.",
-    tech: ["HTML", "CSS", "Node.js", "Express", "MongoDB"],
+      "Webmaster, Super Admin, and social media manager for HDI's public site — a static HTML/CSS/JS site on cPanel consuming an existing Node/Express API built by another team (I didn't build that backend). My work: admin panel improvements (slide reordering), SEO (per-page meta, sitemap, robots, JSON-LD, making the JS-loaded news feed crawlable), ongoing content maintenance, and recovering the Instagram account. Live in production, under an ongoing engagement.",
+    tech: ["HTML", "CSS", "JavaScript", "SEO"],
     liveUrl: "https://halalcert.com.ng",
     category: "featured",
     span: "md",
     image: "/projects/hdi.png",
+    status: "live",
+  },
+  {
+    slug: "simplivide",
+    name: "Simplivide",
+    pitch: "A solo-run Science & Engineering YouTube Shorts channel, scripted like a tiny debate every time.",
+    description:
+      "Independent YouTube Shorts channel with a custom mascot, Bit, and a consistent debate-style format — Hook, Wrong Assumption, Destroy It, Real Explanation, Verdict. I write, record, edit, and publish every episode myself.",
+    tech: ["Video Editing", "Content Strategy", "Social Media"],
+    liveUrl: "https://www.youtube.com/@Simplivide",
+    category: "featured",
+    status: "live",
+  },
+  {
+    slug: "kds-engineering",
+    name: "KDS Engineering",
+    pitch: "First website for a Lagos electrical engineering company — panels, switchgear, solar, CCTV.",
+    description:
+      "Built during my SIWES placement for a Nigerian electrical engineering firm. In progress: a single-file HTML prototype and a multi-page Next.js version, covering their panel-building, switchgear, solar, and CCTV work.",
+    tech: ["Next.js", "HTML", "CSS"],
+    category: "featured",
+    status: "in-development",
   },
   {
     slug: "accessibility-audit-scanner",
     name: "Accessibility Audit Scanner",
-    pitch: "An internal WCAG/ADA compliance scanner powering a solo audit service.",
+    pitch: "An internal WCAG 2.1 AA / ADA compliance scanner that powers a solo accessibility audit service I run.",
     description:
-      "Internal tool built with Playwright and axe-core to automate accessibility scans for a WCAG/ADA compliance audit service I run solo — crawls pages, runs axe-core rules, and compiles violation reports for client audits.",
+      "Internal tool built with Playwright and axe-core to automate accessibility scans for a WCAG 2.1 AA / ADA compliance audit service I run solo — crawls pages, runs axe-core rules, and compiles violation reports to support manual audits. Not a certification, and not a record of completed client audits — just the tooling behind the service.",
     tech: ["Playwright", "axe-core", "Node.js"],
     sourcePrivate: true,
     category: "featured",
+    status: "private",
   },
   {
     slug: "student-performance-prediction",
@@ -78,6 +106,7 @@ export const projects: Project[] = [
     tech: ["Python", "scikit-learn", "React", "Next.js"],
     sourcePrivate: true,
     category: "featured",
+    status: "private",
   },
   {
     slug: "halal-meats",
@@ -91,6 +120,7 @@ export const projects: Project[] = [
     category: "featured",
     span: "md",
     image: "/projects/halal-meats.jpg",
+    status: "live",
   },
   {
     slug: "ibro-pharmacy",
@@ -103,6 +133,7 @@ export const projects: Project[] = [
     category: "featured",
     span: "md",
     image: "/projects/ibro-pharmacy.png",
+    status: "live",
   },
   {
     slug: "preventai",
@@ -117,6 +148,7 @@ export const projects: Project[] = [
     category: "featured",
     span: "md",
     image: "/projects/preventai.jpg",
+    status: "live",
   },
   {
     slug: "chef-claude",
@@ -129,6 +161,7 @@ export const projects: Project[] = [
     sourceUrl: "https://github.com/Abdurore/chef-claude",
     category: "practice",
     image: "/projects/chef-claude.jpg",
+    status: "live",
   },
   {
     slug: "tenzies",
@@ -141,6 +174,7 @@ export const projects: Project[] = [
     sourceUrl: "https://github.com/Abdurore/tenzies-game",
     category: "practice",
     image: "/projects/tenzies.jpg",
+    status: "live",
   },
   {
     slug: "assembly-endgame",
@@ -152,6 +186,7 @@ export const projects: Project[] = [
     liveUrl: "https://assembly-endgame-liart.vercel.app",
     sourceUrl: "https://github.com/Abdurore/assembly-endgame",
     category: "practice",
+    status: "live",
   },
   {
     slug: "tic-tac-toe",
@@ -164,8 +199,10 @@ export const projects: Project[] = [
     sourceUrl: "https://github.com/Abdurore/tic-tac-toe-mini",
     category: "practice",
     image: "/projects/tic-tac-toe.jpg",
+    status: "live",
   },
 ];
 
 export const featuredProjects = projects.filter((p) => p.category === "featured");
 export const practiceProjects = projects.filter((p) => p.category === "practice");
+export const shippedProjectsCount = projects.filter((p) => p.status === "live").length;
