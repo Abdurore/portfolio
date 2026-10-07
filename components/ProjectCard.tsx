@@ -1,11 +1,8 @@
-"use client";
-
-import { motion } from "framer-motion";
 import Image from "next/image";
 import { ArrowUpRight, Lock } from "lucide-react";
 import type { Project } from "@/data/projects";
-import { revealItemVariants } from "./ScrollReveal";
 import { GithubIcon } from "./BrandIcons";
+import { LeafGlyph } from "./Botanical";
 
 const SPAN_CLASSES: Record<NonNullable<Project["span"]>, string> = {
   lg: "sm:col-span-2 sm:row-span-2",
@@ -13,13 +10,20 @@ const SPAN_CLASSES: Record<NonNullable<Project["span"]>, string> = {
   sm: "sm:col-span-1 sm:row-span-1",
 };
 
+const STATUS_LABEL: Record<Project["status"], string> = {
+  live: "Live",
+  "pre-launch": "Pre-launch",
+  "in-development": "In development",
+  private: "Private",
+};
+
 export function ProjectCard({ project }: { project: Project }) {
   const spanClass = project.span ? SPAN_CLASSES[project.span] : "";
 
   return (
-    <motion.div
-      variants={revealItemVariants}
-      className={`corner-brackets group relative flex flex-col justify-between border border-border bg-background-elevated/60 p-6 transition-colors hover:border-accent/50 ${spanClass}`}
+    <div
+      className={`group relative flex flex-col justify-between overflow-hidden border border-border bg-background-elevated/60 p-6 transition-shadow hover:shadow-[0_0_0_1px_var(--accent)] focus-within:shadow-[0_0_0_1px_var(--accent)] ${spanClass}`}
+      style={{ borderRadius: "2rem 0.5rem 2rem 0.5rem" }}
     >
       {project.image && (
         <div className="relative -mx-6 -mt-6 mb-5 overflow-hidden border-b border-border">
@@ -36,15 +40,17 @@ export function ProjectCard({ project }: { project: Project }) {
 
       <div className="relative">
         <div className="flex items-start justify-between gap-3">
-          <h3 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+          <h3 className="font-serif text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
             {project.name}
           </h3>
-          {project.status === "live" && (
-            <span className="flex shrink-0 items-center gap-1.5 border border-border bg-background/60 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wide text-accent">
-              <span className="h-1.5 w-1.5 bg-accent" />
-              Live
-            </span>
-          )}
+          <span
+            className={`flex shrink-0 items-center gap-1.5 border border-border bg-background/60 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wide ${
+              project.status === "live" ? "text-accent" : "text-muted"
+            }`}
+          >
+            <LeafGlyph className="h-3 w-3" />
+            {STATUS_LABEL[project.status]}
+          </span>
         </div>
 
         <p className="mt-2 text-sm font-medium text-muted">{project.pitch}</p>
@@ -71,10 +77,11 @@ export function ProjectCard({ project }: { project: Project }) {
               href={project.liveUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 font-mono text-sm font-medium text-foreground transition-colors hover:text-accent"
+              className="inline-flex items-center gap-1 text-sm font-medium text-foreground transition-colors hover:text-accent"
             >
-              Live Demo
-              <ArrowUpRight className="h-3.5 w-3.5" />
+              {project.name} live demo
+              <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+              <span className="sr-only">(opens in a new tab)</span>
             </a>
           )}
           {project.extraLinks?.map((link) => (
@@ -83,10 +90,11 @@ export function ProjectCard({ project }: { project: Project }) {
               href={link.url}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 font-mono text-sm text-muted transition-colors hover:text-accent"
+              className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-accent"
             >
-              {link.label}
-              <ArrowUpRight className="h-3.5 w-3.5" />
+              {project.name} {link.label.toLowerCase()}
+              <ArrowUpRight className="h-3.5 w-3.5" aria-hidden="true" />
+              <span className="sr-only">(opens in a new tab)</span>
             </a>
           ))}
           {project.sourceUrl && (
@@ -94,20 +102,21 @@ export function ProjectCard({ project }: { project: Project }) {
               href={project.sourceUrl}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1 font-mono text-sm text-muted transition-colors hover:text-foreground"
+              className="inline-flex items-center gap-1 text-sm text-muted transition-colors hover:text-foreground"
             >
-              <GithubIcon className="h-3.5 w-3.5" />
-              Source
+              <GithubIcon className="h-3.5 w-3.5" aria-hidden="true" />
+              {project.name} source code
+              <span className="sr-only">(opens in a new tab)</span>
             </a>
           )}
           {project.sourcePrivate && (
-            <span className="inline-flex items-center gap-1 font-mono text-sm text-muted/60">
-              <Lock className="h-3.5 w-3.5" />
+            <span className="inline-flex items-center gap-1 text-sm text-muted/60">
+              <Lock className="h-3.5 w-3.5" aria-hidden="true" />
               Private repo
             </span>
           )}
         </div>
       </div>
-    </motion.div>
+    </div>
   );
 }

@@ -1,9 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
 import { Download } from "lucide-react";
 import { profile } from "@/data/profile";
+import { ThemeToggle } from "./ThemeToggle";
+import { StillModeToggle } from "./StillModeToggle";
 
 const LINKS = [
   { id: "about", label: "About" },
@@ -52,33 +53,38 @@ export function Nav() {
   };
 
   return (
-    <motion.header
-      initial={{ y: -40, opacity: 0 }}
-      animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.5, ease: "easeOut" }}
+    <header
       className={`fixed top-0 inset-x-0 z-50 border-b transition-colors ${
         scrolled
           ? "border-border bg-background/90 backdrop-saturate-150"
           : "border-transparent bg-transparent"
       }`}
     >
-      <nav className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-4">
+      <nav
+        aria-label="Primary"
+        className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-4"
+      >
         <button
           onClick={() => handleClick("hero")}
-          className="flex items-center gap-2 font-mono text-sm font-semibold tracking-tight text-foreground"
+          className="flex items-center gap-2 font-serif text-lg font-semibold tracking-tight text-foreground"
         >
-          <span className="flex h-6 w-6 items-center justify-center border border-accent text-accent">
+          <span
+            className="flex h-7 w-7 items-center justify-center border border-accent text-accent"
+            style={{ borderRadius: "0.8rem 0.2rem 0.8rem 0.2rem" }}
+            aria-hidden="true"
+          >
             A
           </span>
-          ABDU<span className="text-muted">.dev</span>
+          Abdurore
         </button>
 
-        <ul className="hidden items-center gap-1 sm:flex">
+        <ul className="hidden items-center gap-1 lg:flex">
           {LINKS.map((link) => (
             <li key={link.id}>
               <button
                 onClick={() => handleClick(link.id)}
-                className={`border-b-2 px-3 py-1.5 font-mono text-xs uppercase tracking-wide transition-colors ${
+                aria-current={active === link.id ? "true" : undefined}
+                className={`border-b-2 px-3 py-1.5 text-sm transition-colors ${
                   active === link.id
                     ? "border-accent text-foreground"
                     : "border-transparent text-muted hover:text-foreground"
@@ -90,18 +96,20 @@ export function Nav() {
           ))}
         </ul>
 
-        <div className="hidden items-center gap-2 sm:flex">
+        <div className="hidden items-center gap-2 lg:flex">
+          <ThemeToggle />
+          <StillModeToggle />
           <a
             href={profile.resumeUrl}
             download
-            className="inline-flex items-center gap-1.5 border border-border px-4 py-1.5 font-mono text-xs font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
+            className="inline-flex min-h-11 items-center gap-1.5 border border-border px-4 font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
           >
             <Download className="h-3.5 w-3.5" />
             Resume
           </a>
           <a
             href={`mailto:${profile.email}`}
-            className="border border-accent bg-accent px-4 py-1.5 font-mono text-xs font-medium text-background transition-opacity hover:opacity-85"
+            className="inline-flex min-h-11 items-center border border-accent bg-accent px-4 font-medium text-background transition-opacity hover:opacity-85"
           >
             Say Hi
           </a>
@@ -109,8 +117,9 @@ export function Nav() {
 
         <button
           onClick={() => setOpen((v) => !v)}
-          className="flex flex-col gap-1.5 p-1 sm:hidden"
-          aria-label="Toggle menu"
+          aria-expanded={open}
+          aria-controls="mobile-menu"
+          className="flex min-h-11 min-w-11 flex-col items-center justify-center gap-1.5 lg:hidden"
         >
           <span
             className={`h-0.5 w-5 bg-foreground transition-transform ${
@@ -122,41 +131,51 @@ export function Nav() {
               open ? "-translate-y-[3.5px] -rotate-45" : ""
             }`}
           />
+          <span className="sr-only">
+            {open ? "Close menu" : "Open menu"}
+          </span>
         </button>
       </nav>
 
       {open && (
-        <div className="border-t border-border bg-background sm:hidden">
+        <div
+          id="mobile-menu"
+          className="border-t border-border bg-background lg:hidden"
+        >
           <ul className="flex flex-col divide-y divide-border">
             {LINKS.map((link) => (
               <li key={link.id}>
                 <button
                   onClick={() => handleClick(link.id)}
-                  className="w-full px-6 py-3 text-left font-mono text-sm text-muted hover:bg-background-elevated hover:text-foreground"
+                  className="w-full px-6 py-3 text-left text-sm text-muted hover:bg-background-elevated hover:text-foreground"
                 >
                   {link.label}
                 </button>
               </li>
             ))}
           </ul>
+          <div className="flex flex-wrap gap-2 border-t border-border p-3">
+            <ThemeToggle />
+            <StillModeToggle />
+          </div>
           <div className="flex gap-2 border-t border-border p-3">
             <a
               href={profile.resumeUrl}
               download
-              className="inline-flex flex-1 items-center justify-center gap-1.5 border border-border px-3 py-2 font-mono text-sm text-foreground hover:border-accent hover:text-accent"
+              className="inline-flex min-h-11 flex-1 items-center justify-center gap-1.5 border border-border px-3 text-sm text-foreground hover:border-accent hover:text-accent"
             >
               <Download className="h-3.5 w-3.5" />
               Resume
             </a>
             <a
               href={`mailto:${profile.email}`}
-              className="flex-1 border border-accent bg-accent px-3 py-2 text-center font-mono text-sm font-medium text-background"
+              className="inline-flex min-h-11 flex-1 items-center justify-center border border-accent bg-accent px-3 text-sm font-medium text-background"
             >
               Say Hi
             </a>
           </div>
         </div>
       )}
-    </motion.header>
+    </header>
   );
 }

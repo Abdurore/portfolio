@@ -10,7 +10,7 @@ export default function Home() {
   return (
     <>
       <Nav />
-      <main className="flex flex-1 flex-col">
+      <main id="main" className="flex flex-1 flex-col">
         <Hero />
         <About />
         <FeaturedProjects />
