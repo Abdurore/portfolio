@@ -76,7 +76,13 @@ body {
   color: var(--foreground);
 }
 
-main > section {
+html {
+  /* Keeps focused/anchored elements clear of the sticky header (WCAG 2.2 Focus Not Obscured). */
+  scroll-padding-top: 6rem;
+}
+
+main > section,
+main [id] {
   scroll-margin-top: 6rem;
 }
 

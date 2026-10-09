@@ -1,4 +1,5 @@
 import { shippedProjectsCount } from "./projects";
+import { audit } from "./audit";
 
 export const SITE_URL = "https://abdurore.tech";
 
@@ -79,10 +80,6 @@ export const profile = {
       // TODO: add the public credential/badge URL once available
       url: undefined as string | undefined,
     },
-    {
-      name: "DHS Trusted Tester",
-      status: "in-progress" as const,
-    },
   ],
   experience: [
     {
@@ -132,5 +129,6 @@ export const profile = {
     x: "https://x.com/abdurore",
     instagram: "https://instagram.com/abdurore",
     youtube: "https://www.youtube.com/@Simplivide",
+    upwork: audit.profileUrl,
   },
 } as const;

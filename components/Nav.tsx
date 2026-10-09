@@ -5,10 +5,12 @@ import { Download } from "lucide-react";
 import { profile } from "@/data/profile";
 import { ThemeToggle } from "./ThemeToggle";
 import { StillModeToggle } from "./StillModeToggle";
+import { scrollToId } from "@/lib/scroll";
 
 const LINKS = [
   { id: "about", label: "About" },
   { id: "featured", label: "Featured" },
+  { id: "audits", label: "Audits" },
   { id: "experience", label: "Experience" },
   { id: "practice", label: "Practice" },
   { id: "contact", label: "Contact" },
@@ -49,7 +51,7 @@ export function Nav() {
 
   const handleClick = (id: string) => {
     setOpen(false);
-    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+    scrollToId(id);
   };
 
   return (
@@ -78,7 +80,7 @@ export function Nav() {
           Abdurore
         </button>
 
-        <ul className="hidden items-center gap-1 lg:flex">
+        <ul className="hidden items-center gap-1 xl:flex">
           {LINKS.map((link) => (
             <li key={link.id}>
               <button
@@ -96,7 +98,7 @@ export function Nav() {
           ))}
         </ul>
 
-        <div className="hidden items-center gap-2 lg:flex">
+        <div className="hidden items-center gap-2 xl:flex">
           <ThemeToggle />
           <StillModeToggle />
           <a
@@ -119,7 +121,7 @@ export function Nav() {
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-controls="mobile-menu"
-          className="flex min-h-11 min-w-11 flex-col items-center justify-center gap-1.5 lg:hidden"
+          className="flex min-h-11 min-w-11 flex-col items-center justify-center gap-1.5 xl:hidden"
         >
           <span
             className={`h-0.5 w-5 bg-foreground transition-transform ${
@@ -140,7 +142,7 @@ export function Nav() {
       {open && (
         <div
           id="mobile-menu"
-          className="border-t border-border bg-background lg:hidden"
+          className="border-t border-border bg-background xl:hidden"
         >
           <ul className="flex flex-col divide-y divide-border">
             {LINKS.map((link) => (

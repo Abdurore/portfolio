@@ -1,5 +1,6 @@
 import { Mail } from "lucide-react";
 import { profile } from "@/data/profile";
+import { audit } from "@/data/audit";
 import { Reveal } from "./Reveal";
 import { GrowthLine } from "./GrowthLine";
 import { LeafGlyph } from "./Botanical";
@@ -11,8 +12,6 @@ import {
   YoutubeIcon,
 } from "./BrandIcons";
 
-// TODO: add Upwork profile URL, then add it here as
-// { label: "Upwork", href: profile.socials.upwork, icon: UpworkIcon }
 const SOCIAL_LINKS = [
   { label: "GitHub", href: profile.socials.github, icon: GithubIcon },
   { label: "LinkedIn", href: profile.socials.linkedin, icon: LinkedinIcon },
@@ -30,7 +29,7 @@ export function Contact() {
       <Reveal className="relative">
         <GrowthLine />
         <p className="font-mono text-xs uppercase tracking-widest text-muted">
-          <span className="text-accent">[05]</span> Clearing
+          <span className="text-accent">[06]</span> Clearing
         </p>
         <h2 className="mx-auto mt-3 flex max-w-xl items-center justify-center gap-2 font-serif text-3xl font-semibold tracking-tight sm:text-5xl">
           Got an idea worth <span className="text-accent">building</span>?
@@ -66,6 +65,31 @@ export function Contact() {
               </a>
             </li>
           ))}
+        </ul>
+
+        <ul className="mt-6 flex flex-col items-center gap-1 text-sm">
+          <li>
+            <a
+              href={audit.profileUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-11 items-center underline hover:text-accent"
+            >
+              Upwork profile
+              <span className="sr-only"> (opens in a new tab)</span>
+            </a>
+          </li>
+          <li>
+            <a
+              href={audit.serviceUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex min-h-11 items-center underline hover:text-accent"
+            >
+              Order the accessibility audit
+              <span className="sr-only"> (opens in a new tab on Upwork)</span>
+            </a>
+          </li>
         </ul>
       </Reveal>
     </section>

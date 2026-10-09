@@ -58,6 +58,32 @@ specific container got flaky under concurrent browser instances during
 development; that's a documented, conservative default you can loosen
 once you've confirmed your own environment handles it.
 
+### Accessibility-audit section (`#audits`)
+
+The "Accessibility audits, done by hand" section is covered by the same
+axe matrix (both themes, mobile + desktop, Still on/off). Because closed
+`<details>` content isn't rendered, the `/` test re-scans with every FAQ
+item expanded. Dedicated checks added:
+
+- Hero link "Also offering WCAG accessibility audits" jumps to `#audits`
+  by keyboard and the heading lands below the sticky header.
+- "Audits" nav item works by keyboard (via the hamburger on narrow screens).
+- FAQ `<summary>` shows a focus ring and toggles with Enter and Space.
+- Both Upwork links match the exact URLs, open in a new tab with
+  `noopener`, carry a screen-reader "(opens in a new tab)" notice and are
+  at least 44px tall.
+- "What you get" / "What's not included" are distinguished by heading text.
+
+**Result at last run: 30/30 passing, zero axe violations.** The desktop
+nav breakpoint moved from `lg` to `xl` because six links plus toggles
+were cramped at 1024px.
+
+`scripts/check-jsonld.mjs` also checks that the Service is linked to the
+Person by `@id`, that the JSON-LD price equals the visible price, that
+no other dollar amounts appear, that both Upwork URLs are exact, and that
+no banned claims ("Trusted Tester", "Section 508", testimonials,
+"certified") appear in the rendered page.
+
 ## 2. Contrast: `scripts/check-contrast.mjs`
 
 Reads the real hex values straight out of `app/globals.css` (so it can't
@@ -173,6 +199,12 @@ need a human with real assistive tech, which I don't have here:
 - [ ] **forced-colors / Windows High Contrast Mode**: confirm borders
       stay visible and the botanical SVGs (which use `currentColor`)
       don't disappear or turn into unreadable blobs.
+- [ ] **NVDA read-through of the Audits section**: heading, "At a
+      glance" list, both lists, ordered steps, FAQ, external-link notices.
+- [ ] **Keyboard walk of the FAQ and CTAs**: Tab to each summary, toggle
+      with Enter/Space, reach both Upwork links and the mailto link.
+- [ ] **200% and 400% zoom of the Audits section**: no clipping, single
+      column reflow, no horizontal scroll.
 - [ ] Re-run `npm run a11y` and `npm run check-contrast` after any
       future visual change, before merging.
 

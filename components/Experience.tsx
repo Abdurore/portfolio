@@ -14,7 +14,7 @@ export function Experience() {
       <Reveal className="relative">
         <GrowthLine />
         <p className="font-mono text-xs uppercase tracking-widest text-muted">
-          <span className="text-accent">[03]</span> Rings
+          <span className="text-accent">[04]</span> Rings
         </p>
         <h2 className="mt-3 flex items-center gap-2 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
           Where the time actually went.

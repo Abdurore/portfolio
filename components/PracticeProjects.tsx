@@ -10,7 +10,7 @@ export function PracticeProjects() {
       <Reveal className="relative">
         <GrowthLine />
         <p className="font-mono text-xs uppercase tracking-widest text-muted">
-          <span className="text-accent">[04]</span> Seedlings
+          <span className="text-accent">[05]</span> Seedlings
         </p>
         <h2 className="mt-3 flex max-w-xl items-center gap-2 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
           Smaller builds, sharp focus.

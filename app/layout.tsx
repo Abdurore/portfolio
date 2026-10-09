@@ -3,6 +3,7 @@ import { Fraunces, Instrument_Sans, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { profile, SITE_URL } from "@/data/profile";
 import { projects } from "@/data/projects";
+import { audit } from "@/data/audit";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import "./globals.css";
 
@@ -46,6 +47,8 @@ export const metadata: Metadata = {
     "Mechatronics Engineering LASUSTECH",
     "web developer portfolio",
     "React developer Lagos",
+    "accessibility audit",
+    "WCAG audit",
   ],
   alternates: {
     canonical: SITE_URL,
@@ -162,6 +165,21 @@ const projectsItemListJsonLd = {
   })),
 };
 
+const serviceJsonLd = {
+  "@type": "Service",
+  "@id": `${SITE_URL}/#audit-service`,
+  name: audit.name,
+  serviceType: audit.serviceType,
+  description: audit.description,
+  provider: { "@id": personId },
+  offers: {
+    "@type": "Offer",
+    price: String(audit.price),
+    priceCurrency: audit.currency,
+    url: audit.serviceUrl,
+  },
+};
+
 const jsonLdGraph = {
   "@context": "https://schema.org",
   "@graph": [
@@ -169,6 +187,7 @@ const jsonLdGraph = {
     websiteJsonLd,
     profilePageJsonLd,
     projectsItemListJsonLd,
+    serviceJsonLd,
   ],
 };
 

@@ -39,9 +39,11 @@ export default function AccessibilityPage() {
                 </strong>
                 , with body text aimed at the stricter AAA contrast
                 requirement (7:1) where that&apos;s achievable without
-                compromising the design. It isn&apos;t certified against any
-                standard — the sections below say exactly what was checked
-                and how, so you can judge for yourself.
+                compromising the design. I hold this site to the standard I
+                audit against; here is how it&apos;s tested. No third party
+                has assessed it against any standard, so the sections below
+                say exactly what was checked and how, and you can judge for
+                yourself.
               </p>
             </section>
 

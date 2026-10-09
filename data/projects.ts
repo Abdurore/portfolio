@@ -93,17 +93,6 @@ export const projects: Project[] = [
     status: "in-development",
   },
   {
-    slug: "accessibility-audit-scanner",
-    name: "Accessibility Audit Scanner",
-    pitch: "An internal WCAG 2.1 AA / ADA compliance scanner that powers a solo accessibility audit service I run.",
-    description:
-      "Internal tool built with Playwright and axe-core to automate accessibility scans for a WCAG 2.1 AA / ADA compliance audit service I run solo — crawls pages, runs axe-core rules, and compiles violation reports to support manual audits. Not a certification, and not a record of completed client audits — just the tooling behind the service.",
-    tech: ["Playwright", "axe-core", "Node.js"],
-    sourcePrivate: true,
-    category: "featured",
-    status: "private",
-  },
-  {
     slug: "student-performance-prediction",
     name: "Student Performance Prediction System",
     pitch: "An ML-driven system predicting student outcomes, built for a client's final-year project.",
@@ -127,7 +116,7 @@ export const projects: Project[] = [
     span: "md",
     image: "/projects/halal-meats.jpg",
     imageAlt:
-      "Halal Meats homepage with a certified-halal badge, this week's batch availability bar, and Reserve Your Meat / Chat on WhatsApp buttons.",
+      "Halal Meats homepage with a halal assurance badge, this week's batch availability bar, and Reserve Your Meat / Chat on WhatsApp buttons.",
     status: "live",
   },
   {

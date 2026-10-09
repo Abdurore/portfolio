@@ -82,7 +82,17 @@ export function Hero() {
             </a>
           </Reveal>
 
-          <Reveal delay={0.4} className="mt-10 font-mono text-xs text-muted">
+          <Reveal delay={0.35} className="mt-4">
+            <a
+              href="#audits"
+              className="inline-flex min-h-11 items-center gap-1.5 text-sm text-muted underline underline-offset-4 hover:text-accent"
+            >
+              Also offering WCAG accessibility audits
+              <span aria-hidden="true">→</span>
+            </a>
+          </Reveal>
+
+          <Reveal delay={0.4} className="mt-6 font-mono text-xs text-muted">
             <p>
               {profile.role} / {profile.subrole} / {profile.location}
             </p>
