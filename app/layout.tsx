@@ -1,7 +1,8 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Fraunces, Instrument_Sans, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { profile, SITE_URL } from "@/data/profile";
+import { projects } from "@/data/projects";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import "./globals.css";
 
@@ -21,35 +22,154 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+const TITLE = "Abdurore (Abdulhameed Oreagba) — Full-Stack Developer in Lagos, Nigeria";
+const DESCRIPTION =
+  "Abdurore (Abdulhameed Oreagba) is a full-stack developer and Mechatronics student in Lagos, Nigeria, building web products, e-commerce platforms, and accessible experiences.";
+
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
-  title: "Abdurore — Full-Stack Developer",
-  description:
-    "Portfolio of Abdulhameed Oreagba (Abdurore), a full-stack developer building AI-powered products and playful web experiences — creator of Cardora, Halal Meats, PreventAI, and more.",
+  title: {
+    default: TITLE,
+    template: "%s — Abdurore",
+  },
+  description: DESCRIPTION,
+  applicationName: "Abdurore",
+  authors: [{ name: "Abdulhameed Oreagba", url: SITE_URL }],
+  creator: "Abdulhameed Oreagba",
+  publisher: "Abdulhameed Oreagba",
+  keywords: [
+    "Abdurore",
+    "Abdulhameed Oreagba",
+    "Oreagba Abdulhameed",
+    "full-stack developer Lagos",
+    "Next.js developer Nigeria",
+    "Mechatronics Engineering LASUSTECH",
+    "web developer portfolio",
+    "React developer Lagos",
+  ],
+  alternates: {
+    canonical: SITE_URL,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+    },
+  },
   openGraph: {
-    title: "Abdurore — Full-Stack Developer",
-    description:
-      "Portfolio of Abdulhameed Oreagba (Abdurore), a full-stack developer building AI-powered products and playful web experiences.",
-    type: "website",
+    type: "profile",
+    firstName: "Abdulhameed",
+    lastName: "Oreagba",
+    username: profile.alias,
+    title: TITLE,
+    description: DESCRIPTION,
     url: SITE_URL,
+    siteName: "Abdurore",
+    locale: "en_NG",
+    images: [{ url: "/opengraph-image", width: 1200, height: 630 }],
   },
   twitter: {
     card: "summary_large_image",
-    title: "Abdurore — Full-Stack Developer",
-    description:
-      "Portfolio of Abdulhameed Oreagba (Abdurore), a full-stack developer building AI-powered products and playful web experiences.",
+    title: TITLE,
+    description: DESCRIPTION,
+    creator: "@abdurore",
+    images: ["/opengraph-image"],
   },
 };
 
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: dark)", color: "#0a0d09" },
+    { media: "(prefers-color-scheme: light)", color: "#f3f1e7" },
+  ],
+};
+
+// Public = linkable: anything with a live URL. Keeps the structured data
+// honest instead of listing in-development/private work as if visitable.
+const publicProjects = projects.filter((p) => p.liveUrl);
+
+const personId = `${SITE_URL}/#person`;
+const websiteId = `${SITE_URL}/#website`;
+const profilePageId = `${SITE_URL}/#profilepage`;
+
 const personJsonLd = {
-  "@context": "https://schema.org",
   "@type": "Person",
-  name: profile.name,
-  alternateName: profile.alias,
+  "@id": personId,
+  name: "Abdulhameed Oreagba",
+  alternateName: [
+    "Abdurore",
+    "abdurore",
+    "Oreagba Abdulhameed",
+    "Oreagba Abdulhameed Oluwadurotimi",
+  ],
+  url: SITE_URL,
+  image: `${SITE_URL}/headshot-v5.jpg`,
   jobTitle: profile.role,
   email: `mailto:${profile.email}`,
-  url: SITE_URL,
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Lagos",
+    addressCountry: "NG",
+  },
+  alumniOf: {
+    "@type": "CollegeOrUniversity",
+    name: profile.education.school,
+  },
+  affiliation: {
+    "@type": "CollegeOrUniversity",
+    name: profile.education.school,
+  },
+  knowsAbout: profile.skillGroups.flatMap((g) => g.skills),
   sameAs: Object.values(profile.socials),
+};
+
+const websiteJsonLd = {
+  "@type": "WebSite",
+  "@id": websiteId,
+  url: SITE_URL,
+  name: "Abdurore",
+  description: DESCRIPTION,
+  publisher: { "@id": personId },
+};
+
+const profilePageJsonLd = {
+  "@type": "ProfilePage",
+  "@id": profilePageId,
+  url: SITE_URL,
+  name: TITLE,
+  isPartOf: { "@id": websiteId },
+  mainEntity: { "@id": personId },
+};
+
+const projectsItemListJsonLd = {
+  "@type": "ItemList",
+  "@id": `${SITE_URL}/#projects`,
+  name: "Projects by Abdurore",
+  itemListElement: publicProjects.map((project, index) => ({
+    "@type": "ListItem",
+    position: index + 1,
+    item: {
+      "@type":
+        project.tech.includes("Video Editing") ? "CreativeWork" : "SoftwareApplication",
+      name: project.name,
+      description: project.pitch,
+      url: project.liveUrl,
+      creator: { "@id": personId },
+    },
+  })),
+};
+
+const jsonLdGraph = {
+  "@context": "https://schema.org",
+  "@graph": [
+    personJsonLd,
+    websiteJsonLd,
+    profilePageJsonLd,
+    projectsItemListJsonLd,
+  ],
 };
 
 // Runs before hydration so the saved theme/still-mode preference applies
@@ -85,7 +205,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         </a>
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(personJsonLd) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLdGraph) }}
         />
         <ScrollProgress />
         {children}

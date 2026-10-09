@@ -6,9 +6,11 @@
     "dev": "next dev",
     "prebuild": "node scripts/check-contrast.mjs",
     "build": "next build",
+    "postbuild": "node scripts/check-jsonld.mjs",
     "start": "next start",
     "lint": "eslint",
     "check-contrast": "node scripts/check-contrast.mjs",
+    "check-jsonld": "node scripts/check-jsonld.mjs",
     "a11y": "next build && playwright test"
   },
   "dependencies": {

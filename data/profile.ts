@@ -1,9 +1,12 @@
 import { shippedProjectsCount } from "./projects";
 
-export const SITE_URL = "https://abdurore-dev.vercel.app";
+export const SITE_URL = "https://abdurore.tech";
 
 export const profile = {
+  /** Full legal name, formal order — footer, legal/JSON-LD alternates. */
   name: "Oreagba Abdulhameed Oluwadurotimi",
+  /** Common-order name used in the hero H1 and OG image. */
+  commonName: "Abdulhameed Oreagba",
   alias: "Abdurore",
   role: "Full-Stack Developer",
   subrole: "Mechatronics Engineering Student",

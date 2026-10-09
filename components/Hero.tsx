@@ -39,7 +39,7 @@ export function Hero() {
             className="relative font-serif text-4xl font-semibold leading-[1.1] tracking-tight sm:text-6xl"
           >
             <h1>
-              {profile.name}{" "}
+              {profile.commonName}{" "}
               <span className="text-accent">({profile.alias})</span>
             </h1>
           </Reveal>
