@@ -53,6 +53,7 @@ export function Experience() {
           <li
             key={cred.name}
             className="flex items-center gap-2 border border-border bg-background-elevated/60 px-3 py-1.5 font-mono text-xs text-muted"
+                  style={{ borderRadius: "0.9rem 0.25rem 0.9rem 0.25rem" }}
           >
             {cred.name}
             <span

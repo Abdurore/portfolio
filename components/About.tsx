@@ -45,6 +45,7 @@ export function About() {
                 <span
                   key={skill}
                   className="border border-border bg-background-elevated/60 px-3.5 py-1.5 font-mono text-xs text-muted transition-colors hover:border-accent hover:text-foreground"
+                  style={{ borderRadius: "0.9rem 0.25rem 0.9rem 0.25rem" }}
                 >
                   {skill}
                 </span>

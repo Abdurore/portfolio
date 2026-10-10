@@ -1,5 +1,19 @@
 import { ImageResponse } from "next/og";
 import { profile } from "@/data/profile";
+import { pinnate } from "@/lib/foliage";
+import { LogoSvg } from "@/lib/logo-svg";
+
+const PALM = pinnate({
+  from: [24, 236],
+  control: [58, 44],
+  to: [236, 34],
+  pairs: 26,
+  leafLength: 72,
+  leafWidth: 0.09,
+  angleBase: 70,
+  angleTip: 30,
+  droop: 0.6,
+});
 
 export const size = { width: 1200, height: 630 };
 export const contentType = "image/png";
@@ -23,18 +37,18 @@ export default function OpengraphImage() {
         }}
       >
         <svg
-          width="320"
-          height="320"
-          viewBox="0 0 40 40"
+          width="620"
+          height="620"
+          viewBox="-10 -30 290 290"
           fill="none"
-          style={{ position: "absolute", top: -40, right: -40, opacity: 0.5 }}
+          style={{ position: "absolute", top: -90, right: -120, opacity: 0.22 }}
         >
-          <path
-            d="M20 2 C29 4 37 11 36 20 C35 29 28 36 20 38 C19 38 18 37 16 36 C7 32 3 24 4 16 C5 9 12 3 20 2 Z"
-            stroke="#3b5a34"
-            strokeWidth="1"
-          />
+          <path d={PALM.leafletsB} fill="#7fb069" fillOpacity="0.55" />
+          <path d={PALM.leafletsA} fill="#7fb069" fillOpacity="0.9" />
+          <path d={PALM.rachis} stroke="#7fb069" strokeWidth="2.2" strokeLinecap="round" />
         </svg>
+
+        <LogoSvg size={84} style={{ marginBottom: 28 }} />
 
         <div
           style={{

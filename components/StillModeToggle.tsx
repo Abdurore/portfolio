@@ -1,5 +1,6 @@
 "use client";
 
+import { Pause, Play } from "lucide-react";
 import { useState } from "react";
 
 export function StillModeToggle() {
@@ -33,11 +34,14 @@ export function StillModeToggle() {
       onClick={toggle}
       aria-pressed={still}
       suppressHydrationWarning
-      className="flex min-h-11 items-center gap-1.5 border border-border px-3 font-sans text-xs font-medium text-muted transition-colors hover:border-accent hover:text-foreground"
+      className="flex min-h-11 items-center gap-1.5 whitespace-nowrap border border-border px-3.5 font-sans text-xs font-medium text-muted transition-colors hover:border-accent hover:text-foreground"
+      style={{ borderRadius: "1.1rem 0.3rem 1.1rem 0.3rem" }}
     >
-      <span aria-hidden="true" suppressHydrationWarning>
-        {still ? "⏸" : "▶"}
-      </span>
+      {still ? (
+        <Pause className="h-3.5 w-3.5" aria-hidden="true" suppressHydrationWarning />
+      ) : (
+        <Play className="h-3.5 w-3.5" aria-hidden="true" suppressHydrationWarning />
+      )}
       Still mode
     </button>
   );

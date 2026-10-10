@@ -57,6 +57,7 @@ export function Contact() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex h-11 w-11 items-center justify-center border border-border bg-background-elevated/60 text-muted transition-colors hover:border-accent hover:text-accent"
+                  style={{ borderRadius: "1rem 0.25rem 1rem 0.25rem" }}
               >
                 <Icon className="h-4 w-4" aria-hidden="true" />
                 <span className="sr-only">

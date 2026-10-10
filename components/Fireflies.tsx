@@ -20,7 +20,7 @@ export function Fireflies() {
       {FIREFLIES.map((f) => (
         <span
           key={f.id}
-          className="firefly absolute h-[3px] w-[3px] rounded-full bg-firefly shadow-[0_0_6px_2px_var(--firefly)]"
+          className="firefly absolute h-1 w-1 rounded-full bg-firefly shadow-[0_0_8px_3px_color-mix(in_srgb,var(--firefly)_55%,transparent),0_0_2px_1px_var(--firefly)]"
           style={
             {
               left: `${f.left}%`,

@@ -1,5 +1,6 @@
 "use client";
 
+import { Moon, Sun } from "lucide-react";
 import { useState } from "react";
 
 export function ThemeToggle() {
@@ -33,11 +34,14 @@ export function ThemeToggle() {
       onClick={toggle}
       aria-pressed={isLight}
       suppressHydrationWarning
-      className="flex min-h-11 items-center gap-1.5 border border-border px-3 font-sans text-xs font-medium text-muted transition-colors hover:border-accent hover:text-foreground"
+      className="flex min-h-11 items-center gap-1.5 whitespace-nowrap border border-border px-3.5 font-sans text-xs font-medium text-muted transition-colors hover:border-accent hover:text-foreground"
+      style={{ borderRadius: "1.1rem 0.3rem 1.1rem 0.3rem" }}
     >
-      <span aria-hidden="true" suppressHydrationWarning>
-        {isLight ? "☀" : "☾"}
-      </span>
+      {isLight ? (
+        <Sun className="h-3.5 w-3.5" aria-hidden="true" suppressHydrationWarning />
+      ) : (
+        <Moon className="h-3.5 w-3.5" aria-hidden="true" suppressHydrationWarning />
+      )}
       <span suppressHydrationWarning>{isLight ? "Daylight" : "Night"}</span>
     </button>
   );

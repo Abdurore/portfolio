@@ -1,4 +1,5 @@
 import { ImageResponse } from "next/og";
+import { LogoSvg } from "@/lib/logo-svg";
 
 export const size = { width: 64, height: 64 };
 export const contentType = "image/png";
@@ -16,18 +17,7 @@ export default function Icon() {
           background: "#0a0d09",
         }}
       >
-        <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-          <path
-            d="M20 2 C29 4 37 11 36 20 C35 29 28 36 20 38 C19 38 18 37 16 36 C7 32 3 24 4 16 C5 9 12 3 20 2 Z"
-            fill="#7fb069"
-          />
-          <path
-            d="M20 6 V34"
-            stroke="#0a0d09"
-            strokeWidth="2"
-            strokeLinecap="round"
-          />
-        </svg>
+        <LogoSvg size={52} />
       </div>
     ),
     { ...size }

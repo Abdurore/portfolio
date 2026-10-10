@@ -168,13 +168,23 @@ main [id] {
 [data-reveal-group][data-in-view="true"] > *:nth-child(n+6) { transition-delay: 300ms; }
 
 /* Growth line: vine stroke draws in as its section enters view */
-.growth-line path {
+.growth-line .vine-stem {
   stroke-dasharray: var(--vine-length, 2000);
   stroke-dashoffset: var(--vine-length, 2000);
-  transition: stroke-dashoffset 1.1s ease;
+  transition: stroke-dashoffset 2.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
-[data-in-view="true"] .growth-line path {
+[data-in-view="true"] .growth-line .vine-stem {
   stroke-dashoffset: 0;
+}
+/* Leaves unfurl from their node, one after another down the stem. */
+.growth-line .vine-leaf {
+  transform-box: fill-box;
+  transform-origin: 0 100%;
+  transform: scale(0);
+  transition: transform 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) var(--leaf-delay, 0s);
+}
+[data-in-view="true"] .growth-line .vine-leaf {
+  transform: scale(1);
 }
 
 /* Leaf sprout next to each section heading */
@@ -201,13 +211,26 @@ main [id] {
   animation: blink 1.1s step-end infinite;
 }
 
+/* Foliage sways like it's catching a slight breeze. */
+@keyframes foliage-sway {
+  0%, 100% { transform: rotate(var(--sway-from, -1.2deg)); }
+  50% { transform: rotate(var(--sway-to, 1.6deg)); }
+}
+.foliage-sway {
+  transform-origin: 85% 90%;
+  animation: foliage-sway 9s ease-in-out infinite;
+}
+
 /* Fireflies */
 @keyframes firefly-drift {
-  0% { transform: translate(0, 0); opacity: 0; }
-  10% { opacity: var(--firefly-opacity, 0.85); }
-  50% { transform: translate(var(--drift-x, 14px), var(--drift-y, -18px)); }
-  90% { opacity: var(--firefly-opacity, 0.85); }
-  100% { transform: translate(0, 0); opacity: 0; }
+  0% { transform: translate(0, 0) scale(0.6); opacity: 0; }
+  12% { opacity: var(--firefly-opacity, 0.85); transform: translate(calc(var(--drift-x, 14px) * 0.2), calc(var(--drift-y, -18px) * 0.5)) scale(1); }
+  30% { opacity: 0.25; }
+  38% { opacity: var(--firefly-opacity, 0.85); }
+  55% { transform: translate(var(--drift-x, 14px), var(--drift-y, -18px)) scale(1.15); opacity: 0.35; }
+  64% { opacity: var(--firefly-opacity, 0.85); }
+  82% { transform: translate(calc(var(--drift-x, 14px) * 0.4), calc(var(--drift-y, -18px) * 1.5)) scale(0.9); opacity: 0.2; }
+  100% { transform: translate(0, 0) scale(0.6); opacity: 0; }
 }
 .firefly {
   animation: firefly-drift var(--duration, 6s) ease-in-out infinite;
@@ -221,13 +244,20 @@ html[data-still="true"] [data-reveal-group] > * {
   transform: none !important;
   transition: none !important;
 }
-html[data-still="true"] .growth-line path {
+html[data-still="true"] .growth-line .vine-stem {
   stroke-dashoffset: 0 !important;
+  transition: none !important;
+}
+html[data-still="true"] .growth-line .vine-leaf {
+  transform: none !important;
   transition: none !important;
 }
 html[data-still="true"] .leaf-sprout {
   opacity: 1 !important;
   transform: none !important;
+}
+html[data-still="true"] .foliage-sway {
+  animation: none !important;
 }
 html[data-still="true"] .firefly {
   animation: none !important;
@@ -245,13 +275,20 @@ html[data-still="true"] .animate-blink {
     transform: none !important;
     transition: none !important;
   }
-  .growth-line path {
+  .growth-line .vine-stem {
     stroke-dashoffset: 0 !important;
+    transition: none !important;
+  }
+  .growth-line .vine-leaf {
+    transform: none !important;
     transition: none !important;
   }
   .leaf-sprout {
     opacity: 1 !important;
     transform: none !important;
+  }
+  .foliage-sway {
+    animation: none !important;
   }
   .firefly {
     animation: none !important;

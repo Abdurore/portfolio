@@ -48,6 +48,7 @@ export function ProjectCard({ project }: { project: Project }) {
             className={`flex shrink-0 items-center gap-1.5 border border-border bg-background/60 px-2.5 py-1 font-mono text-[10px] uppercase tracking-wide ${
               project.status === "live" ? "text-accent" : "text-muted"
             }`}
+            style={{ borderRadius: "0.8rem 0.2rem 0.8rem 0.2rem" }}
           >
             <LeafGlyph className="h-3 w-3" />
             {STATUS_LABEL[project.status]}
@@ -66,6 +67,7 @@ export function ProjectCard({ project }: { project: Project }) {
             <span
               key={tech}
               className="border border-border bg-background/60 px-2.5 py-1 font-mono text-[11px] text-muted"
+              style={{ borderRadius: "0.8rem 0.2rem 0.8rem 0.2rem" }}
             >
               {tech}
             </span>

@@ -3,7 +3,7 @@ import { ArrowDown, Download, Mail } from "lucide-react";
 import { profile } from "@/data/profile";
 import { Reveal } from "./Reveal";
 import { Fireflies } from "./Fireflies";
-import { PalmFrond } from "./Botanical";
+import { Fern, PalmFrond } from "./Botanical";
 
 export function Hero() {
   return (
@@ -20,9 +20,21 @@ export function Hero() {
         </defs>
       </svg>
 
-      <PalmFrond
+      {/* Foliage spilling in from the top-right corner, behind the content. */}
+      <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-10 -top-10 h-72 w-72 text-border opacity-40 sm:h-96 sm:w-96"
+        className="pointer-events-none absolute -right-16 -top-8 hidden text-fern sm:block"
+      >
+        <PalmFrond className="foliage-sway h-[26rem] w-[26rem] rotate-[24deg] opacity-[0.16]" />
+        <PalmFrond
+          className="foliage-sway absolute -left-24 top-16 h-[22rem] w-[22rem] -scale-x-100 rotate-[-8deg] opacity-[0.1]"
+          style={{ animationDelay: "-3s" }}
+        />
+      </div>
+      <Fern
+        aria-hidden="true"
+        className="foliage-sway pointer-events-none absolute -bottom-6 -left-6 hidden h-72 w-48 rotate-[-12deg] text-fern opacity-[0.12] sm:block"
+        style={{ transformOrigin: "50% 100%", animationDelay: "-1.5s" }}
       />
       <Fireflies />
 
@@ -103,6 +115,30 @@ export function Hero() {
           delay={0.15}
           className="relative mx-auto aspect-[0.9/1] w-full max-w-[320px] lg:max-w-[380px]"
         >
+          {/* Offset leaf outline + midrib behind the photo, like a leaf's shadow. */}
+          <svg
+            aria-hidden="true"
+            focusable="false"
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            fill="none"
+            className="absolute inset-0 h-full w-full translate-x-3 translate-y-3 text-fern"
+          >
+            <path
+              d="M50,2 C75,8 95,28 92,50 C90,72 78,90 55,98 C50,100 45,97 40,90 C20,80 5,60 8,40 C12,18 30,5 50,2 Z"
+              stroke="currentColor"
+              strokeOpacity=".55"
+              strokeWidth="1.2"
+              vectorEffect="non-scaling-stroke"
+            />
+            <path
+              d="M52,98 C50,70 52,40 50,2"
+              stroke="currentColor"
+              strokeOpacity=".25"
+              strokeWidth="1"
+              vectorEffect="non-scaling-stroke"
+            />
+          </svg>
           <div
             className="relative h-full w-full bg-background-elevated"
             style={{ clipPath: "url(#leaf-clip)" }}

@@ -1,5 +1,6 @@
 "use client";
 
+import { LogoMark } from "./Botanical";
 import { useEffect, useState } from "react";
 import { Download } from "lucide-react";
 import { profile } from "@/data/profile";
@@ -64,19 +65,13 @@ export function Nav() {
     >
       <nav
         aria-label="Primary"
-        className="mx-auto flex w-full max-w-5xl items-center justify-between px-6 py-4"
+        className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-6 py-3 xl:max-w-6xl"
       >
         <button
           onClick={() => handleClick("hero")}
           className="flex items-center gap-2 font-serif text-lg font-semibold tracking-tight text-foreground"
         >
-          <span
-            className="flex h-7 w-7 items-center justify-center border border-accent text-accent"
-            style={{ borderRadius: "0.8rem 0.2rem 0.8rem 0.2rem" }}
-            aria-hidden="true"
-          >
-            A
-          </span>
+          <LogoMark id="nav-logo" className="h-9 w-9" />
           Abdurore
         </button>
 
@@ -104,14 +99,16 @@ export function Nav() {
           <a
             href={profile.resumeUrl}
             download
-            className="inline-flex min-h-11 items-center gap-1.5 border border-border px-4 font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
+            className="inline-flex min-h-11 items-center gap-1.5 whitespace-nowrap border border-border px-4 font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
+            style={{ borderRadius: "1.1rem 0.3rem 1.1rem 0.3rem" }}
           >
             <Download className="h-3.5 w-3.5" />
             Resume
           </a>
           <a
             href={`mailto:${profile.email}`}
-            className="inline-flex min-h-11 items-center border border-accent bg-accent px-4 font-medium text-background transition-opacity hover:opacity-85"
+            className="inline-flex min-h-11 items-center whitespace-nowrap border border-accent bg-accent px-4 font-medium text-background transition-opacity hover:opacity-85"
+            style={{ borderRadius: "1.1rem 0.3rem 1.1rem 0.3rem" }}
           >
             Say Hi
           </a>
