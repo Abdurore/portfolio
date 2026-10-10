@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
 
-const PAGES = ["/", "/accessibility"];
+const PAGES = ["/", "/accessibility", "/accessibility-audit"];
 const THEMES = ["dark", "light"] as const;
 const STILL_MODES = [false, true] as const;
 
@@ -63,7 +63,7 @@ for (const path of PAGES) {
 
         // Closed <details> content isn't rendered, so axe can't see it.
         // Re-scan with every FAQ item expanded.
-        if (path === "/") {
+        if (path !== "/accessibility") {
           await page.evaluate(() =>
             document.querySelectorAll("details").forEach((d) => (d.open = true))
           );

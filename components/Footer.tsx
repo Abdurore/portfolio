@@ -14,6 +14,10 @@ export function Footer() {
           {profile.alias}).
         </p>
         <p className="mt-2 font-mono text-xs text-muted">
+          <a href="/accessibility-audit" className="underline hover:text-accent">
+            Accessibility audit service
+          </a>
+          {" · "}
           <a href="/accessibility" className="underline hover:text-accent">
             Accessibility statement
           </a>

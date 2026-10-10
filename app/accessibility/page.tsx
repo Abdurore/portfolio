@@ -7,6 +7,7 @@ export const metadata: Metadata = {
   title: "Accessibility",
   description:
     "Accessibility statement for Abdurore's portfolio: target conformance level, what was tested and how, known limitations, and how to report a problem.",
+  alternates: { canonical: "/accessibility" },
 };
 
 const LAST_UPDATED = "7 October 2026";

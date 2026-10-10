@@ -53,6 +53,9 @@ export const metadata: Metadata = {
   alternates: {
     canonical: SITE_URL,
   },
+  category: "technology",
+  referrer: "origin-when-cross-origin",
+  formatDetection: { email: false, address: false, telephone: false },
   robots: {
     index: true,
     follow: true,
@@ -170,6 +173,7 @@ const serviceJsonLd = {
   "@id": `${SITE_URL}/#audit-service`,
   name: audit.name,
   serviceType: audit.serviceType,
+  url: `${SITE_URL}/accessibility-audit`,
   description: audit.description,
   provider: { "@id": personId },
   offers: {
