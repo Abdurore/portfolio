@@ -3,7 +3,7 @@ import { Fraunces, Instrument_Sans, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { profile, SITE_URL } from "@/data/profile";
 import { projects } from "@/data/projects";
-import { audit } from "@/data/audit";
+import { audit, auditHighestPrice, auditLowestPrice } from "@/data/audit";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import "./globals.css";
 
@@ -177,10 +177,19 @@ const serviceJsonLd = {
   description: audit.description,
   provider: { "@id": personId },
   offers: {
-    "@type": "Offer",
-    price: String(audit.price),
+    "@type": "AggregateOffer",
     priceCurrency: audit.currency,
+    lowPrice: String(auditLowestPrice),
+    highPrice: String(auditHighestPrice),
+    offerCount: audit.tiers.length,
     url: audit.serviceUrl,
+    offers: audit.tiers.map((t) => ({
+      "@type": "Offer",
+      name: `${t.name}: ${t.scope}`,
+      price: String(t.price),
+      priceCurrency: audit.currency,
+      url: audit.serviceUrl,
+    })),
   },
 };
 

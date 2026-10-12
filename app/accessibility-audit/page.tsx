@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { Audits } from "@/components/Audits";
-import { audit, auditPriceLabel } from "@/data/audit";
+import { auditDeliveryRange, auditFromLabel } from "@/data/audit";
 import { SITE_URL } from "@/data/profile";
 
 const URL = `${SITE_URL}/accessibility-audit`;
 const TITLE = "ADA & WCAG 2.1 AA Accessibility Audit with a PDF Report";
-const DESCRIPTION = `Manual ADA & WCAG 2.1 AA accessibility audit by Abdulhameed Oreagba (Abdurore): ${auditPriceLabel} fixed, delivered in ${audit.deliveryDays} days as a tagged accessible PDF report.`;
+const DESCRIPTION = `Manual ADA & WCAG 2.1 AA accessibility audit by Abdulhameed Oreagba (Abdurore): ${auditFromLabel}, delivered in ${auditDeliveryRange} as a tagged accessible PDF report.`;
 
 export const metadata: Metadata = {
   title: TITLE,

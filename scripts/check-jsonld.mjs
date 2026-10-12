@@ -139,20 +139,37 @@ if (!service) {
   assertField(service, "serviceType", "Service");
   assertField(service, "description", "Service");
   assertField(service, "provider", "Service", (v) => v && person && v["@id"] === person["@id"]);
-  assertField(service, "offers", "Service", (v) => v && v["@type"] === "Offer" && v.priceCurrency === "USD" && v.url === EXPECTED_SERVICE_URL);
+  assertField(service, "offers", "Service", (v) => v && v["@type"] === "AggregateOffer" && v.priceCurrency === "USD" && v.url === EXPECTED_SERVICE_URL && Array.isArray(v.offers) && v.offers.length === Number(v.offerCount) && v.offers.every((o) => o["@type"] === "Offer" && o.priceCurrency === "USD" && o.url === EXPECTED_SERVICE_URL));
   assertField(service, "aggregateRating", "Service (must be absent)", (v) => v === undefined);
   assertField(service, "review", "Service (must be absent)", (v) => v === undefined);
 
-  // The visible price must be the JSON-LD price.
+  // Every visible price must come from the JSON-LD offers, and the
+  // headline must read "from $<lowest>", never a single fixed price.
   const visibleText = html.replace(/<!--[\s\S]*?-->/g, "").replace(/<script[\s\S]*?<\/script>/g, " ").replace(/<style[\s\S]*?<\/style>/g, " ").replace(/<[^>]+>/g, " ").replace(/&amp;/g, "&").replace(/\s+/g, " ");
-  const priceLabel = `$${service.offers?.price}`;
-  const visibleOk = visibleText.includes(`${priceLabel}, fixed`);
-  console.log(`${visibleOk ? "PASS" : "FAIL"}  visible price "${priceLabel}, fixed" matches JSON-LD offers.price`);
-  if (!visibleOk) failures++;
+  const offers = service.offers?.offers ?? [];
+  const prices = offers.map((o) => Number(o.price));
+  const low = Math.min(...prices);
+  const lowOk = String(low) === service.offers?.lowPrice && String(Math.max(...prices)) === service.offers?.highPrice;
+  console.log(`${lowOk ? "PASS" : "FAIL"}  AggregateOffer low/high match the Offer prices`);
+  if (!lowOk) failures++;
+  const fromOk = visibleText.includes(`from $${low}`);
+  console.log(`${fromOk ? "PASS" : "FAIL"}  visible text says "from $${low}"`);
+  if (!fromOk) failures++;
+  for (const o of offers) {
+    const ok = visibleText.includes(`$${o.price} · `);
+    console.log(`${ok ? "PASS" : "FAIL"}  visible tier price $${o.price} matches JSON-LD (${o.name})`);
+    if (!ok) failures++;
+  }
+  const allowed = new Set([...offers.map((o) => `$${o.price}`), "$40"]);
   const dollarAmounts = [...visibleText.matchAll(/\$\d+(?:,\d{3})*(?:\.\d+)?/g)].map((m) => m[0]);
-  const stray = dollarAmounts.filter((d) => d !== priceLabel);
-  console.log(`${stray.length === 0 ? "PASS" : "FAIL"}  no other dollar amounts on the page ${JSON.stringify(stray)}`);
+  const stray = dollarAmounts.filter((d) => !allowed.has(d));
+  console.log(`${stray.length === 0 ? "PASS" : "FAIL"}  no unexpected dollar amounts on the page ${JSON.stringify(stray)}`);
   if (stray.length) failures++;
+  for (const stale of ["$450, fixed", "$450 fixed", "Scanners reported", "What scanners miss"]) {
+    const found = visibleText.includes(stale);
+    console.log(`${found ? "FAIL" : "PASS"}  stale copy absent: "${stale}"`);
+    if (found) failures++;
+  }
 }
 
 assertField(person ?? {}, "sameAs", "Person.sameAs includes Upwork profile", (v) => Array.isArray(v) && v.includes(EXPECTED_PROFILE_URL));

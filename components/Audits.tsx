@@ -2,7 +2,8 @@ import { ArrowUpRight } from "lucide-react";
 import { profile } from "@/data/profile";
 import {
   audit,
-  auditPriceLabel,
+  auditDeliveryList,
+  auditFromLabel,
   formatDate,
   formatMonthYear,
 } from "@/data/audit";
@@ -12,16 +13,16 @@ import { LeafGlyph } from "./Botanical";
 
 const LEAF_CUT = { borderRadius: "2rem 0.5rem 2rem 0.5rem" } as const;
 
-const SCANNER_MISSES = [
-  "A government GIS map page whose embedded map silently never loads for any visitor. Scanners reported the page as passing.",
-  "A site search that returns zero results for multi-word queries. Scanners reported it as passing too.",
+const NON_WCAG_DEFECTS = [
+  "A government GIS map page whose embedded map silently never loads for any visitor.",
+  "A site search that returns zero results for multi-word queries.",
 ];
 
 const STEPS = [
   "We agree the page and flow sample, and what's out of scope, before any testing.",
   "I run an automated scan on every page and state in scope.",
   "I test by hand with keyboard-only navigation and NVDA.",
-  `You get the PDF report within ${audit.deliveryDays} days, plus one revision for corrections.`,
+  `You get the PDF report within your tier's delivery time (${auditDeliveryList} days), plus one revision for corrections.`,
 ];
 
 /** Static "light through leaves" decoration. Not animated, hidden from AT. */
@@ -70,8 +71,6 @@ function ExternalLinkText({
 }
 
 export function Audits() {
-  const [minPages, maxPages] = audit.pagesRange;
-
   return (
     <section
       id="audits"
@@ -122,49 +121,46 @@ export function Audits() {
       >
         <LightThroughLeaves />
         <h3 className="font-serif text-xl font-semibold">At a glance</h3>
-        <dl className="mt-5 grid gap-x-8 gap-y-5 sm:grid-cols-2">
-          <div>
-            <dt className="font-mono text-xs uppercase tracking-wide text-muted">
-              Price
-            </dt>
-            <dd className="mt-1 text-lg font-medium">
-              {auditPriceLabel}, fixed
-            </dd>
-          </div>
-          <div>
-            <dt className="font-mono text-xs uppercase tracking-wide text-muted">
-              Delivery
-            </dt>
-            <dd className="mt-1 text-lg font-medium">
-              {audit.deliveryDays} days
-              <span className="block text-sm font-normal text-muted">
-                from when I receive your requirements
-              </span>
-            </dd>
-          </div>
-          <div>
-            <dt className="font-mono text-xs uppercase tracking-wide text-muted">
-              Scope
-            </dt>
-            <dd className="mt-1 text-lg font-medium">
-              {minPages}–{maxPages} pages or flows
-              <span className="block text-sm font-normal text-muted">
-                chosen with you
-              </span>
-            </dd>
-          </div>
-          <div>
-            <dt className="font-mono text-xs uppercase tracking-wide text-muted">
+        <p className="mt-2 text-muted">
+          Three tiers, {auditFromLabel}. Pick the one that fits your site.
+        </p>
+        <dl className="mt-5 divide-y divide-border border-y border-border">
+          {audit.tiers.map((tier) => (
+            <div
+              key={tier.name}
+              className="grid gap-x-6 gap-y-1 py-3 sm:grid-cols-[8rem_1fr]"
+            >
+              <dt className="font-mono text-xs uppercase tracking-wide text-muted sm:pt-1">
+                {tier.name}
+              </dt>
+              <dd className="text-lg font-medium">
+                ${tier.price} · {tier.days} days · {tier.scope}
+              </dd>
+            </div>
+          ))}
+          <div className="grid gap-x-6 gap-y-1 py-3 sm:grid-cols-[8rem_1fr]">
+            <dt className="font-mono text-xs uppercase tracking-wide text-muted sm:pt-1">
               Revisions
             </dt>
-            <dd className="mt-1 text-lg font-medium">
-              {audit.revisions}
+            <dd className="text-lg font-medium">
+              {audit.revisions} on every tier
               <span className="block text-sm font-normal text-muted">
                 corrections to the report
               </span>
             </dd>
           </div>
+          <div className="grid gap-x-6 gap-y-1 py-3 sm:grid-cols-[8rem_1fr]">
+            <dt className="font-mono text-xs uppercase tracking-wide text-muted sm:pt-1">
+              Add-on
+            </dt>
+            <dd className="text-lg font-medium">
+              {audit.addOn.label}, +${audit.addOn.price}, +{audit.addOn.extraDays} day
+            </dd>
+          </div>
         </dl>
+        <p className="mt-4 text-sm text-muted">
+          Delivery counts from when I receive your requirements.
+        </p>
 
         <div className="mt-8 flex flex-wrap items-center gap-3">
           <ExternalLinkText
@@ -225,12 +221,14 @@ export function Audits() {
       </Reveal>
 
       <Reveal className="mt-12 max-w-2xl">
-        <h3 className="font-serif text-xl font-semibold">What scanners miss</h3>
+        <h3 className="font-serif text-xl font-semibold">
+          Non-WCAG defects found in recent audits
+        </h3>
         <p className="mt-3 text-muted">
-          Two real defects from my Upwork profile (anonymised):
+          Recent audit work also surfaced non-WCAG defects (anonymised):
         </p>
         <ul className="mt-3 list-disc space-y-2 pl-5 text-muted marker:text-accent">
-          {SCANNER_MISSES.map((miss) => (
+          {NON_WCAG_DEFECTS.map((miss) => (
             <li key={miss}>{miss}</li>
           ))}
         </ul>
