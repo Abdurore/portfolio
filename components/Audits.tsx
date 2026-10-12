@@ -90,8 +90,8 @@ export function Audits() {
           <LeafGlyph className="leaf-sprout h-5 w-5 shrink-0 text-accent" />
         </h2>
         <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg">
-          Automated scanners only catch a minority of real accessibility
-          problems. I test the rest myself, with a keyboard and the NVDA
+          Automated scanners miss many problems that only a person testing by
+          hand will find. I test the rest myself, with a keyboard and the NVDA
           screen reader, then hand you a report you can act on.
         </p>
         <p className="mt-4 max-w-2xl text-muted">
