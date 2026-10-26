@@ -2,6 +2,7 @@ import { profile } from "@/data/profile";
 import { Reveal, RevealGroup } from "./Reveal";
 import { GrowthLine } from "./GrowthLine";
 import { LeafGlyph } from "./Botanical";
+import { VerseBackdrop } from "./BackgroundText";
 
 const CREDENTIAL_LABEL: Record<"earned" | "in-progress", string> = {
   earned: "Earned",
@@ -10,7 +11,8 @@ const CREDENTIAL_LABEL: Record<"earned" | "in-progress", string> = {
 
 export function Experience() {
   return (
-    <section id="experience" className="relative mx-auto max-w-4xl px-6 py-20">
+    <section id="experience" className="relative mx-auto max-w-4xl px-6 pb-80 pt-20">
+      <VerseBackdrop bottom className="-z-10" />
       <Reveal className="relative">
         <GrowthLine />
         <p className="font-mono text-xs uppercase tracking-widest text-muted">

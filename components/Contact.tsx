@@ -4,6 +4,7 @@ import { audit } from "@/data/audit";
 import { Reveal } from "./Reveal";
 import { GrowthLine } from "./GrowthLine";
 import { LeafGlyph } from "./Botanical";
+import { YnwaBackdrop } from "./BackgroundText";
 import {
   GithubIcon,
   InstagramIcon,
@@ -26,13 +27,16 @@ export function Contact() {
       id="contact"
       className="relative mx-auto max-w-4xl px-6 py-28 text-center"
     >
+      <YnwaBackdrop className="-z-10" />
       <Reveal className="relative">
         <GrowthLine />
         <p className="font-mono text-xs uppercase tracking-widest text-muted">
           <span className="text-accent">[06]</span> Clearing
         </p>
         <h2 className="mx-auto mt-3 flex max-w-xl items-center justify-center gap-2 font-serif text-3xl font-semibold tracking-tight sm:text-5xl">
-          Got an idea worth <span className="text-accent">building</span>?
+          <span>
+            Got an idea worth <span className="text-accent">building</span>?
+          </span>
           <LeafGlyph className="leaf-sprout h-5 w-5 shrink-0 text-accent" />
         </h2>
         <p className="mx-auto mt-4 max-w-md text-muted">

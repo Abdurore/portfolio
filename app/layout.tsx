@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Instrument_Sans, Geist_Mono } from "next/font/google";
+import { Amiri, Fraunces, Instrument_Sans, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import { profile, SITE_URL } from "@/data/profile";
 import { projects } from "@/data/projects";
@@ -16,6 +16,15 @@ const fraunces = Fraunces({
 const instrumentSans = Instrument_Sans({
   variable: "--font-instrument-sans",
   subsets: ["latin"],
+});
+
+// Classical naskh, used only for the decorative background verse.
+const amiri = Amiri({
+  variable: "--font-amiri",
+  subsets: ["arabic"],
+  weight: ["400", "700"],
+  display: "swap",
+  preload: false,
 });
 
 const geistMono = Geist_Mono({
@@ -225,7 +234,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${fraunces.variable} ${instrumentSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${fraunces.variable} ${instrumentSans.variable} ${geistMono.variable} ${amiri.variable} h-full antialiased`}
       suppressHydrationWarning
     >
       <head>
