@@ -11,7 +11,7 @@ const CREDENTIAL_LABEL: Record<"earned" | "in-progress", string> = {
 
 export function Experience() {
   return (
-    <section id="experience" className="relative mx-auto max-w-4xl px-6 pb-80 pt-20">
+    <section id="experience" className="relative mx-auto max-w-4xl px-6 pb-64 pt-20 sm:pb-80">
       <VerseBackdrop bottom className="-z-10" />
       <Reveal className="relative">
         <GrowthLine />

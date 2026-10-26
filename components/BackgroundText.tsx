@@ -40,11 +40,27 @@ export function VerseBackdrop({ className = "", bottom = false }: { className?: 
       ref={ref}
       data-in-view={inView}
       aria-hidden="true"
-      className={`bg-text pointer-events-none absolute ${bottom ? "bottom-0 h-96" : "inset-y-0"} left-1/2 w-screen -translate-x-1/2 select-none overflow-hidden ${className}`}
+      className={`bg-text pointer-events-none absolute ${bottom ? "bottom-0 h-80 sm:h-96" : "inset-y-0"} left-1/2 w-screen -translate-x-1/2 select-none overflow-hidden ${className}`}
     >
+      {/* Narrow screens: two rows, so the lit word can be big. */}
+      <svg
+        viewBox="0 0 860 560"
+        className="absolute left-1/2 top-1/2 w-[92%] max-w-md overflow-visible -translate-x-1/2 -translate-y-1/2 sm:hidden"
+        focusable="false"
+      >
+        <Glow id={`${gid}m`} cx={430} cy={370} rx={400} ry={190} />
+        <g style={{ ...WORD, fontSize: 200 }} textAnchor="middle" direction="rtl">
+          <text className="bg-hollow" x={746} y={190} lang="ar">إن</text>
+          <text className="bg-hollow" x={523} y={190} lang="ar">مع</text>
+          <text className="bg-hollow bg-hardship" x={207} y={190} lang="ar">العسر</text>
+        </g>
+        <g style={{ ...WORD, fontSize: 300 }} textAnchor="middle" direction="rtl">
+          <text className="bg-lit" x={430} y={470} lang="ar">يسرا</text>
+        </g>
+      </svg>
       <svg
         viewBox="0 0 1370 360"
-        className="absolute left-1/2 top-1/2 w-[94%] max-w-5xl overflow-visible -translate-x-1/2 -translate-y-1/2"
+        className="absolute left-1/2 top-1/2 hidden w-[94%] max-w-5xl overflow-visible -translate-x-1/2 -translate-y-1/2 sm:block"
         focusable="false"
       >
         <Glow id={gid} cx={200} cy={190} rx={240} ry={150} />
@@ -69,9 +85,26 @@ export function YnwaBackdrop({ className = "" }: { className?: string }) {
       aria-hidden="true"
       className={`bg-text pointer-events-none absolute inset-y-0 left-1/2 w-screen -translate-x-1/2 select-none overflow-hidden ${className}`}
     >
+      {/* Narrow screens: YN over WA, so the letters stay big enough to read. */}
+      <svg
+        viewBox="0 0 620 560"
+        className="absolute left-1/2 top-1/2 w-[100%] max-w-sm overflow-visible -translate-x-1/2 -translate-y-1/2 sm:hidden"
+        focusable="false"
+      >
+        <Glow id={`${gid}m`} cx={480} cy={400} rx={200} ry={190} />
+        <g
+          style={{ fontFamily: "var(--font-fraunces), serif", fontSize: 280, fontWeight: 800 }}
+          textAnchor="middle"
+        >
+          <text className="bg-hollow" x={190} y={250}>Y</text>
+          <text className="bg-hollow" x={470} y={250}>N</text>
+          <text className="bg-hollow" x={190} y={520}>W</text>
+          <text className="bg-lit" x={480} y={520}>A</text>
+        </g>
+      </svg>
       <svg
         viewBox="0 0 1000 320"
-        className="absolute left-1/2 top-1/2 w-[120%] min-w-[640px] max-w-none overflow-visible -translate-x-1/2 -translate-y-1/2 sm:w-[90%]"
+        className="absolute left-1/2 top-1/2 hidden w-[90%] max-w-4xl overflow-visible -translate-x-1/2 -translate-y-1/2 sm:block"
         focusable="false"
       >
         <Glow id={gid} cx={800} cy={170} rx={200} ry={150} />

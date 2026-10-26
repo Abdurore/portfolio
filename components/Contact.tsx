@@ -46,11 +46,11 @@ export function Contact() {
 
         <a
           href={`mailto:${profile.email}`}
-          className="mt-8 inline-flex min-h-11 items-center gap-2 border border-accent bg-accent px-7 py-3.5 font-medium text-background transition-opacity hover:opacity-85"
+          className="mt-8 inline-flex min-h-11 max-w-full items-center gap-2 border border-accent bg-accent px-5 py-3.5 text-sm sm:px-7 sm:text-base font-medium text-background transition-opacity hover:opacity-85"
           style={{ borderRadius: "2rem 0.5rem 2rem 0.5rem" }}
         >
-          <Mail className="h-4 w-4" />
-          {profile.email}
+          <Mail className="h-4 w-4 shrink-0" />
+          <span className="min-w-0 break-all">{profile.email}</span>
         </a>
 
         <ul className="mt-10 flex flex-wrap items-center justify-center gap-3">
