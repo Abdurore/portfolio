@@ -1,6 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  images: {
+    formats: ["image/avif", "image/webp"],
+    qualities: [75],
+    // No 3840px variants: the widest image on the site is ~800 CSS px wide
+    // and the source files are at most 1200px.
+    deviceSizes: [640, 750, 828, 1080, 1200],
+    imageSizes: [96, 256, 384],
+  },
   async redirects() {
     return [
       // Canonicalize onto the real domain. These only take effect once

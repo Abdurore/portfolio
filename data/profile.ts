@@ -1,134 +1,141 @@
-import { shippedProjectsCount } from "./projects";
 import { audit } from "./audit";
 
 export const SITE_URL = "https://abdurore.tech";
 
+/**
+ * The one place the contact address lives. Change it here and every link,
+ * label and the footer follow.
+ * TODO(abdul): confirm a test email to hello@ arrives before deploying.
+ * Also turn off Cloudflare's Email Address Obfuscation for this site, or it
+ * replaces the visible address with "[email protected]".
+ */
+export const EMAIL = "hello@abdurore.tech";
+
 export const profile = {
-  /** Full legal name, formal order — footer, legal/JSON-LD alternates. */
-  name: "Oreagba Abdulhameed Oluwadurotimi",
-  /** Common-order name used in the hero H1 and OG image. */
-  commonName: "Abdulhameed Oreagba",
-  alias: "Abdurore",
+  /** Visible name, everywhere. */
+  name: "Abdulhameed Oreagba",
+  handle: "Abdurore",
+  /** Full legal name: JSON-LD alternateName only. Never shown on the page. */
+  legalName: "Oreagba Abdulhameed Oluwadurotimi",
   role: "Full-Stack Developer",
-  subrole: "Mechatronics Engineering Student",
-  tagline:
-    "Full-Stack Developer building AI-powered products and playful web experiences.",
-  heroLead:
-    "Most people call me Abdurore. I'm a full-stack developer in Lagos who builds whole things, from the interface to the deploy, and I try to build the way good things grow: roots first, patiently, on purpose.",
-  bio: "I'm a third-year Mechatronics Engineering student at LASUSTECH, and I've been building for the web for 2+ years. I like making things that are useful to real people: a greeting-card platform for Nigerians who live on WhatsApp, a site for a halal certification body, a pharmacy that delivers same-day across Lagos. Away from the screen I'm happiest around trees, plants, and green things that take their time.",
-  location: "Lagos, Nigeria",
-  email: "abdulhamidore1@gmail.com",
+  location: "Lagos, NG",
   resumeUrl: "/Abdurore-CV.pdf",
-  education: {
-    school: "Lagos State University of Science and Technology (LASUSTECH)",
-    degree: "B.Eng. Mechatronics Engineering",
-    status: "Third Year (In Progress)",
-  },
-  stats: [
-    { label: "Years Building", value: "2+" },
-    { label: "Shipped Projects", value: String(shippedProjectsCount) },
-    { label: "Co-Founded", value: "1" },
+  lede: "Full-stack developer in Lagos. I'm the lead developer on Euphorium, a campus commerce app, and I ship fixes and features on Jaayorun, a live delivery platform.",
+  specimen: [
+    { key: "Based in", value: "Lagos, Nigeria (WAT, UTC+1)" },
+    {
+      key: "Open to",
+      value: "remote roles, or hybrid in Lagos; part-time or contract",
+    },
+    {
+      key: "Studying",
+      value: "B.Eng. Mechatronics Engineering, LASUSTECH, graduating 2028",
+    },
   ],
   skillGroups: [
     {
-      label: "Languages & Frameworks",
-      skills: [
-        "React",
-        "Next.js",
-        "Node.js",
-        "TypeScript",
-        "JavaScript",
-        "Python",
-        "Laravel / PHP",
-        "FastAPI",
-        "Express",
-      ],
+      label: "Front end",
+      skills: ["React", "Next.js", "TypeScript", "JavaScript", "Tailwind CSS"],
     },
     {
-      label: "Backend & Data",
-      skills: ["MongoDB", "Supabase", "NestJS", "scikit-learn", "Docker"],
+      label: "Back end",
+      skills: ["Node.js", "Express", "NestJS", "Laravel/PHP", "FastAPI"],
+    },
+    { label: "Data", skills: ["PostgreSQL (Supabase)", "MongoDB"] },
+    {
+      label: "Infrastructure",
+      skills: ["Docker", "Cloudflare", "DigitalOcean", "Vercel", "Git"],
     },
     {
-      label: "Tools & Workflow",
+      label: "Accessibility",
       skills: [
-        "Tailwind CSS",
-        "HTML / CSS",
-        "Git / GitHub",
-        "Figma",
-        "Vercel / Netlify",
-        "Design Tokens / CSS Custom Properties",
-        "AI Prompt Engineering",
-        "AutoCAD",
-        "Playwright / axe-core",
+        "WCAG 2.1 AA",
+        "NVDA",
+        "keyboard testing",
+        "Playwright with axe-core",
       ],
     },
-    {
-      label: "Content & Accessibility",
-      skills: [
-        "Video Editing",
-        "Social Media Management",
-        "SEO",
-        "Accessibility (WCAG)",
-      ],
-    },
+    { label: "Machine learning", skills: ["Python", "scikit-learn"] },
   ],
   credentials: [
-    { name: "Anthropic Claude 101", status: "earned" as const },
-    {
-      name: "Anthropic AI Fluency",
-      status: "earned" as const,
-      // TODO: add the public credential/badge URL once available
-      url: undefined as string | undefined,
-    },
+    "Anthropic: Claude 101",
+    "Anthropic: AI Fluency",
+    // Keep "(in progress)" attached: scripts/check-jsonld.mjs fails the build
+    // on any other use of "Trusted Tester".
+    "DHS Trusted Tester (in progress)",
   ],
-  experience: [
-    {
-      title: "BoyCode Bootcamp 5.0",
-      org: "Stellar Initiative",
-      period: "June 2026",
-      description:
-        "Residential bootcamp in Lagos — competitive admission, fully funded.",
-    },
-    {
-      title: "Cavista Hackathon 2026",
-      org: "Team FOR_GERS",
-      period: "2026",
-      description:
-        "Built PreventAI, an AI-scored preventive health assistant, in 24 hours.",
-    },
-    {
-      title: "SIWES Placement",
-      org: "Engineering firm, Lagos",
-      period: "",
-      description:
-        "Industrial control panel work; built the firm's first website (KDS Engineering) alongside it.",
-    },
-    {
-      title: "AutoCAD Internship",
-      org: "Architectural firm, Lagos",
-      period: "",
-      description: "Technical drafting and design support.",
-    },
-    {
-      title: "Webmaster & Super Admin",
-      org: "Halal and Haram Distinction Development Initiative (HDI)",
-      period: "Aug 2026 – Jan 2027",
-      description:
-        "Ongoing: site maintenance, SEO, social media, and admin panel improvements.",
-    },
-    {
-      title: "Freelance Full-Stack Development",
-      org: "Upwork & DataAnnotation",
-      period: "Jan 2026 – present",
-      description: "Client web development and data/AI evaluation work.",
-    },
+  socials: [
+    { label: "GitHub", href: "https://github.com/abdurore" },
+    { label: "LinkedIn", href: "https://linkedin.com/in/abdurore" },
+    { label: "X", href: "https://x.com/abdurore" },
+    { label: "Instagram", href: "https://instagram.com/abdurore" },
+    { label: "Upwork", href: audit.profileUrl },
+    { label: "YouTube (Simplivide)", href: "https://www.youtube.com/@Simplivide" },
   ],
-  socials: {
-    github: "https://github.com/abdurore",
-    linkedin: "https://linkedin.com/in/abdurore",
-    x: "https://x.com/abdurore",
-    instagram: "https://instagram.com/abdurore",
-    youtube: "https://www.youtube.com/@Simplivide",
-    upwork: audit.profileUrl,
-  },
 } as const;
+
+export type ExperienceEntry = {
+  title: string;
+  /** Shown in its own element, never joined to the title with a dot. */
+  org?: string;
+  dates: string;
+  note?: string;
+  description: string;
+  link?: { label: string; href: string };
+};
+
+/** Newest first. */
+export const experience: ExperienceEntry[] = [
+  {
+    // TODO(abdul): start month for Corbel.
+    title: "Co-founder, Corbel",
+    dates: "2026 – present",
+    description:
+      "Corbel builds secure software for African infrastructure and regulated industries. Our first product, Coffer, is an evidence vault for telecom field teams: they upload site photos on weak connections, track what's missing against each client's checklist, and assemble the closeout pack. We're building it now with contractors.",
+    link: { label: "corbel.ng", href: "https://corbel.ng" },
+  },
+  {
+    // TODO(abdul): start month for Euphorium.
+    title: "Lead developer, Euphorium",
+    dates: "Present",
+    description: "Built most of the platform. See Selected work.",
+  },
+  {
+    title: "Developer, Jaayorun",
+    dates: "Aug 2026 – present",
+    description:
+      "Production bug fixes and features across vendor, customer, rider and staff apps; taking over day-to-day ownership.",
+  },
+  {
+    title: "Webmaster and super admin, HDI",
+    dates: "Aug 2026 – Jan 2027",
+    note: "Contract",
+    description:
+      "I run the website and portals for a halal certification body: rewrote the news content, fixed broken media, moved inline styles into one maintainable stylesheet, and look after SEO.",
+    link: { label: "halalcert.com.ng", href: "https://halalcert.com.ng" },
+  },
+  {
+    title: "Freelance full-stack developer",
+    dates: "Jan 2026 – present",
+    description:
+      "Client work through Upwork, AI evaluation work through DataAnnotation, and manual WCAG accessibility audits.",
+  },
+  {
+    title: "Cavista Hackathon 2026",
+    org: "Team FOR_GERS",
+    dates: "2026",
+    description: "Built PreventAI in 24 hours.",
+  },
+  {
+    title: "BoyCode Bootcamp 5.0",
+    dates: "Jun 2026",
+    description:
+      "A fully funded residential programme in Lagos run by Stellar Initiative. I'm now in its AI and automation cohort.",
+  },
+  {
+    title: "Engineering placements",
+    dates: "2026",
+    description:
+      "SIWES at KDS Engineering (Jul–Oct 2026), working on industrial control panels, and an AutoCAD drafting internship at a Lagos architecture firm.",
+  },
+];

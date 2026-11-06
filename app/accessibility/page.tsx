@@ -1,131 +1,106 @@
 import type { Metadata } from "next";
-import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
-import { profile } from "@/data/profile";
+import { Nav } from "@/components/Nav";
+import { EMAIL } from "@/data/profile";
+import { pageMetadata } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: "Accessibility",
+export const metadata: Metadata = pageMetadata({
+  title: "Accessibility statement",
   description:
-    "Accessibility statement for Abdurore's portfolio: target conformance level, what was tested and how, known limitations, and how to report a problem.",
-  alternates: { canonical: "/accessibility" },
-};
+    "Accessibility statement for abdurore.tech: the WCAG 2.2 AA target, what was tested and how, the results, known limitations, and how to report a problem.",
+  path: "/accessibility",
+});
 
-const LAST_UPDATED = "7 October 2026";
+// Update these three together whenever the suite is re-run.
+const TESTED_ON = "6 November 2026";
+const RESULT_SUMMARY =
+  "Zero axe-core violations on the homepage, the audits page and this page, at 390px and 1440px wide, in both themes, with the audit FAQ expanded. The keyboard pass found every control reachable in a logical order with a visible focus ring, and the page reflows without horizontal scrolling at 320px and at 200% zoom. Lighthouse scored accessibility 100 on all three pages.";
 
 export default function AccessibilityPage() {
   return (
     <>
       <Nav />
-      <main id="main" className="flex flex-1 flex-col">
-        <section className="mx-auto max-w-3xl px-6 py-28">
-          <p className="font-mono text-xs uppercase tracking-widest text-muted">
-            Accessibility statement
-          </p>
-          <h1 className="mt-3 font-serif text-3xl font-semibold tracking-tight sm:text-4xl">
-            This site aims for WCAG 2.2 AA.
-          </h1>
-          <p className="mt-2 font-mono text-xs text-muted">
-            Last updated {LAST_UPDATED}
-          </p>
+      <main id="main">
+        <section aria-labelledby="statement-title" className="section">
+          <div className="shell">
+            <h1 id="statement-title" className="!text-[clamp(40px,7vw,72px)]">
+              Accessibility statement
+            </h1>
+            <p className="mt-3 text-ink-soft">Last tested {TESTED_ON}</p>
 
-          <div className="mt-10 flex flex-col gap-10 text-base leading-relaxed text-muted">
-            <section>
-              <h2 className="font-serif text-xl font-semibold text-foreground">
-                Target
-              </h2>
-              <p className="mt-3">
-                This site targets{" "}
-                <strong className="text-foreground">
-                  WCAG 2.2 Level AA
-                </strong>
-                , with body text aimed at the stricter AAA contrast
-                requirement (7:1) where that&apos;s achievable without
-                compromising the design. I hold this site to the standard I
-                audit against; here is how it&apos;s tested. No third party
-                has assessed it against any standard, so the sections below
-                say exactly what was checked and how, and you can judge for
-                yourself.
-              </p>
-            </section>
+            <div className="mt-10 flex flex-col gap-10">
+              <section aria-labelledby="target">
+                <h2 id="target">Target</h2>
+                <p className="mt-3">
+                  This site targets WCAG 2.2 Level AA. I sell WCAG audits, so I
+                  hold this site to the standard I audit against. No third party
+                  has assessed it. The sections below say exactly what was
+                  checked and how, so you can judge for yourself.
+                </p>
+              </section>
 
-            <section>
-              <h2 className="font-serif text-xl font-semibold text-foreground">
-                What was tested, and how
-              </h2>
-              <ul className="mt-3 list-disc space-y-2 pl-5">
-                <li>
-                  Automated testing with{" "}
-                  <a
-                    href="https://playwright.dev/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline hover:text-accent"
-                  >
-                    Playwright
-                  </a>{" "}
-                  and{" "}
-                  <a
-                    href="https://github.com/dequelabs/axe-core"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="underline hover:text-accent"
-                  >
-                    axe-core
-                  </a>{" "}
-                  (rules tagged wcag2a, wcag2aa, wcag21aa, and wcag22aa),
-                  run against both the Night and Daylight themes, with
-                  Still mode on and off, at mobile and desktop viewport
-                  sizes.
-                </li>
-                <li>
-                  Every text/background color pair actually used on the
-                  site is checked by a small script
-                  (<code className="font-mono text-sm">
-                    scripts/check-contrast.mjs
-                  </code>
-                  ) against WCAG&apos;s contrast formula, and the production
-                  build fails if any pair comes in under threshold.
-                </li>
-                <li>
-                  A manual keyboard-only pass — tabbing through every
-                  interactive element, checking focus is always visible
-                  and the order makes sense, with no keyboard traps.
-                </li>
-              </ul>
-            </section>
+              <section aria-labelledby="results">
+                <h2 id="results">Latest result</h2>
+                <p className="mt-3">{RESULT_SUMMARY}</p>
+              </section>
 
-            <section>
-              <h2 className="font-serif text-xl font-semibold text-foreground">
-                Known limitations
-              </h2>
-              <p className="mt-3">
-                Automated tools and a keyboard pass catch a lot, but not
-                everything. A full screen-reader pass (NVDA and VoiceOver),
-                testing at 200% and 400% browser zoom, and a check in
-                forced-colors/high-contrast mode are tracked as a manual
-                checklist — some of that is still outstanding at the time
-                of writing. This statement doesn&apos;t claim conformance beyond
-                what&apos;s described above.
-              </p>
-            </section>
+              <section aria-labelledby="how">
+                <h2 id="how">What was tested, and how</h2>
+                <ul className="mt-3 list-disc space-y-2 pl-5">
+                  <li>
+                    Automated scans with Playwright and axe-core (rules tagged
+                    wcag2a, wcag2aa, wcag21a, wcag21aa, wcag22aa and
+                    best-practice) on every page, at 390px and 1440px wide, in
+                    both the light and Night Still themes.
+                  </li>
+                  <li>
+                    Reflow at 320px and at 200% zoom, the WCAG text-spacing
+                    overrides, and a Lighthouse audit of each page.
+                  </li>
+                  <li>
+                    A script checks every text and background colour pair, and
+                    every control boundary, against the WCAG contrast formula in
+                    both themes. The production build fails if any pair falls
+                    below 4.5:1 for text or 3:1 for large text and boundaries.
+                  </li>
+                  <li>
+                    A manual keyboard pass through the whole homepage: tab order,
+                    visible focus, the mobile menu (Escape closes it and returns
+                    focus to its button), and no keyboard traps.
+                  </li>
+                  <li>
+                    Reduced motion is respected. The only animation is a short
+                    settle-in of the portrait on first load, and it is instant
+                    under prefers-reduced-motion. Nothing moves on its own
+                    afterwards.
+                  </li>
+                </ul>
+              </section>
 
-            <section>
-              <h2 className="font-serif text-xl font-semibold text-foreground">
-                Reporting a problem
-              </h2>
-              <p className="mt-3">
-                If something on this site doesn&apos;t work with your assistive
-                technology, or you&apos;ve hit any other accessibility barrier,
-                please email{" "}
-                <a
-                  href={`mailto:${profile.email}`}
-                  className="underline hover:text-accent"
-                >
-                  {profile.email}
-                </a>
-                . I read every email and will fix genuine issues.
-              </p>
-            </section>
+              <section aria-labelledby="limits">
+                <h2 id="limits">Known limitations</h2>
+                <p className="mt-3">
+                  Automated tools and a keyboard pass catch a lot, but not
+                  everything. A full screen-reader pass with NVDA and VoiceOver,
+                  testing at 200% and 400% zoom, and a check in forced-colors
+                  mode are tracked as a manual checklist, and some of that is
+                  still outstanding. This statement doesn&apos;t claim
+                  conformance beyond what is described above.
+                </p>
+              </section>
+
+              <section aria-labelledby="report">
+                <h2 id="report">Reporting a problem</h2>
+                <p className="mt-3">
+                  If something on this site doesn&apos;t work with your assistive
+                  technology, or you&apos;ve hit any other barrier, email{" "}
+                  <a href={`mailto:${EMAIL}`} className="link">
+                    {EMAIL}
+                  </a>
+                  . I read every message and will fix genuine issues.
+                </p>
+              </section>
+            </div>
           </div>
         </section>
       </main>

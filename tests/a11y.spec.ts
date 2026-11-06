@@ -1,191 +1,272 @@
-import { test, expect } from "@playwright/test";
+import { test, expect, type Page } from "@playwright/test";
 import AxeBuilder from "@axe-core/playwright";
+import { mkdirSync, writeFileSync } from "node:fs";
 
-const PAGES = ["/", "/accessibility", "/accessibility-audit"];
-const THEMES = ["dark", "light"] as const;
-const STILL_MODES = [false, true] as const;
+const ROUTES = ["/", "/accessibility-audit", "/accessibility"];
+const THEMES = ["light", "dark"] as const;
+const TAGS = ["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"];
 
-async function setPreferences(
-  page: import("@playwright/test").Page,
-  theme: "dark" | "light",
-  still: boolean
-) {
-  await page.evaluate(
-    ({ theme, still }) => {
-      if (theme === "light") {
-        document.documentElement.setAttribute("data-theme", "light");
-      } else {
-        document.documentElement.removeAttribute("data-theme");
-      }
-      if (still) {
-        document.documentElement.setAttribute("data-still", "true");
-      } else {
-        document.documentElement.removeAttribute("data-still");
-      }
-    },
-    { theme, still }
-  );
+async function open(page: Page, path: string, theme: "light" | "dark") {
+  await page.addInitScript((t) => localStorage.setItem("theme", t), theme);
+  await page.goto(path);
+  await expect(page.locator("html")).toHaveAttribute("data-theme", theme);
+  // Let the one-off settle-in animation finish so axe reads the settled page.
+  await page.waitForTimeout(1000);
 }
 
-for (const path of PAGES) {
+// ---------- axe: every route x theme (width comes from the project) ----------
+
+for (const path of ROUTES) {
   for (const theme of THEMES) {
-    for (const still of STILL_MODES) {
-      test(`${path} — ${theme} theme, still=${still} — no axe violations`, async ({
-        page,
-      }) => {
-        await page.goto(path);
-        await setPreferences(page, theme, still);
-        // Wait for every [data-reveal]/[data-reveal-group] element to have
-        // been observed as in-view, then let its CSS transition (up to
-        // ~900ms: 300ms delay + 600ms duration) fully settle. Axe should
-        // assess the real, settled page — not a frame mid-fade-in, which
-        // is a test-timing artifact, not an actual contrast problem.
-        await page
-          .waitForFunction(
-            () =>
-              document.querySelectorAll(
-                '[data-reveal]:not([data-in-view="true"]), [data-reveal-group]:not([data-in-view="true"])'
-              ).length === 0,
-            undefined,
-            { timeout: 5000 }
-          )
-          .catch(() => {});
-        await page.waitForTimeout(1200);
+    test(`axe: ${path} in ${theme} theme has no violations`, async ({ page }) => {
+      await open(page, path, theme);
+      const run = () => new AxeBuilder({ page }).withTags(TAGS).analyze();
+      const results = await run();
+      expect(results.violations, JSON.stringify(results.violations, null, 2)).toEqual([]);
 
-        const results = await new AxeBuilder({ page })
-          .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
-          .analyze();
+      // Closed <details> content isn't rendered, so re-scan with FAQ items open.
+      if (await page.locator("details").count()) {
+        await page.evaluate(() =>
+          document.querySelectorAll("details").forEach((d) => (d.open = true))
+        );
+        const open = await run();
+        expect(open.violations, JSON.stringify(open.violations, null, 2)).toEqual([]);
+      }
+    });
+  }
+}
 
-        expect(
-          results.violations,
-          JSON.stringify(results.violations, null, 2)
-        ).toEqual([]);
+// ---------- Structure ----------
 
-        // Closed <details> content isn't rendered, so axe can't see it.
-        // Re-scan with every FAQ item expanded.
-        if (path !== "/accessibility") {
-          await page.evaluate(() =>
-            document.querySelectorAll("details").forEach((d) => (d.open = true))
-          );
-          await page.waitForTimeout(200);
-          const openResults = await new AxeBuilder({ page })
-            .withTags(["wcag2a", "wcag2aa", "wcag21aa", "wcag22aa"])
-            .analyze();
-          expect(
-            openResults.violations,
-            JSON.stringify(openResults.violations, null, 2)
-          ).toEqual([]);
-        }
-      });
+for (const path of ROUTES) {
+  test(`structure: ${path} has one h1, no skipped levels, and the landmarks`, async ({ page }) => {
+    await page.goto(path);
+    const levels = await page.$$eval("h1,h2,h3,h4,h5,h6", (els) =>
+      els.map((e) => Number(e.tagName[1]))
+    );
+    expect(levels.filter((l) => l === 1)).toHaveLength(1);
+    levels.forEach((l, i) => {
+      if (i > 0) expect(l - levels[i - 1], `heading jump at index ${i}`).toBeLessThanOrEqual(1);
+    });
+    for (const sel of ["header", "nav", "main", "footer"]) {
+      await expect(page.locator(sel).first()).toBeAttached();
+    }
+    await expect(page.locator("html")).toHaveAttribute("lang", "en");
+  });
+}
+
+test("structure: links have unique names per destination, and none open a new tab", async ({
+  page,
+}) => {
+  for (const path of ROUTES) {
+    await page.goto(path);
+    const links = await page.$$eval("a[href]", (as) =>
+      as.map((a) => ({
+        name: (a.getAttribute("aria-label") || a.textContent || "").replace(/\s+/g, " ").trim(),
+        href: (a as HTMLAnchorElement).href,
+        target: a.getAttribute("target"),
+      }))
+    );
+    const byName = new Map<string, Set<string>>();
+    for (const l of links) {
+      expect(l.target, `${path}: "${l.name}" opens a new tab`).toBeNull();
+      expect(l.name, `${path}: link with no name -> ${l.href}`).not.toBe("");
+      if (!byName.has(l.name)) byName.set(l.name, new Set());
+      byName.get(l.name)!.add(l.href.replace(/#.*$/, "") + (l.href.includes("#") ? "#" : ""));
+    }
+    for (const [name, hrefs] of byName) {
+      // Same name may repeat only when the destination is the same.
+      const distinct = [...hrefs].filter((h) => !h.endsWith("#") || hrefs.size === 1);
+      expect(distinct.length, `${path}: "${name}" points to ${[...hrefs].join(", ")}`).toBeLessThanOrEqual(1);
     }
   }
-}
+});
 
-test("keyboard: skip link is the first focusable element and works", async ({
-  page,
-}) => {
+test("content: Arabic motto has lang and dir, YNWA is an abbr", async ({ page }) => {
+  await page.goto("/");
+  const ar = page.locator('p[lang="ar"][dir="rtl"]');
+  await expect(ar).toHaveText("إن مع العسر يسرا");
+  await expect(page.locator("abbr", { hasText: "YNWA" })).toHaveAttribute(
+    "title",
+    "You'll Never Walk Alone"
+  );
+});
+
+// ---------- Keyboard ----------
+
+test("keyboard: skip link is first, appears on focus, and works", async ({ page, isMobile }) => {
+  test.skip(!!isMobile, "desktop keyboard pass");
   await page.goto("/");
   await page.keyboard.press("Tab");
-  const skipLink = page.locator(".skip-link");
-  await expect(skipLink).toBeFocused();
+  const skip = page.getByRole("link", { name: "Skip to content" });
+  await expect(skip).toBeFocused();
+  await expect(skip).toBeInViewport();
   await page.keyboard.press("Enter");
-  await expect(page.locator("#main")).toBeInViewport();
+  await expect(page).toHaveURL(/#main$/);
 });
 
-test("keyboard: theme and still-mode toggles are reachable and operable", async ({
-  page,
-}) => {
+test("keyboard: full tab order through the homepage (reported)", async ({ page, isMobile }) => {
+  test.skip(!!isMobile, "desktop keyboard pass; the mobile menu has its own test");
   await page.goto("/");
-  let themeToggle = page.getByRole("button", { name: /Night|Daylight/ });
-  // On narrow viewports the toggles live in the collapsed hamburger menu.
-  if (!(await themeToggle.isVisible())) {
-    await page.getByRole("button", { name: /Open menu/ }).click();
-    themeToggle = page.getByRole("button", { name: /Night|Daylight/ });
+  const stops: string[] = [];
+  for (let i = 0; i < 80; i++) {
+    await page.keyboard.press("Tab");
+    const info = await page.evaluate(() => {
+      const el = document.activeElement as HTMLElement | null;
+      if (!el || el === document.body) return null;
+      const r = el.getBoundingClientRect();
+      const cs = getComputedStyle(el);
+      const name = (el.getAttribute("aria-label") || el.textContent || "")
+        .replace(/\s+/g, " ")
+        .trim();
+      return {
+        label: `${el.tagName.toLowerCase()}${(el as HTMLAnchorElement).href ? ` -> ${(el as HTMLAnchorElement).getAttribute("href")}` : ""}: ${name}`,
+        outline: cs.outlineStyle !== "none" && parseFloat(cs.outlineWidth) >= 2,
+        w: r.width,
+        h: r.height,
+      };
+    });
+    if (!info) break;
+    if (stops.length && stops[0] === info.label) break;
+    // Every stop shows a >=2px focus outline and is >=24x24 CSS px.
+    expect(info.outline, `no visible focus ring on ${info.label}`).toBe(true);
+    expect(info.w, `target too narrow: ${info.label}`).toBeGreaterThanOrEqual(24);
+    expect(info.h, `target too short: ${info.label}`).toBeGreaterThanOrEqual(24);
+    stops.push(info.label);
   }
-  await themeToggle.focus();
-  await expect(themeToggle).toBeFocused();
-  await page.keyboard.press("Enter");
-  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  mkdirSync("test-results", { recursive: true });
+  writeFileSync("test-results/tab-order.txt", stops.map((s, i) => `${i + 1}. ${s}`).join("\n"));
+  console.log("TAB ORDER\n" + stops.map((s, i) => `${i + 1}. ${s}`).join("\n"));
+  expect(stops.length).toBeGreaterThan(20);
+  expect(stops[0]).toContain("Skip to content");
 });
 
-const SERVICE_URL =
-  "https://www.upwork.com/services/product/development-it-an-ada-wcag-2-1-aa-accessibility-audit-with-a-pdf-report-2108180327758331602";
-const PROFILE_URL = "https://www.upwork.com/freelancers/~0177ce94419b1c069e";
+test("keyboard: mobile menu uses aria-expanded, Escape closes it and returns focus", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(!isMobile, "mobile menu only");
+  await page.goto("/");
+  const btn = page.getByRole("button", { name: "Menu" });
+  await expect(btn).toHaveAttribute("aria-expanded", "false");
+  await expect(btn).toHaveAttribute("aria-controls", "mobile-menu");
+  await btn.focus();
+  await page.keyboard.press("Enter");
+  await expect(btn).toHaveAttribute("aria-expanded", "true");
+  await expect(page.locator("#mobile-menu")).toBeVisible();
+  await page.keyboard.press("Tab");
+  await expect(page.getByRole("link", { name: "Work", exact: true })).toBeFocused();
+  await page.keyboard.press("Escape");
+  await expect(btn).toHaveAttribute("aria-expanded", "false");
+  await expect(btn).toBeFocused();
+  await expect(page.locator("#mobile-menu")).toBeHidden();
+});
 
-test("audits: hero link jumps to the section by keyboard, heading not obscured", async ({
+test("theme: toggle is a pressed-state button named Dark mode and the choice persists", async ({
   page,
 }) => {
+  await page.emulateMedia({ colorScheme: "light" });
   await page.goto("/");
-  const link = page.getByRole("link", {
-    name: "Also offering WCAG accessibility audits",
-  });
-  await link.focus();
-  await expect(link).toBeFocused();
+  const toggle = page.getByRole("button", { name: "Dark mode" });
+  await expect(toggle).toHaveAttribute("aria-pressed", "false");
+  await toggle.focus();
   await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/#audits$/);
-  const heading = page.getByRole("heading", {
-    level: 2,
-    name: "Accessibility audits, done by hand",
-  });
-  await expect(heading).toBeInViewport();
-  const headerBottom = await page.evaluate(
-    () => document.querySelector("header")!.getBoundingClientRect().bottom
+  await expect(toggle).toHaveAttribute("aria-pressed", "true");
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(page.getByRole("button", { name: "Dark mode" })).toHaveAttribute(
+    "aria-pressed",
+    "true"
   );
-  const headingTop = await heading.evaluate((el) => el.getBoundingClientRect().top);
-  expect(headingTop).toBeGreaterThanOrEqual(headerBottom);
 });
 
-test("audits: nav item works by keyboard", async ({ page }) => {
+test("theme: follows prefers-color-scheme when nothing is saved", async ({ page }) => {
+  await page.emulateMedia({ colorScheme: "dark" });
   await page.goto("/");
-  let item = page.getByRole("button", { name: "Audits", exact: true });
-  if (!(await item.isVisible())) {
-    await page.getByRole("button", { name: /Open menu/ }).click();
-    item = page.getByRole("button", { name: "Audits", exact: true });
-  }
-  await item.focus();
-  await page.keyboard.press("Enter");
-  await expect(
-    page.getByRole("heading", { level: 2, name: "Accessibility audits, done by hand" })
-  ).toBeInViewport();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
 });
 
-test("audits: FAQ toggles by keyboard and shows a focus ring", async ({ page }) => {
+test("theme: still renders when localStorage throws", async ({ page }) => {
+  await page.addInitScript(() => {
+    Object.defineProperty(window, "localStorage", {
+      get() {
+        throw new Error("blocked");
+      },
+    });
+  });
   await page.goto("/");
-  const summary = page.locator("#audits summary").first();
-  await summary.scrollIntoViewIfNeeded();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", /light|dark/);
+});
+
+// ---------- Reflow, zoom, text spacing, motion ----------
+
+for (const path of ROUTES) {
+  test(`reflow: ${path} has no horizontal scroll at 320px and at 200% zoom`, async ({ page }) => {
+    for (const width of [320, 720]) {
+      // 720 CSS px is a 1440px window at 200% zoom.
+      await page.setViewportSize({ width, height: 800 });
+      await page.goto(path);
+      const [sw, vw] = await page.evaluate(() => [
+        document.documentElement.scrollWidth,
+        document.documentElement.clientWidth,
+      ]);
+      expect(sw, `${path} at ${width}px`).toBeLessThanOrEqual(vw);
+    }
+  });
+
+  test(`text spacing: ${path} survives the WCAG text-spacing overrides`, async ({ page }) => {
+    await page.goto(path);
+    await page.waitForTimeout(1000); // let the hero settle-in finish before axe reads colours
+    await page.addStyleTag({
+      content:
+        "* { line-height: 1.5 !important; letter-spacing: 0.12em !important; word-spacing: 0.16em !important; } p { margin-bottom: 2em !important; }",
+    });
+    const [sw, vw] = await page.evaluate(() => [
+      document.documentElement.scrollWidth,
+      document.documentElement.clientWidth,
+    ]);
+    expect(sw).toBeLessThanOrEqual(vw);
+    const results = await new AxeBuilder({ page }).withTags(["wcag2aa", "wcag21aa"]).analyze();
+    expect(results.violations, JSON.stringify(results.violations, null, 2)).toEqual([]);
+  });
+}
+
+test("motion: reduced motion makes the hero settle-in instant", async ({ page }) => {
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page.goto("/");
+  const names = await page.$$eval(".settle-sheet, .settle-label", (els) =>
+    els.map((e) => getComputedStyle(e).animationName)
+  );
+  expect(names).toEqual(["none", "none"]);
+});
+
+test("motion: with motion allowed the hero settles in within 600ms and nothing else animates", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/");
+  const timings = await page.$$eval(".settle-sheet, .settle-label", (els) =>
+    els.map((e) => {
+      const cs = getComputedStyle(e);
+      return parseFloat(cs.animationDuration) * 1000 + parseFloat(cs.animationDelay) * 1000;
+    })
+  );
+  expect(Math.max(...timings)).toBeLessThanOrEqual(600);
+  const animated = await page.$$eval("body *", (els) =>
+    els.filter((e) => getComputedStyle(e).animationName !== "none").length
+  );
+  expect(animated).toBe(2);
+});
+
+test("audit page: FAQ toggles by keyboard with a visible focus ring", async ({ page }) => {
+  await page.goto("/accessibility-audit");
+  const summary = page.locator("summary").first();
   await summary.focus();
   await expect(summary).toBeFocused();
-  const outline = await summary.evaluate((el) => getComputedStyle(el).outlineStyle);
-  expect(outline).not.toBe("none");
-  const details = page.locator("#audits details").first();
+  expect(await summary.evaluate((el) => getComputedStyle(el).outlineStyle)).not.toBe("none");
+  const details = page.locator("details").first();
   await expect(details).not.toHaveAttribute("open", "");
   await page.keyboard.press("Enter");
   await expect(details).toHaveAttribute("open", "");
-  await page.keyboard.press("Space");
-  await expect(details).not.toHaveAttribute("open", "");
-});
-
-test("audits: external links are exact, new-tab, noopener, and 44px tall", async ({
-  page,
-}) => {
-  await page.goto("/");
-  for (const href of [SERVICE_URL, PROFILE_URL]) {
-    const links = page.locator(`a[href="${href}"]`);
-    expect(await links.count()).toBeGreaterThan(0);
-    for (const link of await links.all()) {
-      await expect(link).toHaveAttribute("target", "_blank");
-      await expect(link).toHaveAttribute("rel", /noopener/);
-      await expect(link).toContainText("(opens in a new tab");
-      const box = await link.boundingBox();
-      expect(box!.height).toBeGreaterThanOrEqual(43.5);
-    }
-  }
-});
-
-test("audits: Included and Not included differ by heading text", async ({ page }) => {
-  await page.goto("/");
-  await expect(page.getByRole("heading", { level: 3, name: "What you get" })).toBeVisible();
-  await expect(
-    page.getByRole("heading", { level: 3, name: "What's not included" })
-  ).toBeVisible();
 });

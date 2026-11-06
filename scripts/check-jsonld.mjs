@@ -1,201 +1,175 @@
 #!/usr/bin/env node
 /**
- * Validates the JSON-LD emitted in app/layout.tsx by reading it straight
- * out of the prerendered HTML build output — no server needed. Checks
- * the graph parses and that each node has the fields a consumer
- * (Google, a social-share unfurl, a screen reader's structured-data
- * mode) would actually rely on.
+ * Post-build checks on the prerendered HTML (no server needed):
+ *  - homepage JSON-LD (Person, WebSite, ProfilePage) is valid and complete
+ *  - the audit page's Service JSON-LD matches the visible prices
+ *  - meta hygiene: description length, no keywords tag, canonical present
+ *  - wording that must never ship: certification claims, "Trusted Tester"
+ *    unless followed by "(in progress)", "co-founder" tied to Cardora,
+ *    "final-year project", arrows and middle-dot joiners in visible text
  */
 import { readFileSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-const htmlPath = join(__dirname, "..", ".next", "server", "app", "index.html");
-
-if (!existsSync(htmlPath)) {
-  console.error(
-    `Can't find ${htmlPath} — run "next build" before check-jsonld.mjs.`
-  );
-  process.exit(1);
-}
-
-const html = readFileSync(htmlPath, "utf8");
-const match = html.match(
-  /<script type="application\/ld\+json">([\s\S]*?)<\/script>/
-);
-
-if (!match) {
-  console.error("No <script type=\"application/ld+json\"> tag found in the rendered page.");
-  process.exit(1);
-}
-
-let data;
-try {
-  data = JSON.parse(match[1]);
-} catch (e) {
-  console.error("JSON-LD did not parse as valid JSON:", e.message);
-  process.exit(1);
-}
+const root = join(dirname(fileURLToPath(import.meta.url)), "..", ".next", "server", "app");
+const PAGES = {
+  "/": "index.html",
+  "/accessibility-audit": "accessibility-audit.html",
+  "/accessibility": "accessibility.html",
+};
 
 let failures = 0;
-function assertField(node, field, label, predicate = (v) => v !== undefined && v !== null && v !== "") {
-  const value = node[field];
-  const ok = predicate(value);
-  console.log(`${ok ? "PASS" : "FAIL"}  ${label}: ${field} = ${JSON.stringify(value)}`);
+const check = (ok, label, detail = "") => {
+  console.log(`${ok ? "PASS" : "FAIL"}  ${label}${!ok && detail ? ` ${detail}` : ""}`);
   if (!ok) failures++;
+};
+
+const pages = {};
+for (const [route, file] of Object.entries(PAGES)) {
+  const p = join(root, file);
+  if (!existsSync(p)) {
+    console.error(`Can't find ${p}: run "next build" first.`);
+    process.exit(1);
+  }
+  const html = readFileSync(p, "utf8");
+  const text = html
+    .replace(/<script[\s\S]*?<\/script>/g, " ")
+    .replace(/<style[\s\S]*?<\/style>/g, " ")
+    .replace(/<!--[\s\S]*?-->/g, "")
+    .replace(/<[^>]+>/g, " ")
+    .replace(/&amp;/g, "&")
+    .replace(/&#x27;/g, "'")
+    .replace(/&quot;/g, '"')
+    .replace(/\s+/g, " ");
+  pages[route] = { html, text };
 }
 
-if (data["@context"] !== "https://schema.org") {
-  console.log("FAIL  top-level @context should be https://schema.org");
-  failures++;
-} else {
-  console.log("PASS  top-level @context is https://schema.org");
+function jsonLdOf(html) {
+  const m = html.match(/<script type="application\/ld\+json">([\s\S]*?)<\/script>/);
+  return m ? JSON.parse(m[1]) : null;
 }
 
-if (!Array.isArray(data["@graph"])) {
-  console.error("FAIL  @graph is not an array — cannot check further. Aborting.");
-  process.exit(1);
+// ---- Homepage graph ----
+console.log("\nHomepage JSON-LD");
+const home = jsonLdOf(pages["/"].html);
+check(home?.["@context"] === "https://schema.org", "@context is https://schema.org");
+const g = home?.["@graph"] ?? [];
+const person = g.find((n) => n["@type"] === "Person");
+const site = g.find((n) => n["@type"] === "WebSite");
+const profilePage = g.find((n) => n["@type"] === "ProfilePage");
+check(!!person && !!site && !!profilePage, "Person, WebSite and ProfilePage all present");
+check(person?.name === "Abdulhameed Oreagba", "Person.name", JSON.stringify(person?.name));
+check(
+  JSON.stringify(person?.alternateName) ===
+    JSON.stringify(["Abdurore", "Oreagba Abdulhameed Oluwadurotimi"]),
+  "Person.alternateName",
+  JSON.stringify(person?.alternateName)
+);
+check(person?.jobTitle === "Full-Stack Developer", "Person.jobTitle");
+check(
+  person?.address?.addressLocality === "Lagos" && person?.address?.addressCountry === "NG",
+  "Person.address is Lagos, NG"
+);
+check(!!person?.url && !!person?.image, "Person.url and image");
+check(Array.isArray(person?.knowsAbout) && person.knowsAbout.length > 0, "Person.knowsAbout");
+check(
+  Array.isArray(person?.sameAs) && person.sameAs.length === 6,
+  "Person.sameAs has all 6 profiles",
+  JSON.stringify(person?.sameAs)
+);
+check(profilePage?.mainEntity?.["@id"] === person?.["@id"], "ProfilePage.mainEntity is the Person");
+
+// ---- Audit page Service ----
+console.log("\nAudit page");
+const audit = pages["/accessibility-audit"];
+const svc = jsonLdOf(audit.html);
+check(svc?.["@type"] === "Service", "Service JSON-LD present");
+const offers = svc?.offers?.offers ?? [];
+check(offers.length === 3, "three offers");
+const prices = offers.map((o) => Number(o.price));
+check(
+  String(Math.min(...prices)) === svc?.offers?.lowPrice &&
+    String(Math.max(...prices)) === svc?.offers?.highPrice,
+  "AggregateOffer low/high match the offers"
+);
+for (const o of offers) {
+  check(audit.text.includes(`$${o.price}`), `visible price $${o.price} matches JSON-LD`);
 }
+const allowed = new Set([...offers.map((o) => `$${o.price}`), "$40"]);
+const stray = [...audit.text.matchAll(/\$\d+(?:,\d{3})*/g)]
+  .map((m) => m[0])
+  .filter((d) => !allowed.has(d));
+check(stray.length === 0, "no unexpected dollar amounts", JSON.stringify(stray));
+check(audit.html.includes("2026-07663.htm"), "links the Federal Register notice");
+check(
+  audit.text.includes("April 26, 2027") && audit.text.includes("April 26, 2028"),
+  "shows both Title II dates"
+);
+check(/dates can change/i.test(audit.text), "has the 'dates can change' note");
+const SERVICE_URL = svc?.offers?.url;
+const PROFILE_URL = person?.sameAs?.find((u) => u.includes("upwork.com"));
+check(audit.html.includes(`href="${SERVICE_URL}"`), "Upwork service URL is an exact href on the audit page");
+check(pages["/"].html.includes(`href="${PROFILE_URL}"`), "Upwork profile URL is an exact href on the homepage");
+check(
+  !/upwork\.com[^"'\s]*\?ref/.test(audit.html + pages["/"].html),
+  "no ?ref parameter on Upwork URLs"
+);
 
-const graph = data["@graph"];
-const byType = (type) => graph.find((n) => n["@type"] === type);
-
-const person = byType("Person");
-if (!person) {
-  console.error("FAIL  No Person node in @graph.");
-  failures++;
-} else {
-  assertField(person, "name", "Person");
-  assertField(person, "alternateName", "Person", (v) => Array.isArray(v) && v.length >= 4);
-  assertField(person, "url", "Person");
-  assertField(person, "image", "Person");
-  assertField(person, "jobTitle", "Person");
-  assertField(person, "email", "Person");
-  assertField(person, "address", "Person", (v) => v && v.addressLocality);
-  assertField(person, "alumniOf", "Person", (v) => v && v.name);
-  assertField(person, "knowsAbout", "Person", (v) => Array.isArray(v) && v.length > 0);
-  assertField(person, "sameAs", "Person", (v) => Array.isArray(v) && v.length > 0);
-}
-
-const website = byType("WebSite");
-if (!website) {
-  console.error("FAIL  No WebSite node in @graph.");
-  failures++;
-} else {
-  assertField(website, "url", "WebSite");
-  assertField(website, "name", "WebSite");
-  assertField(website, "publisher", "WebSite", (v) => v && v["@id"]);
-}
-
-const profilePage = byType("ProfilePage");
-if (!profilePage) {
-  console.error("FAIL  No ProfilePage node in @graph.");
-  failures++;
-} else {
-  assertField(profilePage, "url", "ProfilePage");
-  assertField(
-    profilePage,
-    "mainEntity",
-    "ProfilePage",
-    (v) => v && v["@id"] && person && v["@id"] === person["@id"]
+// ---- Meta hygiene ----
+console.log("\nMeta");
+for (const [route, { html }] of Object.entries(pages)) {
+  const desc = html.match(/<meta name="description" content="([^"]*)"/)?.[1] ?? "";
+  check(desc.length > 0 && desc.length <= 155, `${route} description is 1-155 chars`, `(${desc.length})`);
+  check(!/<meta name="keywords"/.test(html), `${route} has no keywords meta`);
+  check(
+    /<link rel="canonical" href="https:\/\/abdurore\.tech[^"]*"/.test(html),
+    `${route} has a canonical`
   );
+  check(
+    /property="og:title"/.test(html) && /name="twitter:title"/.test(html),
+    `${route} has OG and Twitter tags`
+  );
+  check(/property="og:image"/.test(html), `${route} has an og:image`);
 }
+check(
+  /<title>Abdulhameed Oreagba \(Abdurore\) \| Full-Stack Developer, Lagos<\/title>/.test(
+    pages["/"].html
+  ),
+  "homepage title"
+);
 
-const itemList = byType("ItemList");
-if (!itemList) {
-  console.error("FAIL  No ItemList node in @graph.");
-  failures++;
-} else {
-  assertField(itemList, "itemListElement", "ItemList", (v) => Array.isArray(v) && v.length > 0);
-  for (const [i, listItem] of (itemList.itemListElement ?? []).entries()) {
-    const item = listItem.item;
-    const ok =
-      item &&
-      ["SoftwareApplication", "CreativeWork"].includes(item["@type"]) &&
-      item.name &&
-      item.url;
-    console.log(
-      `${ok ? "PASS" : "FAIL"}  ItemList[${i}]: ${item?.name ?? "(missing)"} — @type/name/url present`
-    );
-    if (!ok) failures++;
+// ---- Wording ----
+console.log("\nWording");
+for (const [route, { text }] of Object.entries(pages)) {
+  const trusted = [...text.matchAll(/Trusted Tester(?!\s*\(in progress\))/gi)];
+  check(trusted.length === 0, `${route}: "Trusted Tester" only appears as "(in progress)"`);
+  for (const banned of [
+    "Section 508",
+    "testimonial",
+    "VPAT included",
+    "[email protected]",
+    "final-year project",
+    "Available for full-stack work",
+  ]) {
+    check(!text.toLowerCase().includes(banned.toLowerCase()), `${route}: absent "${banned}"`);
   }
+  const cert = text.match(/[^.]{0,40}\bcertified\b[^.]{0,40}/gi) ?? [];
+  check(cert.length === 0, `${route}: no "certified"`, JSON.stringify(cert));
+  const cardora =
+    text.match(/[^.]*Cardora[^.]*co-?founder[^.]*|[^.]*co-?founder[^.]*Cardora[^.]*/gi) ?? [];
+  check(cardora.length === 0, `${route}: no "co-founder" tied to Cardora`, JSON.stringify(cardora));
+  check(!text.includes("→"), `${route}: no arrows in visible text`);
+  check(!text.includes("·"), `${route}: no middle-dot joiners in visible text`);
+  check(!/Oreagba Abdulhameed/.test(text), `${route}: full legal name is never visible`);
 }
+const homeText = pages["/"].text;
+check(
+  !/Seedlings|Ibro|Chef Claude|Tenzies|Tic Tac Toe|Assembly: Endgame/i.test(homeText),
+  "removed projects and the Seedlings section are gone from the homepage"
+);
+check(!/\[0\d\]/.test(homeText), "no [01]...[06] section numbering");
+check(homeText.includes("hello@abdurore.tech"), "homepage shows hello@abdurore.tech");
 
-// --- Accessibility audit Service -------------------------------------------
-// These literals are deliberately NOT imported from data/audit.ts: this is
-// the independent check that the data module still says what the Upwork
-// listing says.
-const EXPECTED_SERVICE_URL =
-  "https://www.upwork.com/services/product/development-it-an-ada-wcag-2-1-aa-accessibility-audit-with-a-pdf-report-2108180327758331602";
-const EXPECTED_PROFILE_URL = "https://www.upwork.com/freelancers/~0177ce94419b1c069e";
-
-const service = byType("Service");
-if (!service) {
-  console.error("FAIL  No Service node in @graph.");
-  failures++;
-} else {
-  assertField(service, "name", "Service", (v) => v === "ADA & WCAG 2.1 AA accessibility audit with a PDF report");
-  assertField(service, "serviceType", "Service");
-  assertField(service, "description", "Service");
-  assertField(service, "provider", "Service", (v) => v && person && v["@id"] === person["@id"]);
-  assertField(service, "offers", "Service", (v) => v && v["@type"] === "AggregateOffer" && v.priceCurrency === "USD" && v.url === EXPECTED_SERVICE_URL && Array.isArray(v.offers) && v.offers.length === Number(v.offerCount) && v.offers.every((o) => o["@type"] === "Offer" && o.priceCurrency === "USD" && o.url === EXPECTED_SERVICE_URL));
-  assertField(service, "aggregateRating", "Service (must be absent)", (v) => v === undefined);
-  assertField(service, "review", "Service (must be absent)", (v) => v === undefined);
-
-  // Every visible price must come from the JSON-LD offers, and the
-  // headline must read "from $<lowest>", never a single fixed price.
-  const visibleText = html.replace(/<!--[\s\S]*?-->/g, "").replace(/<script[\s\S]*?<\/script>/g, " ").replace(/<style[\s\S]*?<\/style>/g, " ").replace(/<[^>]+>/g, " ").replace(/&amp;/g, "&").replace(/\s+/g, " ");
-  const offers = service.offers?.offers ?? [];
-  const prices = offers.map((o) => Number(o.price));
-  const low = Math.min(...prices);
-  const lowOk = String(low) === service.offers?.lowPrice && String(Math.max(...prices)) === service.offers?.highPrice;
-  console.log(`${lowOk ? "PASS" : "FAIL"}  AggregateOffer low/high match the Offer prices`);
-  if (!lowOk) failures++;
-  const fromOk = visibleText.includes(`from $${low}`);
-  console.log(`${fromOk ? "PASS" : "FAIL"}  visible text says "from $${low}"`);
-  if (!fromOk) failures++;
-  for (const o of offers) {
-    const ok = visibleText.includes(`$${o.price} · `);
-    console.log(`${ok ? "PASS" : "FAIL"}  visible tier price $${o.price} matches JSON-LD (${o.name})`);
-    if (!ok) failures++;
-  }
-  const allowed = new Set([...offers.map((o) => `$${o.price}`), "$40"]);
-  const dollarAmounts = [...visibleText.matchAll(/\$\d+(?:,\d{3})*(?:\.\d+)?/g)].map((m) => m[0]);
-  const stray = dollarAmounts.filter((d) => !allowed.has(d));
-  console.log(`${stray.length === 0 ? "PASS" : "FAIL"}  no unexpected dollar amounts on the page ${JSON.stringify(stray)}`);
-  if (stray.length) failures++;
-  for (const stale of ["$450, fixed", "$450 fixed", "Scanners reported", "What scanners miss"]) {
-    const found = visibleText.includes(stale);
-    console.log(`${found ? "FAIL" : "PASS"}  stale copy absent: "${stale}"`);
-    if (found) failures++;
-  }
-}
-
-assertField(person ?? {}, "sameAs", "Person.sameAs includes Upwork profile", (v) => Array.isArray(v) && v.includes(EXPECTED_PROFILE_URL));
-
-for (const [label, url] of [["service", EXPECTED_SERVICE_URL], ["profile", EXPECTED_PROFILE_URL]]) {
-  const hrefCount = html.split(`href="${url}"`).length - 1;
-  const ok = hrefCount >= 1;
-  console.log(`${ok ? "PASS" : "FAIL"}  Upwork ${label} URL appears as an exact href (${hrefCount}x)`);
-  if (!ok) failures++;
-}
-const refParam = /upwork\.com[^"'\s]*\?ref/.test(html);
-console.log(`${refParam ? "FAIL" : "PASS"}  no ?ref parameter on Upwork URLs`);
-if (refParam) failures++;
-
-// Claims that must not appear anywhere in the rendered page.
-const visibleAll = html.replace(/<!--[\s\S]*?-->/g, "").replace(/<script[\s\S]*?<\/script>/g, " ").replace(/<[^>]+>/g, " ");
-for (const banned of ["Trusted Tester", "Section 508", "testimonial", "VPAT included"]) {
-  const found = visibleAll.toLowerCase().includes(banned.toLowerCase());
-  console.log(`${found ? "FAIL" : "PASS"}  banned phrase absent: "${banned}"`);
-  if (found) failures++;
-}
-// "certified" must not describe me; the only allowed hits are third-party
-// context. Flag any occurrence for a human to look at.
-const certMatches = visibleAll.match(/[^.]{0,40}\bcertified\b[^.]{0,40}/gi) ?? [];
-console.log(`${certMatches.length === 0 ? "PASS" : "FAIL"}  no "certified" in visible text ${JSON.stringify(certMatches)}`);
-if (certMatches.length) failures++;
-
-console.log(`\n${failures === 0 ? "All" : failures} JSON-LD checks ${failures === 0 ? "passed." : "failing."}`);
+console.log(`\n${failures === 0 ? "All" : failures} content checks ${failures === 0 ? "passed." : "failing."}`);
 if (failures > 0) process.exit(1);

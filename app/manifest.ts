@@ -2,14 +2,14 @@ import type { MetadataRoute } from "next";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Abdurore — Full-Stack Developer",
+    name: "Abdulhameed Oreagba (Abdurore)",
     short_name: "Abdurore",
     description:
-      "Abdurore (Abdulhameed Oreagba) is a full-stack developer and Mechatronics student in Lagos, Nigeria.",
+      "Full-stack developer in Lagos, Nigeria.",
     start_url: "/",
     display: "standalone",
-    background_color: "#0a0d09",
-    theme_color: "#0a0d09",
+    background_color: "#eef0e5",
+    theme_color: "#eef0e5",
     icons: [
       {
         src: "/icon",

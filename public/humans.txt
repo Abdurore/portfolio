@@ -1,7 +1,7 @@
 /* TEAM */
 Developer: Abdulhameed Oreagba (Abdurore)
 Location: Lagos, Nigeria
-Contact: abdulhamidore1@gmail.com
+Contact: hello@abdurore.tech
 GitHub: https://github.com/abdurore
 LinkedIn: https://linkedin.com/in/abdurore
 X: https://x.com/abdurore
@@ -12,6 +12,6 @@ YouTube: https://www.youtube.com/@Simplivide
 Trees, plants, and green things that take their time.
 
 /* SITE */
-Last update: 2026/10/07
+Last update: 2026/11/06
 Built with: Next.js, React, Tailwind CSS
-Components: CSS + IntersectionObserver (no animation library)
+Components: Plain CSS (no animation library)

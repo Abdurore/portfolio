@@ -1,230 +1,68 @@
 # Accessibility report
 
-Last updated: 7 October 2026
+Last tested: 6 November 2026
 
-This records what was actually tested, how, and what it found — not a
-conformance claim. The live statement for site visitors is at
-`/accessibility`; this file is the backing detail for anyone (including
-future-me) who wants to re-verify or extend the work.
+Backing detail for the public statement at `/accessibility`. This records what
+was tested and found. It is not a conformance claim.
 
 ## Target
 
-WCAG 2.2 Level AA, with body text aimed at the stricter AAA contrast
-threshold (7:1) where achievable.
+- This site: WCAG 2.2 Level AA.
+- The audits I sell: WCAG 2.1 AA.
 
-## 1. Automated: Playwright + axe-core
+## Automated: Playwright + axe-core
 
-`npm run a11y` runs `tests/a11y.spec.ts` against a production build
-(`next build && next start`), using axe-core via `@axe-core/playwright`
-with rules tagged `wcag2a`, `wcag2aa`, `wcag21aa`, `wcag22aa`.
+`npm run a11y` builds the site and runs `tests/a11y.spec.ts` against it.
 
-Matrix covered: `/` and `/accessibility` × Night/Daylight theme × Still
-mode on/off × desktop and mobile viewports (20 test cases total), plus
-two dedicated keyboard-operability checks (skip link, theme/still
-toggles — including the mobile hamburger-menu path).
+- Rules: `wcag2a`, `wcag2aa`, `wcag21a`, `wcag21aa`, `wcag22aa`, `best-practice`.
+- Matrix: `/`, `/accessibility-audit`, `/accessibility` × light and Night Still
+  themes × 390px and 1440px viewports. The audit FAQ is re-scanned expanded.
+- Result at last run: 49 passed, 0 failed, 3 skipped. The 3 skips are keyboard
+  tests that only apply to the other viewport (the mobile menu test on desktop,
+  the tab-order and skip-link tests on mobile). **Zero axe violations.**
 
-**Result at last run: 20/20 passing, zero axe violations in every
-combination.**
+Also covered by the suite: one h1 per page with no skipped heading levels,
+landmarks, link names unique per destination, no new-tab links, the Arabic motto
+and `abbr`, no horizontal scroll at 320px and at 200% zoom (720 CSS px), the WCAG
+text-spacing overrides, the theme toggle (`aria-pressed`, persistence,
+`prefers-color-scheme`, `localStorage` throwing), mobile menu (`aria-expanded`,
+Escape returns focus), and reduced motion.
 
-```
-20 passed (1.3m)
-```
+## Contrast
 
-Two real bugs surfaced and were fixed while building this suite (not
-just test flakiness):
+`scripts/check-contrast.mjs` reads the tokens from `app/globals.css` and runs on
+every build (`prebuild`). Every text pair is ≥4.5:1 and every control boundary
+and focus ring is ≥3:1, in both themes. `--pollen` (2.74:1 on the light paper)
+is only used for the decorative timeline ring, never for text or a boundary.
 
-- `useInView`'s SSR fallback returned `true` (i.e. "already revealed")
-  because `IntersectionObserver` is also `undefined` in Node during
-  server rendering, which the hook's old check couldn't distinguish from
-  a real old-browser fallback. Every section below the fold hydrated
-  with a mismatched `data-in-view` value. Fixed by checking
-  `typeof window === "undefined"` first.
-- Anchor/nav scrolling landed section headings partially underneath the
-  fixed header. Fixed with `scroll-margin-top` on `main > section`.
+## Keyboard pass (homepage, desktop)
 
-One test-harness bug (not a site bug) is worth recording: an early
-version of the suite called
-`page.waitForFunction(fn, { timeout: 5000 })` — Playwright interprets a
-plain object there as the function's *argument*, not as `options`, so
-the real timeout silently stayed at the 30s default. Fixed by passing
-`undefined` as the arg: `waitForFunction(fn, undefined, { timeout: 5000 })`.
+Tab order, 30 stops, each with a visible ≥2px focus ring and a ≥24×24px target:
 
-**Run notes:** this sandbox's pre-fetched Chromium trails the version
-`@playwright/test` expects, so `playwright.config.ts` points
-`launchOptions.executablePath` at `/opt/pw-browsers/chromium` *only if
-that path exists* — a no-op on a normal machine or CI runner. The suite
-is also configured `workers: 1` / `fullyParallel: false` because this
-specific container got flaky under concurrent browser instances during
-development; that's a documented, conservative default you can loosen
-once you've confirmed your own environment handles it.
+1. Skip to content
+2. Abdurore (home)
+3. Work, Experience, Audits, About, Contact, Résumé
+4. Dark mode (toggle)
+5. See my work, Download résumé (PDF)
+6. Selected work links: Euphorium app, euphorium.me, Cardora demo, PreventAI
+   demo, PreventAI source, Halal Meats store
+7. Experience links: corbel.ng, halalcert.com.ng
+8. See audit packages
+9. hello@abdurore.tech, then GitHub, LinkedIn, X, Instagram, Upwork, YouTube
+10. Footer: Accessibility statement, Accessibility audits
 
-### Accessibility-audit section (`#audits`)
+## Lighthouse (mobile, production build, local)
 
-The "Accessibility audits, done by hand" section is covered by the same
-axe matrix (both themes, mobile + desktop, Still on/off). Because closed
-`<details>` content isn't rendered, the `/` test re-scans with every FAQ
-item expanded. Dedicated checks added:
+| Page | Performance | Accessibility | Best practices | SEO |
+|---|---|---|---|---|
+| `/` | 93 | 100 | 96 | 100 |
+| `/accessibility-audit` | 98 | 100 | 96 | 100 |
+| `/accessibility` | 100 | 100 | 96 | 100 |
 
-- Hero link "Also offering WCAG accessibility audits" jumps to `#audits`
-  by keyboard and the heading lands below the sticky header.
-- "Audits" nav item works by keyboard (via the hamburger on narrow screens).
-- FAQ `<summary>` shows a focus ring and toggles with Enter and Space.
-- Both Upwork links match the exact URLs, open in a new tab with
-  `noopener`, carry a screen-reader "(opens in a new tab)" notice and are
-  at least 44px tall.
-- "What you get" / "What's not included" are distinguished by heading text.
+The one best-practices deduction is `/_vercel/insights/script.js` returning 404
+when served locally; it exists on Vercel.
 
-**Result at last run: 30/30 passing, zero axe violations.** The desktop
-nav breakpoint moved from `lg` to `xl` because six links plus toggles
-were cramped at 1024px.
+## Not yet done
 
-`scripts/check-jsonld.mjs` also checks that the Service is linked to the
-Person by `@id`, that the JSON-LD price equals the visible price, that
-no other dollar amounts appear, that both Upwork URLs are exact, and that
-no banned claims ("Trusted Tester", "Section 508", testimonials,
-"certified") appear in the rendered page.
-
-## 2. Contrast: `scripts/check-contrast.mjs`
-
-Reads the real hex values straight out of `app/globals.css` (so it can't
-drift from the actual tokens) and computes WCAG contrast for every
-text/background pair actually used in the UI, in both themes. Wired as
-`"prebuild"` in `package.json`, so `npm run build` fails loudly on a
-regression; also runnable directly as `npm run check-contrast`.
-
-**Result at last run: 22/22 pairs passing** (full output below).
-`--moss` is intentionally excluded — it's border/decorative-only and
-never used as text (verified by grep).
-
-```
-[dark] PASS  bone (body text) on soil                   17.00:1  (need >= 7:1, body)
-[dark] PASS  bone (body text) on canopy                 15.49:1  (need >= 7:1, body)
-[dark] PASS  bone (body text) on bark                   13.10:1  (need >= 7:1, body)
-[dark] PASS  sage (muted text) on soil                  12.13:1  (need >= 4.5:1, other)
-[dark] PASS  sage (muted text) on canopy                11.05:1  (need >= 4.5:1, other)
-[dark] PASS  sage (muted text) on bark                  9.34:1  (need >= 4.5:1, other)
-[dark] PASS  fern (accent, large text/icon) on soil     7.74:1  (need >= 3:1, large)
-[dark] PASS  fern (accent, large text/icon) on canopy   7.05:1  (need >= 3:1, large)
-[dark] PASS  fern (accent, large text/icon) on bark     5.96:1  (need >= 3:1, large)
-[dark] PASS  firefly (focus ring) on soil               13.31:1  (need >= 3:1, large)
-[dark] PASS  soil (button text) on fern (filled button) 7.74:1  (need >= 4.5:1, other)
-[light] PASS  bone (body text) on soil                   14.11:1  (need >= 7:1, body)
-[light] PASS  bone (body text) on canopy                 15.98:1  (need >= 7:1, body)
-[light] PASS  bone (body text) on bark                   12.32:1  (need >= 7:1, body)
-[light] PASS  sage (muted text) on soil                  6.76:1  (need >= 4.5:1, other)
-[light] PASS  sage (muted text) on canopy                7.65:1  (need >= 4.5:1, other)
-[light] PASS  sage (muted text) on bark                  5.90:1  (need >= 4.5:1, other)
-[light] PASS  fern (accent, large text/icon) on soil     5.65:1  (need >= 3:1, large)
-[light] PASS  fern (accent, large text/icon) on canopy   6.40:1  (need >= 3:1, large)
-[light] PASS  fern (accent, large text/icon) on bark     4.94:1  (need >= 3:1, large)
-[light] PASS  firefly (focus ring) on soil               4.89:1  (need >= 3:1, large)
-[light] PASS  soil (button text) on fern (filled button) 5.65:1  (need >= 4.5:1, other)
-
-22 pairs checked, 0 failing.
-```
-
-Two real issues this script caught and that got fixed in the token
-design (not just the one-off failing elements):
-
-- Opacity-modified "muted" text (`text-muted/60`, `/70`, `/80`, used in
-  the footer, project cards, About's skill-group labels, and
-  Experience) failed contrast in the Daylight theme as low as 2.6:1 —
-  alpha-blending the same color toward a light background drops
-  contrast fast. Fixed by removing all opacity modifiers from text
-  color classes site-wide; opacity is now only used on genuinely
-  decorative, non-text elements (the botanical line art, hover states).
-- The Daylight theme's `--firefly` (focus ring / rare highlight color)
-  was 2.87:1 against the page background, just under the 3:1 UI-contrast
-  minimum. Darkened from `#b8860b` to `#8a6107`.
-
-## 3. Lighthouse
-
-Run locally against a production build (`next build && next start`) in
-this sandboxed dev container, mobile form factor, via:
-
-```
-CHROME_PATH=/opt/pw-browsers/chromium npx lighthouse http://localhost:3000/ \
-  --chrome-flags="--headless=new --no-sandbox --disable-gpu" \
-  --form-factor=mobile --screenEmulation.mobile
-```
-
-| Category       | Score |
-| -------------- | ----- |
-| Accessibility  | **100** |
-| SEO            | **100** (baseline — Phase 4 adds the full metadata/JSON-LD pass) |
-| Best Practices | 96 |
-| Performance    | 93–95 across repeated runs (target: ≥95) |
-
-Accessibility hit the target exactly. Performance is close but landed
-under 95 on 2 of 3 runs, so I'm reporting it honestly rather than
-rounding up. Two things make the local number pessimistic compared to
-what you'll actually see on `abdurore.tech`:
-
-- `@vercel/analytics`'s script only resolves on a real Vercel deployment
-  — locally it 404s and retries, adding failed-request overhead that
-  won't exist in production.
-- Lighthouse's mobile run simulates throttled CPU/network on top of an
-  already resource-shared sandbox container; `next start` here has none
-  of Vercel's edge caching, compression, or CDN proximity.
-
-What I did apply, not just excuse: removed framer-motion entirely
-(smaller JS bundle, no React re-render churn from scroll listeners),
-and added `sizes` to every `next/image` usage that was missing it (the
-headshot and project screenshots were requesting a larger source image
-than their actual rendered size). **TODO for you: re-run Lighthouse
-against the live `abdurore.tech` deployment once it's up, and treat that
-number as the real one** — if it's still under 95 there, that's worth a
-follow-up pass with real production data to look at (I'd start with the
-LCP breakdown, since that's the lowest-scoring individual metric at
-~3s).
-
-## Manual checklist (for you to run)
-
-Automated tools and my own keyboard pass cover a lot, but a few things
-need a human with real assistive tech, which I don't have here:
-
-- [ ] **Keyboard-only walkthrough**: unplug your mouse, tab through the
-      entire site (both themes), confirm focus is always visible and
-      the order makes sense, no traps.
-- [ ] **200% browser zoom**: check nothing clips, overlaps, or requires
-      horizontal scrolling.
-- [ ] **400% browser zoom** (WCAG 2.2's reflow requirement): same check,
-      more extreme — content should reflow to a single column rather
-      than requiring 2D scrolling.
-- [ ] **NVDA pass** (Windows, Firefox or Chrome): navigate by heading,
-      by landmark, and tab through interactive elements. Confirm the
-      status line, project status chips, and toggle states are
-      announced sensibly.
-- [ ] **VoiceOver pass** (macOS Safari, or iOS Safari): same checks.
-- [ ] **forced-colors / Windows High Contrast Mode**: confirm borders
-      stay visible and the botanical SVGs (which use `currentColor`)
-      don't disappear or turn into unreadable blobs.
-- [ ] **NVDA read-through of the Audits section**: heading, "At a
-      glance" list, both lists, ordered steps, FAQ, external-link notices.
-- [ ] **Keyboard walk of the FAQ and CTAs**: Tab to each summary, toggle
-      with Enter/Space, reach both Upwork links and the mailto link.
-- [ ] **200% and 400% zoom of the Audits section**: no clipping, single
-      column reflow, no horizontal scroll.
-- [ ] Re-run `npm run a11y` and `npm run check-contrast` after any
-      future visual change, before merging.
-
-## One documented judgment call
-
-WCAG 2.2's 2.5.8 (Target Size Minimum, AA) requires 24×24px targets but
-explicitly exempts targets "in a sentence or block of text." The compact
-inline links on project cards ("Cardora live demo", "Source code" etc.)
-sit in a short row of links rather than a button grid, and rely on that
-inline exception rather than hitting 44px like the primary CTAs do. All
-*primary* controls (nav buttons, toggles, hero/contact CTAs, social
-icons) are a full 44×44px via `min-h-11`/`h-11 w-11`.
-
-## Known limitations
-
-- The manual checklist above is unchecked at time of writing — I ran
-  everything that can be automated or driven by a keyboard script, but
-  a real screen-reader pass needs a human.
-- Performance (not accessibility) is the one Lighthouse category under
-  target locally; see above for why and what to check once deployed.
-- `check-contrast.mjs` checks the color tokens that are actually wired
-  into Tailwind classes across the codebase; it doesn't catch a future
-  one-off inline `style={{ color: ... }}` that bypasses those classes.
+A full NVDA and VoiceOver pass, 400% zoom beyond the 320px reflow check, and
+forced-colors mode are still manual items.

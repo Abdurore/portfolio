@@ -1,48 +1,63 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
-import { useState } from "react";
+import { Moon } from "lucide-react";
+import { useSyncExternalStore } from "react";
+
+type Theme = "light" | "dark";
+
+// The inline head script has already set data-theme before hydration.
+// useSyncExternalStore reads it without a hydration mismatch: the server
+// snapshot is "light", and the client corrects to the real value at once.
+function subscribe(callback: () => void) {
+  const observer = new MutationObserver(callback);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
+  });
+  return () => observer.disconnect();
+}
+function getSnapshot(): Theme {
+  return document.documentElement.getAttribute("data-theme") === "dark"
+    ? "dark"
+    : "light";
+}
+function getServerSnapshot(): Theme {
+  return "light";
+}
 
 export function ThemeToggle() {
-  // The inline script in app/layout.tsx already sets data-theme on <html>
-  // before hydration, so this reads the real value on first client render
-  // instead of flashing the default and correcting it in an effect.
-  const [theme, setTheme] = useState<"dark" | "light">(() =>
-    typeof document !== "undefined" &&
-    document.documentElement.getAttribute("data-theme") === "light"
-      ? "light"
-      : "dark"
-  );
+  const theme = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
+  const isDark = theme === "dark";
 
   const toggle = () => {
-    const next = theme === "light" ? "dark" : "light";
-    setTheme(next);
-    document.documentElement.setAttribute("data-theme", next);
+    const root = document.documentElement;
+    const next: Theme = isDark ? "light" : "dark";
+    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (!reduce) {
+      // 150ms colour crossfade, only while switching.
+      root.classList.add("theme-fade");
+      window.setTimeout(() => root.classList.remove("theme-fade"), 200);
+    }
+    root.setAttribute("data-theme", next);
     try {
       localStorage.setItem("theme", next);
     } catch {
-      // localStorage unavailable (private mode, blocked, etc.) — the
-      // preference just won't persist across visits.
+      // Storage unavailable (private mode): the choice just won't persist.
     }
   };
-
-  const isLight = theme === "light";
 
   return (
     <button
       type="button"
       onClick={toggle}
-      aria-pressed={isLight}
-      suppressHydrationWarning
-      className="flex min-h-11 items-center gap-1.5 whitespace-nowrap border border-border px-3.5 font-sans text-xs font-medium text-muted transition-colors hover:border-accent hover:text-foreground"
-      style={{ borderRadius: "1.1rem 0.3rem 1.1rem 0.3rem" }}
+      aria-pressed={isDark}
+      aria-label="Dark mode"
+      className="inline-flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-md border border-ink-soft px-3 text-sm font-medium text-ink"
     >
-      {isLight ? (
-        <Sun className="h-3.5 w-3.5" aria-hidden="true" suppressHydrationWarning />
-      ) : (
-        <Moon className="h-3.5 w-3.5" aria-hidden="true" suppressHydrationWarning />
-      )}
-      <span suppressHydrationWarning>{isLight ? "Daylight" : "Night"}</span>
+      <Moon className="h-4 w-4" aria-hidden="true" />
+      <span className="hidden sm:inline" aria-hidden="true">
+        Dark mode
+      </span>
     </button>
   );
 }

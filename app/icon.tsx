@@ -14,7 +14,7 @@ export default function Icon() {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#0a0d09",
+          background: "#eef0e5",
         }}
       >
         <LogoSvg size={52} />

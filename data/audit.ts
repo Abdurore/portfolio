@@ -15,6 +15,7 @@ export const audit = {
     "https://www.upwork.com/services/product/development-it-an-ada-wcag-2-1-aa-accessibility-audit-with-a-pdf-report-2108180327758331602",
   profileUrl: "https://www.upwork.com/freelancers/~0177ce94419b1c069e",
   currency: "USD",
+  // TODO(abdul): confirm package prices (site shows $150 / $300 / $450).
   tiers: [
     { name: "Starter", price: 150, days: 4, scope: "up to 3 pages or 1 key flow" },
     { name: "Standard", price: 300, days: 6, scope: "up to 8 pages" },
@@ -26,10 +27,14 @@ export const audit = {
     extraDays: 1,
   },
   revisions: 1,
-  deadlinesAsOf: "2026-10-10",
+  /** DOJ interim final rule that set the current Title II dates. */
+  rule: {
+    publishedLabel: "April 20, 2026",
+    url: "https://www.govinfo.gov/content/pkg/FR-2026-04-20/html/2026-07663.htm",
+  },
   deadlines: [
     {
-      label: "Public entities serving 50,000 or more people",
+      label: "State and local governments with a population of 50,000 or more",
       date: "2027-04-26",
     },
     {
@@ -104,12 +109,6 @@ const MONTHS = [
 export function formatDate(iso: string): string {
   const [y, m, d] = iso.split("-").map(Number);
   return `${MONTHS[m - 1]} ${d}, ${y}`;
-}
-
-/** "2026-10-10" -> "October 2026" */
-export function formatMonthYear(iso: string): string {
-  const [y, m] = iso.split("-").map(Number);
-  return `${MONTHS[m - 1]} ${y}`;
 }
 
 export const auditLowestPrice = Math.min(...audit.tiers.map((t) => t.price));

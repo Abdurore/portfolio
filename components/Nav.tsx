@@ -1,180 +1,120 @@
 "use client";
 
-import { LogoMark } from "./Botanical";
-import { useEffect, useState } from "react";
-import { Download } from "lucide-react";
+import Link from "next/link";
+import { Menu, X } from "lucide-react";
+import { useEffect, useRef, useState, type FocusEvent } from "react";
 import { profile } from "@/data/profile";
 import { ThemeToggle } from "./ThemeToggle";
-import { StillModeToggle } from "./StillModeToggle";
-import { scrollToId } from "@/lib/scroll";
 
 const LINKS = [
-  { id: "about", label: "About" },
-  { id: "featured", label: "Featured" },
-  { id: "audits", label: "Audits" },
-  { id: "experience", label: "Experience" },
-  { id: "practice", label: "Practice" },
-  { id: "contact", label: "Contact" },
+  { href: "/#work", label: "Work" },
+  { href: "/#experience", label: "Experience" },
+  { href: "/#audits", label: "Audits" },
+  { href: "/#about", label: "About" },
+  { href: "/#contact", label: "Contact" },
 ];
 
+const linkClass =
+  "link-plain inline-flex min-h-11 items-center px-1 text-[15px] font-medium";
+
 export function Nav() {
-  const [active, setActive] = useState<string>("");
   const [open, setOpen] = useState(false);
-  const [scrolled, setScrolled] = useState(false);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
+  // Escape closes the menu and returns focus to the button.
   useEffect(() => {
-    const sections = LINKS.map((l) => document.getElementById(l.id)).filter(
-      (el): el is HTMLElement => el !== null
-    );
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActive(entry.target.id);
-          }
-        });
-      },
-      { rootMargin: "-40% 0px -50% 0px", threshold: 0 }
-    );
-
-    sections.forEach((el) => observer.observe(el));
-
-    const onScroll = () => setScrolled(window.scrollY > 8);
-    onScroll();
-    window.addEventListener("scroll", onScroll, { passive: true });
-
-    return () => {
-      observer.disconnect();
-      window.removeEventListener("scroll", onScroll);
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setOpen(false);
+        buttonRef.current?.focus();
+      }
     };
-  }, []);
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [open]);
 
-  const handleClick = (id: string) => {
-    setOpen(false);
-    scrollToId(id);
+  // Focus leaving the header closes the menu, so it never hangs open
+  // behind the page as keyboard focus moves on.
+  const onBlur = (e: FocusEvent<HTMLElement>) => {
+    if (open && !e.currentTarget.contains(e.relatedTarget as Node | null)) {
+      setOpen(false);
+    }
   };
 
   return (
     <header
-      className={`fixed top-0 inset-x-0 z-50 border-b transition-colors ${
-        scrolled
-          ? "border-border bg-background/90 backdrop-saturate-150"
-          : "border-transparent bg-transparent"
-      }`}
+      className="sticky top-0 z-50 border-b border-rule bg-paper"
+      onBlur={onBlur}
     >
-      <nav
-        aria-label="Primary"
-        className="mx-auto flex w-full max-w-5xl items-center justify-between gap-4 px-6 py-3 xl:max-w-6xl"
-      >
-        <button
-          onClick={() => handleClick("hero")}
-          className="flex items-center gap-2 font-serif text-lg font-semibold tracking-tight text-foreground"
-        >
-          <LogoMark id="nav-logo" className="h-9 w-9" />
+      <div className="shell flex min-h-16 items-center justify-between gap-4">
+        <Link href="/" className="link-plain inline-flex min-h-11 items-center font-serif text-xl font-semibold">
           Abdurore
-        </button>
+        </Link>
 
-        <ul className="hidden items-center gap-1 xl:flex">
-          {LINKS.map((link) => (
-            <li key={link.id}>
-              <button
-                onClick={() => handleClick(link.id)}
-                aria-current={active === link.id ? "true" : undefined}
-                className={`border-b-2 px-3 py-1.5 text-sm transition-colors ${
-                  active === link.id
-                    ? "border-accent text-foreground"
-                    : "border-transparent text-muted hover:text-foreground"
-                }`}
-              >
-                {link.label}
-              </button>
-            </li>
-          ))}
-        </ul>
-
-        <div className="hidden items-center gap-2 xl:flex">
-          <ThemeToggle />
-          <StillModeToggle />
-          <a
-            href={profile.resumeUrl}
-            download
-            className="inline-flex min-h-11 items-center gap-1.5 whitespace-nowrap border border-border px-4 font-medium text-foreground transition-colors hover:border-accent hover:text-accent"
-            style={{ borderRadius: "1.1rem 0.3rem 1.1rem 0.3rem" }}
-          >
-            <Download className="h-3.5 w-3.5" />
-            Resume
-          </a>
-          <a
-            href={`mailto:${profile.email}`}
-            className="inline-flex min-h-11 items-center whitespace-nowrap border border-accent bg-accent px-4 font-medium text-background transition-opacity hover:opacity-85"
-            style={{ borderRadius: "1.1rem 0.3rem 1.1rem 0.3rem" }}
-          >
-            Say Hi
-          </a>
-        </div>
-
-        <button
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
-          aria-controls="mobile-menu"
-          className="flex min-h-11 min-w-11 flex-col items-center justify-center gap-1.5 xl:hidden"
-        >
-          <span
-            className={`h-0.5 w-5 bg-foreground transition-transform ${
-              open ? "translate-y-[3.5px] rotate-45" : ""
-            }`}
-          />
-          <span
-            className={`h-0.5 w-5 bg-foreground transition-transform ${
-              open ? "-translate-y-[3.5px] -rotate-45" : ""
-            }`}
-          />
-          <span className="sr-only">
-            {open ? "Close menu" : "Open menu"}
-          </span>
-        </button>
-      </nav>
-
-      {open && (
-        <div
-          id="mobile-menu"
-          className="border-t border-border bg-background xl:hidden"
-        >
-          <ul className="flex flex-col divide-y divide-border">
-            {LINKS.map((link) => (
-              <li key={link.id}>
-                <button
-                  onClick={() => handleClick(link.id)}
-                  className="w-full px-6 py-3 text-left text-sm text-muted hover:bg-background-elevated hover:text-foreground"
-                >
-                  {link.label}
-                </button>
+        <div className="flex items-center gap-2">
+          <nav aria-label="Primary">
+            <ul className="hidden items-center gap-4 md:flex">
+              {LINKS.map((l) => (
+                <li key={l.href}>
+                  <Link href={l.href} className={linkClass}>
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <a href={profile.resumeUrl} className={linkClass}>
+                  Résumé
+                </a>
               </li>
-            ))}
-          </ul>
-          <div className="flex flex-wrap gap-2 border-t border-border p-3">
-            <ThemeToggle />
-            <StillModeToggle />
-          </div>
-          <div className="flex gap-2 border-t border-border p-3">
-            <a
-              href={profile.resumeUrl}
-              download
-              className="inline-flex min-h-11 flex-1 items-center justify-center gap-1.5 border border-border px-3 text-sm text-foreground hover:border-accent hover:text-accent"
+            </ul>
+
+            <button
+              ref={buttonRef}
+              type="button"
+              className="inline-flex min-h-11 items-center gap-2 rounded-md border border-ink-soft px-3 text-sm font-medium text-ink md:hidden"
+              aria-expanded={open}
+              aria-controls="mobile-menu"
+              onClick={() => setOpen((o) => !o)}
             >
-              <Download className="h-3.5 w-3.5" />
-              Resume
-            </a>
-            <a
-              href={`mailto:${profile.email}`}
-              className="inline-flex min-h-11 flex-1 items-center justify-center border border-accent bg-accent px-3 text-sm font-medium text-background"
+              {open ? (
+                <X className="h-4 w-4" aria-hidden="true" />
+              ) : (
+                <Menu className="h-4 w-4" aria-hidden="true" />
+              )}
+              Menu
+            </button>
+
+            <ul
+              id="mobile-menu"
+              hidden={!open}
+              className="absolute inset-x-0 top-full border-b border-rule bg-paper px-5 pb-4 pt-2 sm:px-8 md:hidden"
             >
-              Say Hi
-            </a>
-          </div>
+              {LINKS.map((l) => (
+                <li key={l.href}>
+                  <Link
+                    href={l.href}
+                    className={`${linkClass} w-full`}
+                    onClick={() => setOpen(false)}
+                  >
+                    {l.label}
+                  </Link>
+                </li>
+              ))}
+              <li>
+                <a
+                  href={profile.resumeUrl}
+                  className={`${linkClass} w-full`}
+                  onClick={() => setOpen(false)}
+                >
+                  Résumé
+                </a>
+              </li>
+            </ul>
+          </nav>
+          <ThemeToggle />
         </div>
-      )}
+      </div>
     </header>
   );
 }

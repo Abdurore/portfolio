@@ -6,12 +6,13 @@
     "dev": "next dev",
     "prebuild": "node scripts/check-contrast.mjs",
     "build": "next build",
-    "postbuild": "node scripts/check-jsonld.mjs",
+    "postbuild": "node scripts/check-jsonld.mjs && node scripts/check-banned.mjs",
     "start": "next start",
     "lint": "eslint",
     "check-contrast": "node scripts/check-contrast.mjs",
     "check-jsonld": "node scripts/check-jsonld.mjs",
-    "a11y": "next build && playwright test"
+    "a11y": "next build && playwright test",
+    "check-banned": "node scripts/check-banned.mjs"
   },
   "dependencies": {
     "@vercel/analytics": "^2.0.1",
