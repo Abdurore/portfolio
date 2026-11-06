@@ -139,6 +139,25 @@ check(
   "homepage title"
 );
 
+// ---- Date ranges ----
+console.log("\nDate ranges");
+{
+  const MONTH = "(?:Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)";
+  const END = `(?:present|${MONTH} \\d{4}|\\d{4})`;
+  const START = `(?:${MONTH} \\d{4}|\\d{4})`;
+  // Raw text with whitespace kept, so thin spaces (U+2009) stay visible.
+  const re = new RegExp(`${START}[ \\u2009]*[\\u2013\\u2014-][ \\u2009]*${END}`, "gi");
+  let found = 0;
+  for (const [route, { html }] of Object.entries(pages)) {
+    const raw = html.replace(/<script[\s\S]*?<\/script>/g, " ").replace(/<style[\s\S]*?<\/style>/g, " ").replace(/<[^>]+>/g, "");
+    for (const m of raw.match(re) ?? []) {
+      found++;
+      check(/^[^\u2009]+\u2009\u2013\u2009[^\u2009]+$/.test(m), `${route}: date range uses an en dash between thin spaces`, JSON.stringify(m));
+    }
+  }
+  check(found >= 5, "date ranges were found to check", `(${found})`);
+}
+
 // ---- Wording ----
 console.log("\nWording");
 for (const [route, { text }] of Object.entries(pages)) {

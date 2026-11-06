@@ -77,6 +77,36 @@ for (const [theme, t] of Object.entries(themes)) {
   }
 }
 
+// Paper grain: noise at GRAIN_OPACITY can at worst blend each background
+// pixel toward black or white. Re-test the text pairs on --paper against the
+// worse of the two blends, using the opacity actually set in globals.css.
+const grainMatch = css.match(/opacity='([0-9.]+)'/);
+const GRAIN = grainMatch ? Number(grainMatch[1]) : null;
+if (GRAIN === null || GRAIN > 0.035) {
+  console.log(`FAIL  paper grain opacity is ${GRAIN}; it must be set and <= 0.035`);
+  failures++;
+} else {
+  const mix = (hex, to, a) =>
+    "#" +
+    [1, 3, 5]
+      .map((i) => {
+        const c = parseInt(hex.slice(i, i + 2), 16);
+        return Math.round(c * (1 - a) + to * a).toString(16).padStart(2, "0");
+      })
+      .join("");
+  for (const [theme, t] of Object.entries(themes)) {
+    for (const [fg, min] of [["ink", 4.5], ["ink-soft", 4.5], ["moss", 4.5]]) {
+      const worst = Math.min(
+        ratio(t[fg], mix(t.paper, 0, GRAIN)),
+        ratio(t[fg], mix(t.paper, 255, GRAIN))
+      );
+      const ok = worst >= min;
+      if (!ok) failures++;
+      console.log(`${ok ? "PASS" : "FAIL"}  ${worst.toFixed(2).padStart(5)}:1 (min ${min})  ${theme}: --${fg} on grained --paper (worst case, ${GRAIN} opacity)`);
+    }
+  }
+}
+
 // The no-JS media-query fallback must mirror the dark theme exactly.
 for (const k of Object.keys(themes["Night Still"])) {
   if (k === "color-scheme") continue;

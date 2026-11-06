@@ -238,7 +238,8 @@ test("motion: reduced motion makes the hero settle-in instant", async ({ page })
   const names = await page.$$eval(".settle-sheet, .settle-label", (els) =>
     els.map((e) => getComputedStyle(e).animationName)
   );
-  expect(names).toEqual(["none", "none"]);
+  expect(names.length).toBeGreaterThan(0);
+  expect(names.every((n) => n === "none")).toBe(true);
 });
 
 test("motion: with motion allowed the hero settles in within 600ms and nothing else animates", async ({
@@ -253,10 +254,13 @@ test("motion: with motion allowed the hero settles in within 600ms and nothing e
     })
   );
   expect(Math.max(...timings)).toBeLessThanOrEqual(600);
+  // Only the hero's settle-in animates: the sheet, its caption and its label.
   const animated = await page.$$eval("body *", (els) =>
-    els.filter((e) => getComputedStyle(e).animationName !== "none").length
+    els
+      .filter((e) => getComputedStyle(e).animationName !== "none")
+      .filter((e) => !e.matches(".settle-sheet, .settle-label")).length
   );
-  expect(animated).toBe(2);
+  expect(animated).toBe(0);
 });
 
 test("audit page: FAQ toggles by keyboard with a visible focus ring", async ({ page }) => {

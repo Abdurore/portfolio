@@ -74,6 +74,10 @@ export const profile = {
   ],
 } as const;
 
+/** Every date range uses an en dash between thin spaces (U+2009), never a hyphen. */
+const DASH = "\u2009\u2013\u2009";
+const range = (from: string, to: string) => `${from}${DASH}${to}`;
+
 export type ExperienceEntry = {
   title: string;
   /** Shown in its own element, never joined to the title with a dot. */
@@ -89,26 +93,27 @@ export const experience: ExperienceEntry[] = [
   {
     // TODO(abdul): start month for Corbel.
     title: "Co-founder, Corbel",
-    dates: "2026 – present",
+    dates: range("2026", "present"),
     description:
-      "Corbel builds secure software for African infrastructure and regulated industries. Our first product, Coffer, is an evidence vault for telecom field teams: they upload site photos on weak connections, track what's missing against each client's checklist, and assemble the closeout pack. We're building it now with contractors.",
+      "Corbel builds secure software for African infrastructure. Our first product, Coffer, is an evidence vault for telecom field teams, built with contractors.",
     link: { label: "corbel.ng", href: "https://corbel.ng" },
   },
   {
-    // TODO(abdul): start month for Euphorium.
     title: "Lead developer, Euphorium",
-    dates: "Present",
-    description: "Built most of the platform. See Selected work.",
+    // Read "2026 – present" plus "april" as April 2026. Confirm with Abdul.
+    dates: range("Apr 2026", "present"),
+    description:
+      "Built most of a live campus commerce app, front end to back end: storefronts, feed, messaging, search and seller verification. Next.js, NestJS, Supabase, Cloudflare.",
   },
   {
     title: "Developer, Jaayorun",
-    dates: "Aug 2026 – present",
+    dates: range("Aug 2026", "present"),
     description:
       "Production bug fixes and features across vendor, customer, rider and staff apps; taking over day-to-day ownership.",
   },
   {
     title: "Webmaster and super admin, HDI",
-    dates: "Aug 2026 – Jan 2027",
+    dates: range("Aug 2026", "Jan 2027"),
     note: "Contract",
     description:
       "I run the website and portals for a halal certification body: rewrote the news content, fixed broken media, moved inline styles into one maintainable stylesheet, and look after SEO.",
@@ -116,7 +121,7 @@ export const experience: ExperienceEntry[] = [
   },
   {
     title: "Freelance full-stack developer",
-    dates: "Jan 2026 – present",
+    dates: range("Jan 2026", "present"),
     description:
       "Client work through Upwork, AI evaluation work through DataAnnotation, and manual WCAG accessibility audits.",
   },
@@ -136,6 +141,6 @@ export const experience: ExperienceEntry[] = [
     title: "Engineering placements",
     dates: "2026",
     description:
-      "SIWES at KDS Engineering (Jul–Oct 2026), working on industrial control panels, and an AutoCAD drafting internship at a Lagos architecture firm.",
+      "SIWES at KDS Engineering (Jul\u2009\u2013\u2009Oct 2026), working on industrial control panels, and an AutoCAD drafting internship at a Lagos architecture firm.",
   },
 ];

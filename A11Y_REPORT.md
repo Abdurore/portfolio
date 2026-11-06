@@ -1,6 +1,6 @@
 # Accessibility report
 
-Last tested: 6 November 2026
+Last tested: 6 November 2026 (design pass 2)
 
 Backing detail for the public statement at `/accessibility`. This records what
 was tested and found. It is not a conformance claim.
@@ -55,10 +55,12 @@ Tab order, 30 stops, each with a visible ≥2px focus ring and a ≥24×24px tar
 
 | Page | Performance | Accessibility | Best practices | SEO |
 |---|---|---|---|---|
-| `/` | 93 | 100 | 96 | 100 |
+| `/` | 89 to 99 (five runs) | 100 | 96 | 100 |
 | `/accessibility-audit` | 98 | 100 | 96 | 100 |
-| `/accessibility` | 100 | 100 | 96 | 100 |
+| `/accessibility` | 97 | 100 | 96 | 100 |
 
+The homepage performance score swings between runs because its LCP (the hero
+portrait) alternates between about 0.9s and 3.3s; the median is in the 90s.
 The one best-practices deduction is `/_vercel/insights/script.js` returning 404
 when served locally; it exists on Vercel.
 

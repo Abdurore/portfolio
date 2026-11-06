@@ -8,6 +8,14 @@ const LARGE_SIZES = "(min-width: 1024px) 796px, calc(100vw - 90px)";
 const SMALL_SIZES =
   "(min-width: 1024px) 365px, (min-width: 640px) calc(100vw - 114px), calc(100vw - 90px)";
 
+/** Whether the project has anything to show in an image area. */
+function hasVisual(project: Project) {
+  if (project.slug === "jaayorun") return true; // drawn plate, no screenshot
+  const img = project.image;
+  // No file yet means no image area at all (never a blank box).
+  return !!img && existsSync(join(process.cwd(), "public", img.src));
+}
+
 function Visual({ project, large }: { project: Project; large: boolean }) {
   const frame =
     "relative flex aspect-[16/10] items-center justify-center overflow-hidden border border-rule bg-paper";
@@ -20,21 +28,17 @@ function Visual({ project, large }: { project: Project; large: boolean }) {
     );
   }
 
-  const img = project.image;
-  // Shows an empty mount (no broken image) until the file exists in /public.
-  const present = img && existsSync(join(process.cwd(), "public", img.src));
+  const img = project.image!;
   return (
     <div className={frame}>
-      {img && present ? (
-        <Image
-          src={img.src}
-          alt={img.alt}
-          width={img.width}
-          height={img.height}
-          sizes={large ? LARGE_SIZES : SMALL_SIZES}
-          className="h-full w-full object-cover object-top"
-        />
-      ) : null}
+      <Image
+        src={img.src}
+        alt={img.alt}
+        width={img.width}
+        height={img.height}
+        sizes={large ? LARGE_SIZES : SMALL_SIZES}
+        className="h-full w-full object-cover object-top"
+      />
     </div>
   );
 }
@@ -48,18 +52,23 @@ export function Specimen({
   large?: boolean;
 }) {
   const titleId = `${project.slug}-title`;
+  const visual = hasVisual(project);
   return (
     <article className="sheet" aria-labelledby={titleId}>
       <h3 id={titleId}>{project.name}</h3>
-      <div className="mt-4">
-        <Visual project={project} large={large} />
-      </div>
+      {visual ? (
+        <div className="mt-4">
+          <Visual project={project} large={large} />
+        </div>
+      ) : null}
 
       <div
         className={
-          large
+          large && visual
             ? "mt-6 grid grid-cols-1 gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(0,20rem)]"
-            : "mt-6 flex flex-col gap-6"
+            : visual
+              ? "mt-6 flex flex-col gap-6"
+              : "mt-4 flex flex-col gap-6"
         }
       >
         <div>
@@ -69,7 +78,7 @@ export function Specimen({
           ) : null}
         </div>
 
-        <div className="label-block self-start">
+        <div className={`label-block ${large && visual ? "self-start" : "w-full"}`}>
           <dl>
             {project.role ? (
               <>
