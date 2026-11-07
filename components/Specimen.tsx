@@ -118,6 +118,7 @@ export function Specimen({
                   </a>
                 </li>
               ))}
+              {project.linksNote ? <li>{project.linksNote}</li> : null}
             </ul>
           ) : (
             project.linksNote

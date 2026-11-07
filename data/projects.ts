@@ -49,8 +49,10 @@ export const projects: Project[] = [
       "A social-commerce app for students, where each campus is its own marketplace. Young people sell what they make or know, post to a shared feed, and message buyers. I built most of the product, front end to back end: storefront profiles, the feed, direct messages, search across sellers and products, and tiered seller verification with a step-by-step check for orders above ₦30,000.",
     architecture:
       "NestJS modular monolith on DigitalOcean, Supabase Postgres, and Cloudflare for DNS, CDN and R2 image storage.",
-    // Two cropped phone screenshots of euphorium.app (light and dark theme).
-    // TODO(abdul): review the alt text.
+    // Two cropped phone screenshots of euphorium.app.
+    // TODO(abdul): confirm you built the 5-minute edit window shown in the
+    // second screenshot. If yes, add it to the description above; until then
+    // it is deliberately not claimed in the copy.
     portraitImages: [
       {
         src: "/projects/euphorium-1.png",
@@ -61,8 +63,8 @@ export const projects: Project[] = [
       {
         src: "/projects/euphorium-2.png",
         width: 474,
-        height: 882,
-        alt: "The same Euphorium feed in the dark theme.",
+        height: 1237,
+        alt: "The Euphorium Sell an Item form on a phone, filled in with a sample listing: photos, title, description, category, condition, availability, price, stock and optional specs, a notice about editing a listing after posting, and a List Item button.",
       },
     ],
   },
@@ -72,8 +74,8 @@ export const projects: Project[] = [
     role: "Developer",
     builtWith: ["Laravel", "PHP", "Docker"],
     status: "Live in production",
-    links: [],
-    // TODO(abdul): public URL for Jaayorun, if one exists.
+    // Checked: jaayorun.com returned 200 on 2026-11-07.
+    links: [{ label: "Visit jaayorun.com", href: "https://jaayorun.com" }],
     linksNote: "Code is private",
     description:
       "A delivery platform with four connected apps for vendors, customers, riders and staff. I fix production bugs and ship features across all four in a Dockerised Laravel codebase, and I'm taking over day-to-day ownership from the lead developer.",
@@ -109,17 +111,13 @@ export const projects: Project[] = [
     // Role supplied by Abdul in chat, not from repo data.
     role: "Full-stack developer",
     builtWith: ["React", "FastAPI", "Groq", "Llama 3.1"],
-    status: "Live. Built in 24 hours at Cavista Hackathon 2026.",
-    // TODO(abdul): the backend link ("Open the PreventAI backend",
-    // https://preventai-backend.onrender.com) was removed: Render answers 503
-    // with "suspend-by-user" (checked 2026-11-06). Restore it if you resume
-    // the service. The demo front end loads, but it needs this backend to
-    // score a profile, so check whether "Live" is still accurate.
+    status: "Built in 24 hours at Cavista Hackathon 2026. Demo offline.",
+    // TODO(abdul): restore the demo links when the backend is back
+    // ("Open the PreventAI demo" -> https://cavista-real-w2eb.vercel.app and
+    // "Open the PreventAI backend" -> https://preventai-backend.onrender.com;
+    // Render answers 503 "suspend-by-user", checked 2026-11-06), and flip
+    // Status back to "Live".
     links: [
-      {
-        label: "Open the PreventAI demo",
-        href: "https://cavista-real-w2eb.vercel.app",
-      },
       {
         label: "Read the PreventAI source on GitHub",
         href: "https://github.com/Abdurore/Cavista_real",
@@ -137,8 +135,7 @@ export const projects: Project[] = [
   {
     slug: "halal-meats",
     name: "Halal Meats",
-    // TODO(abdul): your role on Halal Meats.
-    role: null,
+    role: "Solo designer and developer",
     layout: "wide",
     builtWith: ["Next.js", "React", "Tailwind CSS"],
     status: "Live",

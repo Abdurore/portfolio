@@ -91,9 +91,8 @@ export type ExperienceEntry = {
 /** Newest first. */
 export const experience: ExperienceEntry[] = [
   {
-    // TODO(abdul): start month for Corbel.
     title: "Co-founder, Corbel",
-    dates: range("2026", "present"),
+    dates: range("Jul 2026", "present"),
     description:
       "Corbel builds secure software for African infrastructure. Our first product, Coffer, is an evidence vault for telecom field teams, built with contractors.",
     link: { label: "corbel.ng", href: "https://corbel.ng" },

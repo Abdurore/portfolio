@@ -15,7 +15,6 @@ export const audit = {
     "https://www.upwork.com/services/product/development-it-an-ada-wcag-2-1-aa-accessibility-audit-with-a-pdf-report-2108180327758331602",
   profileUrl: "https://www.upwork.com/freelancers/~0177ce94419b1c069e",
   currency: "USD",
-  // TODO(abdul): confirm package prices (site shows $150 / $300 / $450).
   tiers: [
     { name: "Starter", price: 150, days: 4, scope: "up to 3 pages or 1 key flow" },
     { name: "Standard", price: 300, days: 6, scope: "up to 8 pages" },
