@@ -5,8 +5,7 @@ export const SITE_URL = "https://abdurore.tech";
 /**
  * The one place the contact address lives. Change it here and every link,
  * label and the footer follow.
- * TODO(abdul): confirm a test email to hello@ arrives before deploying.
- * Also turn off Cloudflare's Email Address Obfuscation for this site, or it
+ * Cloudflare's Email Address Obfuscation must stay off for this domain, or it
  * replaces the visible address with "[email protected]".
  */
 export const EMAIL = "hello@abdurore.tech";
