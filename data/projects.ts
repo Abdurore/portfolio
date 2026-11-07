@@ -43,16 +43,12 @@ export const projects: Project[] = [
       { label: "Open the Euphorium app", href: "https://euphorium.app" },
       { label: "Visit euphorium.me", href: "https://euphorium.me" },
     ],
-    // TODO(abdul): is it still a Telegram Mini App? Did you build Lockbox
-    // (payment hold)? If yes, add one clause for each.
+    // It is a normal web app now, not a Telegram Mini App.
     description:
-      "A social-commerce app for students, where each campus is its own marketplace. Young people sell what they make or know, post to a shared feed, and message buyers. I built most of the product, front end to back end: storefront profiles, the feed, direct messages, search across sellers and products, and tiered seller verification with a step-by-step check for orders above ₦30,000.",
+      "A social-commerce app for students, where each campus is its own marketplace. Young people sell what they make or know, post to a shared feed, and message buyers. I built most of it, front end to back end: storefronts, the feed, messaging, search, and tiered seller verification with a step-by-step check for orders above ₦30,000. I also built Lockbox, a payment hold, and the five-minute window sellers get to edit a new listing.",
     architecture:
       "NestJS modular monolith on DigitalOcean, Supabase Postgres, and Cloudflare for DNS, CDN and R2 image storage.",
     // Two cropped phone screenshots of euphorium.app.
-    // TODO(abdul): confirm you built the 5-minute edit window shown in the
-    // second screenshot. If yes, add it to the description above; until then
-    // it is deliberately not claimed in the copy.
     portraitImages: [
       {
         src: "/projects/euphorium-1.png",

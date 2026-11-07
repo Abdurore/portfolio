@@ -23,8 +23,8 @@ export const metadata: Metadata = pageMetadata({
   path: "/accessibility-audit",
 });
 
-// TODO(abdul): this heading must match how many audits you've actually
-// completed. It is worded neutrally for now; reword once the count is known.
+// The heading above these deliberately says nothing about how many audits
+// have been done.
 const OTHER_DEFECTS = [
   "A government GIS map page whose embedded map silently never loads for any visitor.",
   "A site search that returns zero results for multi-word queries.",
