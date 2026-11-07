@@ -10,6 +10,10 @@ const petrona = Petrona({
   subsets: ["latin"],
   style: ["normal", "italic"],
   display: "swap",
+  // Not preloaded: the portrait is the LCP element and should not queue
+  // behind font files. Text still renders at once (swap) in a metric-matched
+  // fallback.
+  preload: false,
 });
 
 // Body and UI: Schibsted Grotesk, variable.
@@ -17,6 +21,7 @@ const schibsted = Schibsted_Grotesk({
   variable: "--font-schibsted",
   subsets: ["latin"],
   display: "swap",
+  preload: false,
 });
 
 // Used only for the Arabic motto in the footer.

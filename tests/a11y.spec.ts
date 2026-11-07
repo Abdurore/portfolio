@@ -263,6 +263,34 @@ test("motion: with motion allowed the hero settles in within 600ms and nothing e
   expect(animated).toBe(0);
 });
 
+test("motion: the hero portrait is never below full opacity on any frame (LCP)", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.addInitScript(() => {
+    const w = window as unknown as { __op: number[] };
+    w.__op = [];
+    const sample = () => {
+      const img = document.querySelector('img[alt^="Portrait of"]');
+      if (img) {
+        // Effective opacity: the product of every ancestor's opacity.
+        let o = 1;
+        for (let el: Element | null = img; el; el = el.parentElement) {
+          o *= parseFloat(getComputedStyle(el).opacity);
+        }
+        w.__op.push(o);
+      }
+      if (w.__op.length < 90) requestAnimationFrame(sample);
+    };
+    requestAnimationFrame(sample);
+  });
+  await page.goto("/");
+  await page.waitForTimeout(1200);
+  const samples = await page.evaluate(() => (window as unknown as { __op: number[] }).__op);
+  expect(samples.length).toBeGreaterThan(5);
+  expect(Math.min(...samples)).toBe(1);
+});
+
 test("audit page: FAQ toggles by keyboard with a visible focus ring", async ({ page }) => {
   await page.goto("/accessibility-audit");
   const summary = page.locator("summary").first();

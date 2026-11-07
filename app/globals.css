@@ -371,7 +371,18 @@ h3 {
 /* ---------- Motion ---------- */
 
 /* The one moment: the hero portrait sheet and its label settle in on
-   first load (<=600ms total; label starts 120ms after the sheet). */
+   first load (<=600ms total; label starts 120ms after the sheet).
+   The portrait is the page's LCP element, so it must NEVER start at
+   opacity 0: the sheet only rises 8px, fully opaque. The label and caption
+   (not LCP candidates) also fade. */
+@keyframes rise {
+  from {
+    transform: translateY(8px);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
 @keyframes settle {
   from {
     opacity: 0;
@@ -383,7 +394,7 @@ h3 {
   }
 }
 .settle-sheet {
-  animation: settle 400ms ease-out both;
+  animation: rise 400ms ease-out both;
 }
 .settle-label {
   animation: settle 480ms ease-out 120ms both;

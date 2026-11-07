@@ -1,5 +1,7 @@
 export type ProjectLink = { label: string; href: string };
 
+export type ProjectImage = { src: string; width: number; height: number; alt: string };
+
 export type Project = {
   slug: string;
   name: string;
@@ -13,7 +15,14 @@ export type Project = {
   linksNote?: string;
   description: string;
   architecture?: string;
-  image?: { src: string; width: number; height: number; alt: string };
+  /** One landscape screenshot. */
+  image?: ProjectImage;
+  /** Portrait phone screenshots, shown side by side. Needs every file to
+   *  exist in /public; until then the sheet has no image area. */
+  portraitImages?: ProjectImage[];
+  /** Layout at >=1024px: "wide" is a full-width sheet with the image in the
+   *  left 5 columns and the text and label in the right 7. */
+  layout?: "wide";
 };
 
 export const projects: Project[] = [
@@ -40,15 +49,22 @@ export const projects: Project[] = [
       "A social-commerce app for students, where each campus is its own marketplace. Young people sell what they make or know, post to a shared feed, and message buyers. I built most of the product, front end to back end: storefront profiles, the feed, direct messages, search across sellers and products, and tiered seller verification with a step-by-step check for orders above ₦30,000.",
     architecture:
       "NestJS modular monolith on DigitalOcean, Supabase Postgres, and Cloudflare for DNS, CDN and R2 image storage.",
-    // TODO(abdul): add public/projects/euphorium.png (a real screenshot of
-    // euphorium.app or euphorium.me). The sheet reads this path and shows an
-    // empty mount until the file exists.
-    image: {
-      src: "/projects/euphorium.png",
-      width: 1600,
-      height: 1000,
-      alt: "The Euphorium app, a campus marketplace and social feed for students.",
-    },
+    // Two cropped phone screenshots of euphorium.app (light and dark theme).
+    // TODO(abdul): review the alt text.
+    portraitImages: [
+      {
+        src: "/projects/euphorium-1.png",
+        width: 474,
+        height: 882,
+        alt: "The Euphorium feed on a phone, in the light theme: stories, a search bar, For You and Trending tabs, category chips and a sponsored post.",
+      },
+      {
+        src: "/projects/euphorium-2.png",
+        width: 474,
+        height: 882,
+        alt: "The same Euphorium feed in the dark theme.",
+      },
+    ],
   },
   {
     slug: "jaayorun",
@@ -123,6 +139,7 @@ export const projects: Project[] = [
     name: "Halal Meats",
     // TODO(abdul): your role on Halal Meats.
     role: null,
+    layout: "wide",
     builtWith: ["Next.js", "React", "Tailwind CSS"],
     status: "Live",
     links: [

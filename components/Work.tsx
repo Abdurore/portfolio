@@ -4,16 +4,21 @@ import { Specimen } from "./Specimen";
 
 export function Work() {
   const [euphorium, jaayorun, ...rest] = projects;
+  const twoUp = rest.filter((p) => p.layout !== "wide");
+  const wide = rest.filter((p) => p.layout === "wide");
   return (
     <Section id="work" label="Branches" heading="Selected work">
       <Content className="mt-10 flex flex-col gap-6">
         <Specimen project={euphorium} large />
         <Specimen project={jaayorun} large />
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
-          {rest.map((p) => (
+          {twoUp.map((p) => (
             <Specimen key={p.slug} project={p} />
           ))}
         </div>
+        {wide.map((p) => (
+          <Specimen key={p.slug} project={p} />
+        ))}
 
         <div className="mt-4 border-t border-rule pt-6">
           <h3>Also built</h3>

@@ -53,14 +53,22 @@ Tab order, 30 stops, each with a visible ≥2px focus ring and a ≥24×24px tar
 
 ## Lighthouse (mobile, production build, local)
 
+Homepage, five runs on the final build: performance 92, 96, 95, 95, 96
+(LCP 2.6 to 3.4s simulated, 130ms observed; CLS 0.016). Accessibility 100,
+best practices 96 and SEO 100 on every run.
+
 | Page | Performance | Accessibility | Best practices | SEO |
 |---|---|---|---|---|
-| `/` | 89 to 99 (five runs) | 100 | 96 | 100 |
-| `/accessibility-audit` | 98 | 100 | 96 | 100 |
-| `/accessibility` | 97 | 100 | 96 | 100 |
+| `/` | 92 to 96 (five runs) | 100 | 96 | 100 |
+| `/accessibility-audit` | 97 | 100 | 96 | 100 |
+| `/accessibility` | 99 | 100 | 96 | 100 |
 
-The homepage performance score swings between runs because its LCP (the hero
-portrait) alternates between about 0.9s and 3.3s; the median is in the 90s.
+The hero portrait is the LCP element and is never below full opacity: its
+settle-in is a translate only (`tests/a11y.spec.ts` samples its effective
+opacity on every frame). Earlier runs swung between 0.9s and 3.3s because the
+opacity-0 start made Chrome skip the portrait as an LCP candidate. The two text
+fonts are not preloaded, so they don't queue ahead of the portrait.
+
 The one best-practices deduction is `/_vercel/insights/script.js` returning 404
 when served locally; it exists on Vercel.
 

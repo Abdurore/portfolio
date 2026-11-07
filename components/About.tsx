@@ -14,7 +14,7 @@ export function About() {
             building for over two years. Engineering school shaped how I work:
             I want to understand the whole system before I change one part of
             it. I&apos;m currently learning cloud infrastructure and machine
-            learning. Away from the keyboard: plants, trees, and Liverpool.{" "}
+            learning. Away from the keyboard: the gym, games, food and football.{" "}
             <abbr title="You'll Never Walk Alone">YNWA</abbr>.
           </p>
         </div>
