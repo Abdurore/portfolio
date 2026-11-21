@@ -24,10 +24,10 @@ export function Hero() {
               <AlmondBranch className="absolute left-0 top-0 z-0 origin-top-left translate-x-12 scale-50 sm:translate-x-0 sm:scale-100" />
               <div className="sheet relative z-10">
                 <Image
-                  src="/headshot-v5.jpg"
-                  alt="Portrait of Abdulhameed Oreagba, smiling slightly."
-                  width={960}
-                  height={1280}
+                  src="/headshot-v6.jpg"
+                  alt="Portrait of Abdulhameed Oreagba, smiling slightly, in a brown patterned cap and a tan shirt with embroidered trim."
+                  width={720}
+                  height={960}
                   preload
                   fetchPriority="high"
                   sizes="(min-width: 468px) 372px, calc(100vw - 90px)"

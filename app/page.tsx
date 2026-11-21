@@ -36,7 +36,7 @@ const graph = {
       alternateName: [profile.handle, profile.legalName],
       jobTitle: profile.role,
       url: SITE_URL,
-      image: `${SITE_URL}/headshot-v5.jpg`,
+      image: `${SITE_URL}/headshot-v6.jpg`,
       address: {
         "@type": "PostalAddress",
         addressLocality: "Lagos",
