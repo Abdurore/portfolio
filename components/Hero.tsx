@@ -26,8 +26,8 @@ export function Hero() {
                 <Image
                   src="/headshot-v6.jpg"
                   alt="Portrait of Abdulhameed Oreagba, smiling slightly, in a brown patterned cap and a tan shirt with embroidered trim."
-                  width={720}
-                  height={960}
+                  width={600}
+                  height={800}
                   preload
                   fetchPriority="high"
                   sizes="(min-width: 468px) 372px, calc(100vw - 90px)"
