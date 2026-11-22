@@ -47,19 +47,21 @@ export const projects: Project[] = [
     ],
     description:
       "A campus-first social-commerce platform for Nigeria: feed, marketplace and seller profiles, with tiered seller verification and a Paystack split-payment checkout (test mode). A pnpm monorepo with a NestJS and Prisma API, an installable React/Vite PWA, and Postgres with row-level security on every table. I'm the only active developer.",
-    // Two cropped phone screenshots of euphorium.app.
+    // Two cropped phone screenshots of euphorium.app, both in the dark theme.
+    // The feed shows listings with photos and prices; the profile crop starts
+    // below the wallet card on purpose, so no balance is shown.
     portraitImages: [
       {
-        src: "/projects/euphorium-1.png",
-        width: 474,
-        height: 882,
-        alt: "The Euphorium feed on a phone, in the light theme: stories, a search bar, For You and Trending tabs, category chips and a sponsored post.",
+        src: "/projects/euphorium-feed.png",
+        width: 433,
+        height: 843,
+        alt: "The Euphorium feed on a phone, in the dark theme: listings with photos, prices and stock notes, including a football shirt, a white jalamiyya set and a study bundle.",
       },
       {
-        src: "/projects/euphorium-2.png",
-        width: 474,
-        height: 1237,
-        alt: "The Euphorium Sell an Item form on a phone, filled in with a sample listing: photos, title, description, category, condition, availability, price, stock and optional specs, a notice about editing a listing after posting, and a List Item button.",
+        src: "/projects/euphorium-profile.png",
+        width: 436,
+        height: 588,
+        alt: "The Euphorium profile screen on a phone, in the dark theme: a verify-your-identity prompt, shortcuts for orders, bids, requests, trust score, Lockbox, domains, opportunities, feed and invites, and appearance and settings options.",
       },
     ],
   },
