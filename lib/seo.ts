@@ -4,7 +4,7 @@ import { SITE_URL } from "@/data/profile";
 export const HOME_TITLE =
   "Abdulhameed Oreagba (Abdurore) | Full-Stack Developer, Lagos";
 export const HOME_DESCRIPTION =
-  "Full-stack developer in Lagos. Lead developer on Euphorium; ships on Jaayorun, a live delivery platform. Open to remote and part-time roles.";
+  "Full-stack developer in Lagos. Head of development on Euphorium, a pre-launch campus commerce platform; ships on Jaayorun. Open to remote and part-time.";
 
 /**
  * Every page gets its own title, description, canonical and OG/Twitter tags.

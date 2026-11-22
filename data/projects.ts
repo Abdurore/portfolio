@@ -29,25 +29,24 @@ export const projects: Project[] = [
   {
     slug: "euphorium",
     name: "Euphorium",
-    role: "Lead developer",
+    role: "Head of development",
     builtWith: [
-      "Next.js",
-      "Tailwind CSS",
       "NestJS",
+      "Prisma",
+      "React",
+      "Vite",
+      "Tailwind CSS",
       "PostgreSQL (Supabase)",
-      "Cloudflare",
-      "DigitalOcean",
+      "Render",
+      "Vercel",
     ],
-    status: "Live and growing",
+    status: "Pre-launch",
     links: [
       { label: "Open the Euphorium app", href: "https://euphorium.app" },
       { label: "Visit euphorium.me", href: "https://euphorium.me" },
     ],
-    // It is a normal web app now, not a Telegram Mini App.
     description:
-      "A social-commerce app for students, where each campus is its own marketplace. Young people sell what they make or know, post to a shared feed, and message buyers. I built most of it, front end to back end: storefronts, the feed, messaging, search, and tiered seller verification with a step-by-step check for orders above ₦30,000. I also built Lockbox, a payment hold, and the five-minute window sellers get to edit a new listing.",
-    architecture:
-      "NestJS modular monolith on DigitalOcean, Supabase Postgres, and Cloudflare for DNS, CDN and R2 image storage.",
+      "A campus-first social-commerce platform for Nigeria: feed, marketplace and seller profiles, with tiered seller verification and a Paystack split-payment checkout (test mode). A pnpm monorepo with a NestJS and Prisma API, an installable React/Vite PWA, and Postgres with row-level security on every table. I'm the only active developer.",
     // Two cropped phone screenshots of euphorium.app.
     portraitImages: [
       {
@@ -74,7 +73,7 @@ export const projects: Project[] = [
     links: [{ label: "Visit jaayorun.com", href: "https://jaayorun.com" }],
     linksNote: "Code is private",
     description:
-      "A delivery platform with four connected apps for vendors, customers, riders and staff. I fix production bugs and ship features across all four in a Dockerised Laravel codebase, and I'm taking over day-to-day ownership from the lead developer.",
+      "A delivery platform with four connected apps for vendors, customers, riders and staff. I fix production bugs and ship features across all four in a Dockerised Laravel codebase, and I'm taking over day-to-day ownership of it.",
     // No screenshot exists: the sheet draws the JaayorunPlate diagram instead.
   },
   {

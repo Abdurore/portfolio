@@ -19,7 +19,7 @@ export const profile = {
   role: "Full-Stack Developer",
   location: "Lagos, NG",
   resumeUrl: "/Abdurore-CV.pdf",
-  lede: "Full-stack developer in Lagos. I'm the lead developer on Euphorium, a campus commerce app, and I ship fixes and features on Jaayorun, a live delivery platform.",
+  lede: "Full-stack developer in Lagos. I'm head of development on Euphorium, a pre-launch campus commerce platform, and I ship fixes and features on Jaayorun, a live delivery platform.",
   specimen: [
     { key: "Based in", value: "Lagos, Nigeria (WAT, UTC+1)" },
     {
@@ -34,16 +34,27 @@ export const profile = {
   skillGroups: [
     {
       label: "Front end",
-      skills: ["React", "Next.js", "TypeScript", "JavaScript", "Tailwind CSS"],
+      skills: ["React", "Next.js", "Vite", "TypeScript", "JavaScript", "Tailwind CSS"],
     },
     {
       label: "Back end",
       skills: ["Node.js", "Express", "NestJS", "Laravel/PHP", "FastAPI"],
     },
-    { label: "Data", skills: ["PostgreSQL (Supabase)", "MongoDB"] },
+    {
+      label: "Data",
+      skills: ["PostgreSQL (Supabase) with row-level security", "Prisma", "MongoDB"],
+    },
     {
       label: "Infrastructure",
-      skills: ["Docker", "Cloudflare", "DigitalOcean", "Vercel", "Git"],
+      skills: [
+        "Docker",
+        "Terraform",
+        "Azure (Key Vault, App Service, container registry)",
+        "Render",
+        "Vercel",
+        "Git and GitHub",
+        "CI/CD with OIDC",
+      ],
     },
     {
       label: "Accessibility",
@@ -97,11 +108,11 @@ export const experience: ExperienceEntry[] = [
     link: { label: "corbel.ng", href: "https://corbel.ng" },
   },
   {
-    title: "Lead developer, Euphorium",
+    title: "Head of development, Euphorium",
     // Read "2026 – present" plus "april" as April 2026. Confirm with Abdul.
     dates: range("Apr 2026", "present"),
     description:
-      "Built most of a live campus commerce app, front end to back end: storefronts, feed, messaging, search and seller verification. Next.js, NestJS, Supabase, Cloudflare.",
+      "Own the engineering of a pre-launch campus commerce platform as its only active developer: API, web app, database security and infrastructure. NestJS, Prisma, React/Vite, Postgres.",
   },
   {
     title: "Developer, Jaayorun",
@@ -118,10 +129,10 @@ export const experience: ExperienceEntry[] = [
     link: { label: "halalcert.com.ng", href: "https://halalcert.com.ng" },
   },
   {
-    title: "Freelance full-stack developer",
+    title: "Freelance full-stack developer, Upwork",
     dates: range("Jan 2026", "present"),
     description:
-      "Client work through Upwork, AI evaluation work through DataAnnotation, and manual WCAG accessibility audits.",
+      "Client web builds and bug fixes through Upwork, and manual WCAG accessibility audits.",
   },
   {
     title: "Cavista Hackathon 2026",
