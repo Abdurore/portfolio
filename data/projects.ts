@@ -46,7 +46,7 @@ export const projects: Project[] = [
       { label: "Visit euphorium.me", href: "https://euphorium.me" },
     ],
     description:
-      "A campus-first social-commerce platform for Nigeria: feed, marketplace and seller profiles, with tiered seller verification and a Paystack split-payment checkout (test mode). A pnpm monorepo with a NestJS and Prisma API, an installable React/Vite PWA, and Postgres with row-level security on every table. I'm the only active developer.",
+      "A campus-first social-commerce platform for Nigeria: feed, marketplace and seller profiles, with tiered seller verification and a Paystack split-payment checkout (test mode). A pnpm monorepo with a NestJS and Prisma API, an installable React/Vite PWA, and Postgres with row-level security on every table. I run the engineering end to end.",
     // Two cropped phone screenshots of euphorium.app, both in the dark theme.
     // The feed shows listings with photos and prices; the profile crop starts
     // below the wallet card on purpose, so no balance is shown.

@@ -112,7 +112,7 @@ export const experience: ExperienceEntry[] = [
     // Read "2026 – present" plus "april" as April 2026. Confirm with Abdul.
     dates: range("Apr 2026", "present"),
     description:
-      "Own the engineering of a pre-launch campus commerce platform as its only active developer: API, web app, database security and infrastructure. NestJS, Prisma, React/Vite, Postgres.",
+      "Own the engineering of a pre-launch campus commerce platform: API, web app, database security and infrastructure. NestJS, Prisma, React/Vite, Postgres.",
   },
   {
     title: "Developer, Jaayorun",
